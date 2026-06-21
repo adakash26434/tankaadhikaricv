@@ -647,8 +647,10 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(34,211,238,.6);outli
 <!-- PROJECTS -->
 <section id="projects">
   <h2 class="section-title">Projects</h2><div class="section-underline"></div>
-  <?php if($projects): foreach($projects as $proj): $tags = array_filter(array_map('trim', explode(',', $proj['tags']??''))); ?>
-  <div class="card-dark" style="margin-bottom:16px">
+  <?php if($projects): ?>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px">
+  <?php foreach($projects as $proj): $tags = array_filter(array_map('trim', explode(',', $proj['tags']??''))); ?>
+  <div class="card-dark">
     <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:10px">
       <div>
         <div style="font-size:15px;font-weight:700;color:#fff"><?=h($proj['title'])?></div>
@@ -665,7 +667,9 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(34,211,238,.6);outli
     </div>
     <?php endif; ?>
   </div>
-  <?php endforeach; else: ?>
+  <?php endforeach; ?>
+  </div>
+  <?php else: ?>
   <p style="color:var(--muted);font-size:13px">No projects found.</p>
   <?php endif; ?>
 </section>
