@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /config.php
+Disallow: /db.php
+Disallow: /superadmin.php
+Disallow: /contact.php
+
+# Replace your-domain.com with your actual domain
+Sitemap: https://your-domain.com/sitemap.xml

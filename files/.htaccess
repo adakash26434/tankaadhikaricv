@@ -1,0 +1,15 @@
+# Block PHP execution in files directory
+<FilesMatch "\.ph(p[2-9]?|t|tml|ps|ar)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+Options -ExecCGI
+AddHandler cgi-script .php .php3 .php4 .php5 .php7 .php8 .phtml .pl .py .cgi
+
+# Allow only PDF downloads
+<FilesMatch "\.pdf$">
+    Order Allow,Deny
+    Allow from all
+    Header set Content-Disposition "attachment"
+</FilesMatch>

@@ -1,0 +1,5 @@
+# Block direct web access to the stored password hash file
+<Files "password.php">
+    Order Allow,Deny
+    Deny from all
+</Files>

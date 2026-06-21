@@ -1,0 +1,68 @@
+# ============================================================
+# TANKA PORTFOLIO — ROOT .htaccess
+# Security hardening for cPanel shared hosting
+# ============================================================
+
+# ── Enable mod_rewrite ──────────────────────────────────────
+Options -Indexes
+Options -MultiViews
+
+# ── Block direct access to sensitive PHP files ──────────────
+<FilesMatch "^(config|db|superadmin|setup)\.php$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# ── Block SQL and backup files ──────────────────────────────
+<FilesMatch "\.(sql|bak|log|sh|env|json|lock|md|yml|yaml|ini|htpasswd|htaccess\.bak)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# ── Security HTTP Headers ───────────────────────────────────
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set X-XSS-Protection "1; mode=block"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self'; frame-src 'none'; object-src 'none'; base-uri 'self';"
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains" env=HTTPS
+</IfModule>
+
+# ── PHP session security ────────────────────────────────────
+<IfModule mod_php.c>
+    php_value session.cookie_httponly 1
+    php_value session.cookie_samesite Strict
+    php_value session.use_strict_mode 1
+    php_value session.use_only_cookies 1
+    php_flag session.cookie_secure Off
+    php_value expose_php Off
+    php_value display_errors Off
+    php_value log_errors On
+</IfModule>
+
+# ── Disable server signature ────────────────────────────────
+ServerSignature Off
+
+# ── Cache static assets ────────────────────────────────────
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/png  "access plus 1 year"
+    ExpiresByType image/webp "access plus 1 year"
+    ExpiresByType image/gif  "access plus 1 year"
+    ExpiresByType text/css   "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType application/pdf "access plus 1 month"
+</IfModule>
+
+# ── Gzip compression ────────────────────────────────────────
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/css text/javascript application/javascript application/json
+</IfModule>
+
+# ── Custom error pages ───────────────────────────────────────
+ErrorDocument 404 /404.php
+ErrorDocument 403 /404.php
+ErrorDocument 500 /404.php
