@@ -394,7 +394,7 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(34,211,238,.6);outli
 <?php $navItems = [
   ['about','user','About'],['education','graduation-cap','Education'],['experience','briefcase','Work Experience'],
   ['training','certificate','Training'],['awards','trophy','Awards'],['research','book-open','Research'],
-  ['news','newspaper','News'],['skills','chart-bar','Skills'],['projects','laptop-code','Projects'],
+  ['news','newspaper','News'],['skills','chart-bar','Skills'],['services','handshake','Services'],['projects','laptop-code','Projects'],
   ['videos','play-circle','Videos'],['portfolio','image','Portfolio'],['interests','heart','Interests'],['contact','envelope','Contact']
 ]; ?>
 
@@ -640,6 +640,64 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(34,211,238,.6);outli
   <?php else: ?>
   <p style="color:var(--muted);font-size:13px">No skills found.</p>
   <?php endif; ?>
+</section>
+
+<!-- DIGITAL SERVICES -->
+<section id="services">
+  <h2 class="section-title">Digital Services</h2><div class="section-underline"></div>
+  <p style="font-size:13px;color:var(--muted);margin-bottom:20px;max-width:600px;line-height:1.7">
+    Need a professional website, reliable web hosting, or custom email hosting? I provide end-to-end digital solutions tailored for businesses, cooperatives, and startups in Nepal.
+  </p>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-bottom:24px">
+    <!-- Website Development -->
+    <div class="card-dark" style="border-left:3px solid var(--cyan)">
+      <div style="font-size:26px;margin-bottom:12px">🌐</div>
+      <div style="font-size:15px;font-weight:700;color:#fff;margin-bottom:8px">Website Development</div>
+      <div style="font-size:24px;font-weight:900;color:var(--cyan);margin-bottom:4px">From NPR 15,000</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:14px">One-time • Custom design included</div>
+      <ul style="font-size:12px;color:var(--muted);line-height:1.9;padding-left:16px;margin-bottom:16px">
+        <li>Responsive & mobile-friendly design</li>
+        <li>SEO optimized structure</li>
+        <li>Contact forms & analytics</li>
+        <li>Free 30-day support</li>
+        <li>Portfolio, corporate, cooperative sites</li>
+      </ul>
+      <a href="#contact" class="tag" style="display:inline-block;text-align:center;width:100%;background:rgba(34,211,238,.1);border-color:rgba(34,211,238,.2)">Request a Quote →</a>
+    </div>
+    <!-- Web Hosting -->
+    <div class="card-dark" style="border-left:3px solid #a78bfa">
+      <div style="font-size:26px;margin-bottom:12px">☁️</div>
+      <div style="font-size:15px;font-weight:700;color:#fff;margin-bottom:8px">Web Hosting</div>
+      <div style="font-size:24px;font-weight:900;color:#a78bfa;margin-bottom:4px">From NPR 3,000<span style="font-size:11px;font-weight:400;color:var(--muted)"> /year</span></div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:14px">Annual plans • Nepal-based servers</div>
+      <ul style="font-size:12px;color:var(--muted);line-height:1.9;padding-left:16px;margin-bottom:16px">
+        <li>99.9% uptime guarantee</li>
+        <li>Free SSL certificate</li>
+        <li>Daily backups</li>
+        <li>cPanel / managed options</li>
+        <li>Email accounts included</li>
+      </ul>
+      <a href="#contact" class="tag" style="display:inline-block;text-align:center;width:100%;background:rgba(139,92,246,.1);border-color:rgba(139,92,246,.2);color:#a78bfa">Get Hosting →</a>
+    </div>
+    <!-- Email Hosting -->
+    <div class="card-dark" style="border-left:3px solid #f59e0b">
+      <div style="font-size:26px;margin-bottom:12px">📧</div>
+      <div style="font-size:15px;font-weight:700;color:#fff;margin-bottom:8px">Professional Email Hosting</div>
+      <div style="font-size:24px;font-weight:900;color:#f59e0b;margin-bottom:4px">From NPR 1,500<span style="font-size:11px;font-weight:400;color:var(--muted)"> /year</span></div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:14px">Annual plans • Your domain @you.com</div>
+      <ul style="font-size:12px;color:var(--muted);line-height:1.9;padding-left:16px;margin-bottom:16px">
+        <li>yourname@yourdomain.com</li>
+        <li>5 GB storage per mailbox</li>
+        <li>Webmail + IMAP/SMTP access</li>
+        <li>Spam & virus protection</li>
+        <li>Calendar & contacts sync</li>
+      </ul>
+      <a href="#contact" class="tag" style="display:inline-block;text-align:center;width:100%;background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.2);color:#f59e0b">Setup Email →</a>
+    </div>
+  </div>
+  <div style="background:rgba(34,211,238,.04);border:1px solid rgba(34,211,238,.12);border-radius:12px;padding:16px 20px;font-size:13px;color:var(--muted);line-height:1.7;max-width:700px">
+    💡 All packages include <strong style="color:#c9d1e3">free consultation</strong>. For cooperative organizations, NGOs, and educational institutions — special discounted rates available. Contact me to discuss your project requirements.
+  </div>
 </section>
 
 <!-- PROJECTS -->
