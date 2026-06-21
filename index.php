@@ -45,8 +45,6 @@ $siteDesc = htmlspecialchars("{$_fn} is the {$_ti} of {$_co}, leading digital tr
 <title><?=$name?> — <?=$title?> | <?=h($p['company']??'Aakash Digital Pvt. Ltd.')?></title>
 <meta name="description" content="<?=$siteDesc?>">
 <meta name="author" content="<?=$name?>">
-<meta name="robots" content="index, follow">
-<link rel="canonical" href="<?=$siteUrl?>/">
 <meta property="og:type" content="profile">
 <meta property="og:title" content="<?=$name?> — <?=$title?>">
 <meta property="og:description" content="<?=$siteDesc?>">
@@ -98,6 +96,11 @@ a{color:var(--cyan);text-decoration:none}a:hover{text-decoration:underline}
 #loader{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;transition:opacity .4s}
 .loader-ring{width:48px;height:48px;border:3px solid var(--border);border-top-color:var(--cyan);border-radius:50%;animation:spin 1s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── Reduced motion preference ─────────────────────────── */
+@media(prefers-reduced-motion:reduce){
+  *,::before,::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+}
 
 /* ── Layout: two floating cards ── */
 .layout{position:relative;z-index:1;display:flex;gap:16px;padding:16px;height:100vh;align-items:stretch}
@@ -358,11 +361,11 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(34,211,238,.6);outli
       </div>
     </div>
     <div class="social-links">
-      <?php if($p['facebook_url']??''): ?><a href="<?=h($p['facebook_url'])?>" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a><?php endif; ?>
-      <?php if($p['tiktok_url']??''): ?><a href="<?=h($p['tiktok_url'])?>" target="_blank" rel="noopener noreferrer" aria-label="TikTok"><i class="fab fa-tiktok"></i></a><?php endif; ?>
-      <?php if($p['whatsapp_url']??''): ?><a href="<?=h($p['whatsapp_url'])?>" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a><?php endif; ?>
-      <?php if($p['linkedin_url']??''): ?><a href="<?=h($p['linkedin_url'])?>" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a><?php endif; ?>
-      <?php if($p['youtube_url']??''): ?><a href="<?=h($p['youtube_url'])?>" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fab fa-youtube"></i></a><?php endif; ?>
+      <?php if($p['facebook_url']??''): ?><a href="<?=h($p['facebook_url'])?>" target="_blank" rel="noopener noreferrer" aria-label="Follow on Facebook"><i class="fab fa-facebook-f"></i></a><?php endif; ?>
+      <?php if($p['tiktok_url']??''): ?><a href="<?=h($p['tiktok_url'])?>" target="_blank" rel="noopener noreferrer" aria-label="Follow on TikTok"><i class="fab fa-tiktok"></i></a><?php endif; ?>
+      <?php if($p['whatsapp_url']??''): ?><a href="<?=h($p['whatsapp_url'])?>" target="_blank" rel="noopener noreferrer" aria-label="Message on WhatsApp"><i class="fab fa-whatsapp"></i></a><?php endif; ?>
+      <?php if($p['linkedin_url']??''): ?><a href="<?=h($p['linkedin_url'])?>" target="_blank" rel="noopener noreferrer" aria-label="Connect on LinkedIn"><i class="fab fa-linkedin-in"></i></a><?php endif; ?>
+      <?php if($p['youtube_url']??''): ?><a href="<?=h($p['youtube_url'])?>" target="_blank" rel="noopener noreferrer" aria-label="Subscribe on YouTube"><i class="fab fa-youtube"></i></a><?php endif; ?>
     </div>
   </div>
   <div class="sidebar-divider"></div>

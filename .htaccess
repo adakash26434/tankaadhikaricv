@@ -8,10 +8,16 @@ Options -Indexes
 Options -MultiViews
 
 # ── Block direct access to sensitive PHP files ──────────────
-<FilesMatch "^(config|db|superadmin|setup)\.php$">
+<FilesMatch "^(config|db|superadmin|setup|password)\.php$">
     Order Allow,Deny
     Deny from all
 </FilesMatch>
+
+# ── Block admin/password.php even when accessed via admin/ path ──
+<Files "password.php">
+    Order Allow,Deny
+    Deny from all
+</Files>
 
 # ── Block SQL and backup files ──────────────────────────────
 <FilesMatch "\.(sql|bak|log|sh|env|json|lock|md|yml|yaml|ini|htpasswd|htaccess\.bak)$">

@@ -1,6 +1,7 @@
 -- ============================================================
 -- Tanka Prasad Adhikari — Portfolio Setup SQL (Full Dynamic)
 -- Run this file once in your cPanel phpMyAdmin
+-- Run again to ADD INDEXES (safe to re-run — IF NOT EXISTS used)
 -- ============================================================
 
 SET NAMES utf8mb4;
@@ -260,3 +261,45 @@ CREATE TABLE IF NOT EXISTS `messages` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `is_read` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ── Performance Indexes ─────────────────────────────────────────────────
+-- NOTE: Requires MySQL 8.0.29+. If host uses MySQL 5.7, run these manually
+-- via phpMyAdmin → SQL tab:
+--
+-- CREATE INDEX idx_messages_is_read ON messages(is_read);
+-- CREATE INDEX idx_messages_created ON messages(created_at);
+-- CREATE INDEX idx_experience_sort ON experience(sort_order);
+-- ... etc.
+--
+-- Or upgrade MySQL. Indexes significantly speed up queries on large tables.
+
+DELIMITER $$
+DROP PROCEDURE IF EXISTS add_idx$$
+CREATE PROCEDURE add_idx(IN tbl VARCHAR(128), IN idx VARCHAR(128), IN cols VARCHAR(255))
+BEGIN
+  DECLARE exists_cnt INT DEFAULT 0;
+  SELECT COUNT(*) INTO exists_cnt FROM information_schema.statistics
+    WHERE table_schema = DATABASE() AND table_name = tbl AND index_name = idx;
+  IF exists_cnt = 0 THEN
+    SET @sql = CONCAT('ALTER TABLE `', tbl, '` ADD INDEX `', idx, '` (', cols, ')');
+    PREPARE stmt FROM @sql; EXECUTE stmt; DEALLOCATE PREPARE stmt;
+  END IF;
+END$$
+DELIMITER ;
+
+CALL add_idx('messages', 'idx_messages_is_read', '`is_read`');
+CALL add_idx('messages', 'idx_messages_created', '`created_at`');
+CALL add_idx('experience', 'idx_experience_sort', '`sort_order`');
+CALL add_idx('education', 'idx_education_sort', '`sort_order`');
+CALL add_idx('skills', 'idx_skills_sort', '`sort_order`');
+CALL add_idx('skills', 'idx_skills_category', '`category`');
+CALL add_idx('projects', 'idx_projects_sort', '`sort_order`');
+CALL add_idx('awards', 'idx_awards_sort', '`sort_order`');
+CALL add_idx('news', 'idx_news_sort', '`sort_order`');
+CALL add_idx('training', 'idx_training_sort', '`sort_order`');
+CALL add_idx('research', 'idx_research_sort', '`sort_order`');
+CALL add_idx('interests', 'idx_interests_sort', '`sort_order`');
+CALL add_idx('portfolio_sites', 'idx_portfolio_sort', '`sort_order`');
+CALL add_idx('services_about', 'idx_services_sort', '`sort_order`');
+
+DROP PROCEDURE IF EXISTS add_idx$$
