@@ -115,7 +115,66 @@ a{color:var(--cyan);text-decoration:none}a:hover{text-decoration:underline}
 /* ── Reduced motion preference ─────────────────────────── */
 @media(prefers-reduced-motion:reduce){
   *,::before,::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+  .hero-eyebrow,.hero-text h1,.hero-text h1 span::after,.hero-sub,.meta-row,.hero-stats-row,
+  .card-dark,section>*:not(.section-title):not(.section-underline),
+  .hero-avatar-box::before,.avatar-ring,.section-title{animation:none!important}
 }
+
+/* ── Hero typing animation ─────────────────────────────── */
+@keyframes fadeInUp{
+  from{opacity:0;transform:translateY(20px)}
+  to{opacity:1;transform:translateY(0)}
+}
+@keyframes fadeInLeft{
+  from{opacity:0;transform:translateX(-20px)}
+  to{opacity:1;transform:translateX(0)}
+}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+
+.hero-eyebrow{animation:fadeInLeft .6s ease-out both}
+.hero-text h1{animation:fadeInUp .7s ease-out .15s both}
+.hero-text h1 span{position:relative;display:inline-block}
+.hero-text h1 span::after{content:'';display:inline-block;width:3px;height:1em;background:var(--cyan);margin-left:4px;vertical-align:text-bottom;animation:blink 1.2s step-end infinite}
+.hero-sub{animation:fadeInUp .7s ease-out .3s both}
+.meta-row{animation:fadeInUp .7s ease-out .4s both}
+.hero-stats-row{animation:fadeInUp .7s ease-out .5s both}
+
+/* ── Card entrance animations ──────────────────────────── */
+@keyframes slideInUp{
+  from{opacity:0;transform:translateY(24px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.card-dark{animation:slideInUp .5s ease-out both}
+section>*:not(.section-title):not(.section-underline){animation:slideInUp .5s ease-out both}
+section>.card-dark:nth-child(1){animation-delay:.05s}
+section>.card-dark:nth-child(2){animation-delay:.1s}
+section>.card-dark:nth-child(3){animation-delay:.15s}
+section>.card-dark:nth-child(4){animation-delay:.2s}
+section>.card-dark:nth-child(5){animation-delay:.25s}
+
+/* ── Hero gradient shimmer on avatar ────────────────────── */
+@keyframes gradientShift{
+  0%,100%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+}
+.hero-avatar-box::before{
+  content:'';position:absolute;inset:0;border-radius:18px;
+  background:linear-gradient(135deg,var(--cyan),var(--violet),var(--cyan));
+  background-size:200% 200%;
+  animation:gradientShift 4s ease infinite;
+  opacity:.15;z-index:0;
+}
+
+/* ── Section titles animate in ────────────────────────── */
+.section-title{animation:fadeInUp .6s ease-out both}
+
+/* ── Glow pulse on avatar ring ─────────────────────────── */
+@keyframes glowPulse{
+  0%,100%{box-shadow:0 0 8px rgba(34,211,238,.3),0 0 16px rgba(139,92,246,.15)}
+  50%{box-shadow:0 0 16px rgba(34,211,238,.5),0 0 32px rgba(139,92,246,.25)}
+}
+.avatar-ring{animation:glowPulse 3s ease-in-out infinite}
 
 /* ── Layout: two floating cards ── */
 .layout{position:relative;z-index:1;display:flex;gap:16px;padding:16px;height:100vh;align-items:stretch}
