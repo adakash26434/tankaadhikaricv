@@ -27,11 +27,22 @@ $role     = h($p['role'] ?? '');
 $avatar   = h($p['avatar'] ?? 'img/avatar.jpg');
 $cvFile   = h($p['cv_file'] ?? 'files/canada.pdf');
 $firstName = explode(' ', $p['full_name'] ?? 'Tanka')[0];
+// Social links for Schema.org sameAs
+$sameAs = array_filter([
+    $p['facebook_url']  ?? '',
+    $p['linkedin_url']  ?? '',
+    $p['youtube_url']   ?? '',
+    $p['tiktok_url']    ?? '',
+    $p['whatsapp_url']  ?? '',
+]);
 // Dynamic site URL — auto-detected, no hardcoding needed
 $_proto   = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
-$_host    = $_SERVER['HTTP_HOST'] ?? 'your-domain.com';
+$_host    = $_SERVER['HTTP_HOST'] ?? 'www.tankaadhikari.com.np';
 $siteUrl  = $_proto . '://' . $_host;
-$ogImage  = $siteUrl . '/' . ltrim($p['avatar'] ?? 'img/avatar.jpg', '/');
+// OG image: use dedicated og_image field from profile if set, else avatar
+$ogImage  = !empty($p['og_image'])
+    ? $siteUrl . '/' . ltrim($p['og_image'], '/')
+    : $siteUrl . '/' . ltrim($p['avatar'] ?? 'img/avatar.jpg', '/');
 $_fn = $p['full_name'] ?? 'Tanka Prasad Adhikari';
 $_ti = $p['title'] ?? 'Founder & CEO';
 $_co = $p['company'] ?? 'Aakash Digital Pvt. Ltd.';
@@ -62,12 +73,16 @@ $siteDesc = htmlspecialchars("{$_fn} is the {$_ti} of {$_co}, leading digital tr
   "@type": "Person",
   "name": "<?=addslashes($p['full_name']??'Tanka Prasad Adhikari')?>",
   "jobTitle": "<?=addslashes($p['title']??'Founder & CEO')?>",
+  "description": "<?=addslashes($p['bio']??'')?>",
   "worksFor": {"@type": "Organization", "name": "<?=addslashes($p['company']??'Aakash Digital Pvt. Ltd.')?>", "url": "<?=addslashes($p['company_url']??'')?>"},
   "email": "<?=addslashes($p['email']??'')?>",
   "telephone": "<?=addslashes($p['phone']??'')?>",
   "address": {"@type": "PostalAddress", "addressLocality": "<?=addslashes($p['location']??'Pokhara')?>", "addressCountry": "NP"},
   "url": "<?=addslashes($siteUrl)?>",
   "image": "<?=addslashes($ogImage)?>"
+  <?php if($sameAs): ?>,
+  "sameAs": [<?php $sa=array_values($sameAs); foreach($sa as $i=>$u): echo '"'.addslashes($u).'"'.($i<count($sa)-1?',':''); endforeach; ?>]
+  <?php endif; ?>
 }
 </script>
 <link rel="icon" type="image/png" sizes="32x32" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌐</text></svg>">
@@ -81,7 +96,7 @@ $siteDesc = htmlspecialchars("{$_fn} is the {$_ti} of {$_co}, leading digital tr
 *{box-sizing:border-box;margin:0;padding:0}
 :root{--bg:#0d1117;--sidebar:#161b27;--card:#1e2535;--border:#263147;--text:#c9d1e3;--muted:#64748b;--cyan:#22d3ee;--violet:#8b5cf6;--accent:#0ea5e9}
 html{scroll-behavior:smooth}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow:hidden}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
 /* ── Animated background ── */
 body::before{content:'';position:fixed;inset:0;background:
   radial-gradient(ellipse 80% 60% at 20% 0%,rgba(14,165,233,.18) 0%,transparent 60%),

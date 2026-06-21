@@ -26,7 +26,9 @@ CREATE TABLE IF NOT EXISTS `profile` (
   `linkedin_url` varchar(255) NOT NULL DEFAULT '',
   `youtube_url` varchar(255) NOT NULL DEFAULT '',
   `cv_file` varchar(255) NOT NULL DEFAULT 'files/canada.pdf',
-  `avatar` varchar(255) NOT NULL DEFAULT 'img/avatar.jpg'
+  `avatar` varchar(255) NOT NULL DEFAULT 'img/avatar.jpg',
+  `og_image` varchar(255) NOT NULL DEFAULT '',
+  `contact_email` varchar(255) NOT NULL DEFAULT ''
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO `profile` (`full_name`,`title`,`bio`,`email`,`phone`,`location`,`born`,`company`,`company_url`,`role`,`facebook_url`,`tiktok_url`,`whatsapp_url`,`linkedin_url`,`youtube_url`,`cv_file`,`avatar`) VALUES

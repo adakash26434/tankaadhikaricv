@@ -11,7 +11,7 @@ $profile = dbRow("SELECT * FROM profile LIMIT 1");
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     verifyCsrf();
-    $fields = ['full_name','title','bio','email','phone','location','born','company','company_url','role','facebook_url','tiktok_url','whatsapp_url','linkedin_url','youtube_url','cv_file'];
+    $fields = ['full_name','title','bio','email','phone','location','born','company','company_url','role','facebook_url','tiktok_url','whatsapp_url','linkedin_url','youtube_url','cv_file','og_image','contact_email'];
     $vals = [];
     $sets = [];
     foreach ($fields as $f) {
@@ -62,6 +62,10 @@ include __DIR__ . '/header.php';
       <input type="url" id="pf-yt" name="youtube_url" value="<?=h($profile['youtube_url']??'')?>">
       <label for="pf-cv">CV File path (e.g. files/cv.pdf)</label>
       <input type="text" id="pf-cv" name="cv_file" value="<?=h($profile['cv_file']??'')?>">
+      <label for="pf-ogimg">OG Image path (for LinkedIn/Twitter share card — e.g. img/og-image.jpg — recommended 1200x630px)</label>
+      <input type="text" id="pf-ogimg" name="og_image" value="<?=h($profile['og_image']??'')?>" placeholder="img/og-image.jpg">
+      <label for="pf-contact-email">Admin Email for Contact Notifications <span style="color:#64748b;font-weight:400">(new messages will be emailed here)</span></label>
+      <input type="email" id="pf-contact-email" name="contact_email" value="<?=h($profile['contact_email']??'')?>" placeholder="aakashpame@gmail.com">
     </div>
   </div>
   <label for="pf-bio">Bio / About Text</label>

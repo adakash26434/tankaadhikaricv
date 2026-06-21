@@ -53,7 +53,29 @@ if (mb_strlen($message) > 3000) {
     exit;
 }
 
+// Save message to database
 dbExec("INSERT INTO messages (name,email,subject,message) VALUES (?,?,?,?)", [$name, $email, $subject, $message]);
+
+// Send email notification to admin
+$toEmail = dbRow("SELECT contact_email FROM profile LIMIT 1");
+$toEmail = $toEmail['contact_email'] ?? '';
+if ($toEmail && filter_var($toEmail, FILTER_VALIDATE_EMAIL)) {
+    $siteName = dbRow("SELECT full_name FROM profile LIMIT 1")['full_name'] ?? 'Tanka Adhikari';
+    $emailSubject = $subject ?: 'New Contact Form Message';
+    $emailBody = "You received a new message from your portfolio contact form.\n\n"
+        . "Name: $name\n"
+        . "Email: $email\n"
+        . "Subject: " . ($subject ?: '(none)') . "\n\n"
+        . "Message:\n$message\n\n"
+        . "---\nSent via tankaadhikari.com.np";
+    $headers = [
+        'From: noreply@tankaadhikari.com.np',
+        'Reply-To: ' . $email,
+        'X-Mailer: PHP/' . phpversion(),
+        'Content-Type: text/plain; charset=UTF-8',
+    ];
+    @mail($toEmail, "[Portfolio] " . $emailSubject, $emailBody, implode("\r\n", $headers));
+}
 
 $reqs[] = $now;
 $_SESSION['contact_requests'] = array_values($reqs);
