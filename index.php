@@ -260,7 +260,7 @@ section+section{margin-top:52px;padding-top:40px;border-top:1px solid var(--bord
 .port-info p{font-size:12.5px;font-weight:700;color:#fff;margin-bottom:2px}
 .port-info span{font-size:11px;color:var(--muted)}
 /* Awards */
-.award-card{background:linear-gradient(135deg,rgba(25,34,58,.9),rgba(19,26,46,.9));border:1px solid var(--border);border-radius:14px;padding:24px 26px;margin-bottom:14px;position:relative;overflow:hidden;transition:.2s}
+.award-card{background:linear-gradient(135deg,rgba(25,34,58,.9),rgba(19,26,46,.9));border:1px solid var(--border);border-radius:14px;padding:24px 26px;position:relative;overflow:hidden;transition:.2s}
 .award-card.cyan{border-left:3px solid var(--cyan)}
 .award-card.violet{border-left:3px solid var(--violet)}
 .award-card:hover{box-shadow:0 12px 32px rgba(0,0,0,.35)}
@@ -543,23 +543,27 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(34,211,238,.6);outli
 <!-- AWARDS -->
 <section id="awards">
   <h2 class="section-title">Awards &amp; Nominations</h2><div class="section-underline"></div>
-  <?php if($awards): foreach($awards as $a): $isViolet=$a['color']==='violet'; ?>
-  <div class="award-card <?=$isViolet?'violet':'cyan'?>">
-    <div class="award-badge" style="background:rgba(<?=$isViolet?'139,92,246':'34,211,238'?>,.1);color:<?=$isViolet?'#a78bfa':'var(--cyan)'?>">
-      <i class="fa <?=h($a['icon'])?>"></i> <?=h($a['year'])?>
+  <?php if($awards): ?>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px">
+    <?php foreach($awards as $a): $isViolet=$a['color']==='violet'; ?>
+    <div class="award-card <?=$isViolet?'violet':'cyan'?>">
+      <div class="award-badge" style="background:rgba(<?=$isViolet?'139,92,246':'34,211,238'?>,.1);color:<?=$isViolet?'#a78bfa':'var(--cyan)'?>">
+        <i class="fa <?=h($a['icon'])?>"></i> <?=h($a['year'])?>
+      </div>
+      <div style="font-size:17px;font-weight:900;color:#fff;margin-bottom:4px;letter-spacing:-.2px"><?=h($a['title'])?></div>
+      <div style="font-size:12px;color:<?=$isViolet?'#a78bfa':'var(--cyan)'?>;margin-bottom:10px;font-weight:600"><?=h($a['organization'])?></div>
+      <p style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:14px"><?=h($a['description'])?></p>
+      <?php if($a['image1'] || $a['image2']): ?>
+      <div style="display:grid;grid-template-columns:<?=($a['image1']&&$a['image2'])?'1fr 1fr':'1fr'?>;gap:12px">
+        <?php if($a['image1']): ?><img src="<?=h($a['image1'])?>" alt="<?=h($a['title'])?>" loading="lazy" style="width:100%;height:160px;object-fit:cover;border-radius:8px;border:1px solid var(--border)" /><?php endif; ?>
+        <?php if($a['image2']): ?><img src="<?=h($a['image2'])?>" alt="" loading="lazy" style="width:100%;height:160px;object-fit:cover;border-radius:8px;border:1px solid var(--border)" /><?php endif; ?>
+      </div>
+      <?php endif; ?>
+      <?php if($a['url']): ?><div style="margin-top:12px"><a href="<?=h($a['url'])?>" target="_blank" rel="noopener noreferrer" class="tag" style="font-size:11px">View Certificate ↗</a></div><?php endif; ?>
     </div>
-    <div style="font-size:17px;font-weight:900;color:#fff;margin-bottom:4px;letter-spacing:-.2px"><?=h($a['title'])?></div>
-    <div style="font-size:12px;color:<?=$isViolet?'#a78bfa':'var(--cyan)'?>;margin-bottom:10px;font-weight:600"><?=h($a['organization'])?></div>
-    <p style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:14px"><?=h($a['description'])?></p>
-    <?php if($a['image1'] || $a['image2']): ?>
-    <div style="display:grid;grid-template-columns:<?=($a['image1']&&$a['image2'])?'1fr 1fr':'1fr'?>;gap:12px">
-      <?php if($a['image1']): ?><img src="<?=h($a['image1'])?>" alt="<?=h($a['title'])?>" loading="lazy" style="width:100%;height:160px;object-fit:cover;border-radius:8px;border:1px solid var(--border)" /><?php endif; ?>
-      <?php if($a['image2']): ?><img src="<?=h($a['image2'])?>" alt="" loading="lazy" style="width:100%;height:160px;object-fit:cover;border-radius:8px;border:1px solid var(--border)" /><?php endif; ?>
-    </div>
-    <?php endif; ?>
-    <?php if($a['url']): ?><div style="margin-top:12px"><a href="<?=h($a['url'])?>" target="_blank" rel="noopener noreferrer" class="tag" style="font-size:11px">View Certificate / Award ↗</a></div><?php endif; ?>
+    <?php endforeach; ?>
   </div>
-  <?php endforeach; else: ?>
+  <?php else: ?>
   <p style="color:var(--muted);font-size:13px">No awards found.</p>
   <?php endif; ?>
 </section>
