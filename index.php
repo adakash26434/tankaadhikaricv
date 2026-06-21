@@ -472,20 +472,15 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(34,211,238,.6);outli
 <section id="education">
   <h2 class="section-title">Education</h2><div class="section-underline"></div>
   <?php if($education): ?>
-  <div class="tl-wrap">
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px">
     <?php foreach($education as $i=>$e): ?>
-    <div class="tl-item">
-      <div class="tl-dot<?=$i===0?' violet':''?>"></div>
-      <div class="tl-card">
-        <div class="tl-header">
-          <div>
-            <span class="tag"><?=h($e['degree_code'])?></span>
-            <div style="font-size:13.5px;font-weight:700;color:#fff;margin-top:6px"><?=h($e['degree_name'])?></div>
-            <div style="font-size:11.5px;color:<?=$i===0?'#a78bfa':'var(--cyan)'?>;margin-top:3px;font-weight:600"><?=h($e['institution'])?></div>
-          </div>
-          <div class="tl-period"><?=h($e['period'])?></div>
-        </div>
+    <div class="card-dark" style="border-left:3px solid <?=$i===0?'#a78bfa':'var(--cyan)'?>">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:8px">
+        <span class="tag"><?=h($e['degree_code'])?></span>
+        <span style="font-size:11px;color:var(--muted);white-space:nowrap"><?=h($e['period'])?></span>
       </div>
+      <div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:4px"><?=h($e['degree_name'])?></div>
+      <div style="font-size:12px;color:<?=$i===0?'#a78bfa':'var(--cyan)'?>;font-weight:600"><?=h($e['institution'])?></div>
     </div>
     <?php endforeach; ?>
   </div>
@@ -498,21 +493,16 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(34,211,238,.6);outli
 <section id="experience">
   <h2 class="section-title">Work Experience</h2><div class="section-underline"></div>
   <?php if($experiences): ?>
-  <div class="tl-wrap">
-    <?php foreach($experiences as $i=>$exp): $isViolet = $exp['color']==='violet'; $isCurrent = stripos($exp['period'],'present')!==false; ?>
-    <div class="tl-item">
-      <div class="tl-dot<?=$isViolet?' violet':''?>"></div>
-      <div class="tl-card">
-        <div class="tl-header">
-          <div style="font-size:12.5px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.3px"><?=h($exp['company'])?></div>
-          <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
-            <?php if($isCurrent): ?><span style="font-size:8px;background:rgba(34,211,238,.15);color:var(--cyan);padding:1px 7px;border-radius:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px">Current</span><?php endif; ?>
-            <div class="tl-period"><?=h($exp['period'])?></div>
-          </div>
-        </div>
-        <div style="font-size:12px;color:<?=$isViolet?'#a78bfa':'var(--cyan)'?>;margin-bottom:7px;font-weight:600"><?=h($exp['role'])?></div>
-        <p style="font-size:12.5px;color:var(--muted);line-height:1.75"><?=h($exp['description'])?></p>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px">
+    <?php foreach($experiences as $exp): $isViolet = $exp['color']==='violet'; $isCurrent = stripos($exp['period'],'present')!==false; ?>
+    <div class="card-dark" style="border-left:3px solid <?=$isViolet?'#a78bfa':'var(--cyan)'?>">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:6px">
+        <div style="font-size:12px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.3px"><?=h($exp['company'])?></div>
+        <?php if($isCurrent): ?><span style="font-size:8px;background:rgba(34,211,238,.15);color:var(--cyan);padding:2px 8px;border-radius:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px">Current</span><?php endif; ?>
       </div>
+      <div style="font-size:12px;color:<?=$isViolet?'#a78bfa':'var(--cyan)'?>;font-weight:600;margin-bottom:6px"><?=h($exp['role'])?></div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:8px"><?=h($exp['period'])?></div>
+      <p style="font-size:12px;color:var(--muted);line-height:1.6"><?=h($exp['description'])?></p>
     </div>
     <?php endforeach; ?>
   </div>
