@@ -648,7 +648,7 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(34,211,238,.6);outli
   <p style="font-size:13px;color:var(--muted);margin-bottom:20px;max-width:600px;line-height:1.7">
     Need a professional website, reliable web hosting, or custom email hosting? I provide end-to-end digital solutions tailored for businesses, cooperatives, and startups in Nepal.
   </p>
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-bottom:24px">
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-bottom:24px">
     <!-- Website Development -->
     <div class="card-dark" style="border-left:3px solid var(--cyan)">
       <div style="font-size:26px;margin-bottom:12px">🌐</div>
@@ -693,6 +693,21 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(34,211,238,.6);outli
         <li>Calendar & contacts sync</li>
       </ul>
       <a href="#contact" class="tag" style="display:inline-block;text-align:center;width:100%;background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.2);color:#f59e0b">Setup Email →</a>
+    </div>
+    <!-- Cyber Security Training -->
+    <div class="card-dark" style="border-left:3px solid #f87171">
+      <div style="font-size:26px;margin-bottom:12px">🔒</div>
+      <div style="font-size:15px;font-weight:700;color:#fff;margin-bottom:8px">Cyber Security Training</div>
+      <div style="font-size:24px;font-weight:900;color:#f87171;margin-bottom:4px">NPR 20,000</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:14px">Per person • Group discounts available</div>
+      <ul style="font-size:12px;color:var(--muted);line-height:1.9;padding-left:16px;margin-bottom:16px">
+        <li>Network & endpoint security</li>
+        <li>Phishing & social engineering awareness</li>
+        <li>Data privacy & compliance</li>
+        <li>Incident response basics</li>
+        <li>For businesses, IT teams & individuals</li>
+      </ul>
+      <a href="#contact" class="tag" style="display:inline-block;text-align:center;width:100%;background:rgba(248,113,113,.1);border-color:rgba(248,113,113,.2);color:#f87171">Enroll Now →</a>
     </div>
   </div>
   <div style="background:rgba(34,211,238,.04);border:1px solid rgba(34,211,238,.12);border-radius:12px;padding:16px 20px;font-size:13px;color:var(--muted);line-height:1.7;max-width:700px">
