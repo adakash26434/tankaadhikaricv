@@ -32,7 +32,11 @@ $_proto   = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https'
 $_host    = $_SERVER['HTTP_HOST'] ?? 'your-domain.com';
 $siteUrl  = $_proto . '://' . $_host;
 $ogImage  = $siteUrl . '/' . ltrim($p['avatar'] ?? 'img/avatar.jpg', '/');
-$siteDesc = htmlspecialchars("{$p['full_name']??'Tanka Prasad Adhikari'} is the {$p['title']??'Founder & CEO'} of ".($p['company']??'Aakash Digital Pvt. Ltd.').", leading digital transformation in Nepal's cooperative and fintech sector from ".($p['location']??'Pokhara').".", ENT_QUOTES, 'UTF-8');
+$_fn = $p['full_name'] ?? 'Tanka Prasad Adhikari';
+$_ti = $p['title'] ?? 'Founder & CEO';
+$_co = $p['company'] ?? 'Aakash Digital Pvt. Ltd.';
+$_lo = $p['location'] ?? 'Pokhara';
+$siteDesc = htmlspecialchars("{$_fn} is the {$_ti} of {$_co}, leading digital transformation in Nepal's cooperative and fintech sector from {$_lo}.", ENT_QUOTES, 'UTF-8');
 ?>
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
