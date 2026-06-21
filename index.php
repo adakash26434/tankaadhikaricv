@@ -413,6 +413,14 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(34,211,238,.6);outli
 <!-- ABOUT -->
 <section id="about">
   <div class="hero">
+    <div class="hero-avatar-box">
+      <?php if($avatar && strpos($avatar,'avatar') === false): ?>
+        <img src="<?=$avatar?>" alt="<?=$name?>" />
+      <?php else: ?>
+        <div class="hero-avatar-initials"><?=strtoupper(substr($firstName,0,1).substr(explode(' ',$name)[count(explode(' ',$name))-1],0,1))?></div>
+      <?php endif; ?>
+      <div class="hero-corner">CEO</div>
+    </div>
     <div class="hero-text">
       <div class="hero-eyebrow"><span class="hero-pulse"></span> Welcome to my portfolio</div>
       <h1>Hi, I'm <span><?=h($firstName)?>!</span></h1>
@@ -429,14 +437,6 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(34,211,238,.6);outli
         <div class="hero-stat"><div class="hero-stat-num">500+</div><div class="hero-stat-lbl">Clients Served</div></div>
         <div class="hero-stat"><div class="hero-stat-num">2</div><div class="hero-stat-lbl">Int'l Awards</div></div>
       </div>
-    </div>
-    <div class="hero-avatar-box">
-      <?php if($avatar && strpos($avatar,'avatar') === false): ?>
-        <img src="<?=$avatar?>" alt="<?=$name?>" />
-      <?php else: ?>
-        <div class="hero-avatar-initials"><?=strtoupper(substr($firstName,0,1).substr(explode(' ',$name)[count(explode(' ',$name))-1],0,1))?></div>
-      <?php endif; ?>
-      <div class="hero-corner">CEO</div>
     </div>
   </div>
   <p style="font-size:14px;color:var(--muted);line-height:1.85;margin-bottom:28px;max-width:660px"><?=$bio?></p>
