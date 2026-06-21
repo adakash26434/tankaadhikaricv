@@ -567,21 +567,25 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(34,211,238,.6);outli
 <!-- RESEARCH -->
 <section id="research">
   <h2 class="section-title">Research Publications</h2><div class="section-underline"></div>
-  <?php if($research): foreach($research as $paper): ?>
-  <div class="card-dark" style="margin-bottom:12px;display:flex;align-items:flex-start;gap:16px">
-    <div style="width:36px;height:36px;background:rgba(34,211,238,.08);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--cyan);font-size:14px"><i class="fa fa-file-pdf"></i></div>
-    <div style="flex:1">
-      <div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:4px"><?=h($paper['title'])?></div>
-      <?php if($paper['journal']): ?><div style="font-size:11px;color:var(--cyan);margin-bottom:6px"><i class="fa fa-book" style="margin-right:4px"></i><?=h($paper['journal'])?></div><?php endif; ?>
-      <p style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:8px"><?=h($paper['description'])?></p>
-      <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center">
-        <?php if($paper['pdf_file']): ?><a href="<?=h($paper['pdf_file'])?>" target="_blank" class="tag" style="font-size:11px"><i class="fa fa-download" style="margin-right:4px"></i>Download PDF</a><?php endif; ?>
-        <?php if($paper['url']): ?><a href="<?=h($paper['url'])?>" target="_blank" class="tag" style="font-size:11px;background:rgba(139,92,246,.1);color:#a78bfa;border-color:rgba(139,92,246,.2)"><i class="fa fa-globe" style="margin-right:4px"></i>Published Online ↗</a><?php endif; ?>
+  <?php if($research): ?>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px">
+    <?php foreach($research as $paper): ?>
+    <div class="card-dark">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+        <div style="width:36px;height:36px;background:rgba(34,211,238,.08);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--cyan)"><i class="fa fa-file-pdf"></i></div>
+        <?php if($paper['year']): ?><span style="font-size:11px;color:var(--muted);background:var(--border);padding:3px 10px;border-radius:20px"><?=h($paper['year'])?></span><?php endif; ?>
+      </div>
+      <div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:6px;line-height:1.4"><?=h($paper['title'])?></div>
+      <?php if($paper['journal']): ?><div style="font-size:11px;color:var(--cyan);margin-bottom:8px"><i class="fa fa-book" style="margin-right:4px"></i><?=h($paper['journal'])?></div><?php endif; ?>
+      <p style="font-size:12px;color:var(--muted);line-height:1.65;margin-bottom:12px"><?=h($paper['description'])?></p>
+      <div style="display:flex;flex-wrap:wrap;gap:8px">
+        <?php if($paper['pdf_file']): ?><a href="<?=h($paper['pdf_file'])?>" target="_blank" class="tag" style="font-size:11px"><i class="fa fa-download" style="margin-right:4px"></i>PDF</a><?php endif; ?>
+        <?php if($paper['url']): ?><a href="<?=h($paper['url'])?>" target="_blank" class="tag" style="font-size:11px;background:rgba(139,92,246,.1);color:#a78bfa;border-color:rgba(139,92,246,.2)"><i class="fa fa-globe" style="margin-right:4px"></i>Online ↗</a><?php endif; ?>
       </div>
     </div>
-    <?php if($paper['year']): ?><div style="font-size:11px;color:var(--muted);background:var(--border);padding:3px 8px;border-radius:20px;white-space:nowrap"><?=h($paper['year'])?></div><?php endif; ?>
+    <?php endforeach; ?>
   </div>
-  <?php endforeach; else: ?>
+  <?php else: ?>
   <p style="color:var(--muted);font-size:13px">No research publications found.</p>
   <?php endif; ?>
 </section>
