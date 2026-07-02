@@ -45,8 +45,8 @@ include __DIR__ . '/header.php';
         <input type="text" name="title" value="<?=h($editRow['title']??'')?>" required placeholder="ICT Award Winner 2024 — Aakash Digital">
         <label>Source / Publication Name *</label>
         <input type="text" name="source" value="<?=h($editRow['source']??'')?>" required placeholder="Gorkhapatra National Daily">
-        <label>Image Path (e.g. img/news-screenshot.jpg)</label>
-        <input type="text" name="image" value="<?=h($editRow['image']??'')?>" placeholder="img/news-screenshot.jpg">
+        <label>Image Path (e.g. files/news1.jpeg)</label>
+        <input type="text" name="image" value="<?=h($editRow['image']??'')?>" placeholder="files/news1.jpeg">
       </div>
       <div>
         <label>PDF File Path (e.g. files/news1.pdf)</label>
