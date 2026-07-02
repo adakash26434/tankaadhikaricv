@@ -999,15 +999,23 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(34,211,238,.6);outli
   <h3 style="font-size:11px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:14px">Websites Developed</h3>
   <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-bottom:28px">
     <?php foreach($portfolioSites as $s): ?>
-    <?php $tag = $s['url'] ? '<a href="'.h($s['url']).'" target="_blank" rel="noopener noreferrer"' : '<div'; $closeTag = $s['url'] ? 'a' : 'div'; ?>
-    <<?=$tag?> class="port-item">
+    <?php if($s['url']): ?>
+    <a href="<?=h($s['url'])?>" target="_blank" rel="noopener noreferrer" class="port-item">
       <img src="<?=h($s['image'])?>" alt="<?=h($s['title'])?>" loading="lazy" />
       <div class="port-info">
         <p><?=h($s['title'])?></p>
         <span><?=h($s['subtitle'])?></span>
       </div>
-    </<?=$closeTag?>>
-    <?php endforeach; ?>
+    </a>
+    <?php else: ?>
+    <div class="port-item">
+      <img src="<?=h($s['image'])?>" alt="<?=h($s['title'])?>" loading="lazy" />
+      <div class="port-info">
+        <p><?=h($s['title'])?></p>
+        <span><?=h($s['subtitle'])?></span>
+      </div>
+    </div>
+    <?php endif; endforeach; ?>
   </div>
   <?php endif; ?>
   <h3 style="font-size:11px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:14px">Photo Gallery</h3>
