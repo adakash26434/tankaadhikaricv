@@ -31,8 +31,8 @@ CREATE TABLE IF NOT EXISTS `profile` (
   `contact_email` varchar(255) NOT NULL DEFAULT ''
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-INSERT INTO `profile` (`full_name`,`title`,`bio`,`email`,`phone`,`location`,`born`,`company`,`company_url`,`role`,`facebook_url`,`tiktok_url`,`whatsapp_url`,`linkedin_url`,`youtube_url`,`cv_file`,`avatar`) VALUES
-('Tanka Prasad Adhikari','Founder & Chief Executive Officer','Tanka Prasad Adhikari, the Founder of Aakash Digital Pvt. Ltd., leads the digital transformation of Nepal\'s cooperative sector. With a focus on fintech solutions and automation, he empowers financial institutions to operate efficiently in the digital age.','aakashpame@gmail.com','+977 985-6026434','Pokhara, Nepal','19 March 1990 — Pokhara, Nepal','Aakash Digital Pvt. Ltd.','https://www.aakashdigital.com.np','Founder & CEO','https://www.facebook.com/akashadhikari2','https://www.tiktok.com/@tankaadhikari34','https://wa.me/9779856026434','https://www.linkedin.com/in/tanka-adhikari','https://www.youtube.com/@aakashpame','files/canada.pdf','img/avatar.jpg');
+INSERT INTO `profile` (`full_name`,`title`,`bio`,`email`,`phone`,`location`,`born`,`company`,`company_url`,`role`,`facebook_url`,`tiktok_url`,`whatsapp_url`,`linkedin_url`,`youtube_url`,`cv_file`,`avatar`,`og_image`,`contact_email`) VALUES
+('Tanka Prasad Adhikari','Founder & Chief Executive Officer','Tanka Prasad Adhikari, the Founder of Aakash Digital Pvt. Ltd., leads the digital transformation of Nepal\'s cooperative sector. With a focus on fintech solutions and automation, he empowers financial institutions to operate efficiently in the digital age.','aakashpame@gmail.com','+977 985-6026434','Pokhara, Nepal','19 March 1990 — Pokhara, Nepal','Aakash Digital Pvt. Ltd.','https://www.aakashdigital.com.np','Founder & CEO','https://www.facebook.com/akashadhikari2','https://www.tiktok.com/@tankaadhikari34','https://wa.me/9779856026434','https://www.linkedin.com/in/tanka-adhikari','https://www.youtube.com/@aakashpame','files/canada.pdf','img/avatar.jpg','','');
 
 -- Education
 CREATE TABLE IF NOT EXISTS `education` (
@@ -45,10 +45,10 @@ CREATE TABLE IF NOT EXISTS `education` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO `education` (`degree_code`,`degree_name`,`institution`,`period`,`sort_order`) VALUES
-('MBS','Master of Business Studies','Pokhara University — Prithvi Narayan Campus, Pokhara','2013 – 2015',1),
-('BBS','Bachelor of Business Studies','Prithvi Narayan Campus, Pokhara','2007 – 2011',2),
-('PCL','Proficiency Certificate Level (Commerce)','Prithvi Narayan Campus, Pokhara','2005 – 2007',3),
-('SLC','School Leaving Certificate','Bhadrakali Bal Bidhyalaya, Pokhara','2005',4);
+('MBS','Master of Business Studies (MBS - Management)','Janapriya Multiple Campus, Tribhuvan University','Graduated: November 2019',1),
+('BBS','Bachelor of Business Studies (BBS - Management)','Prithivi Narayan Campus, Tribhuvan University','Graduated: June 2013',2),
+('PCL','Proficiency Certificate Level (PCL) in Management','Prithivi Narayan Campus, Tribhuvan University','Graduated: March 2008',3),
+('SLC','School Leaving Certificate (10th Grade)','Shree Siddha Baraha Secondary School, Board of Nepal','Graduated: February 2004',4);
 
 -- Work Experience
 CREATE TABLE IF NOT EXISTS `experience` (
@@ -81,19 +81,19 @@ CREATE TABLE IF NOT EXISTS `training` (
   `sort_order` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-INSERT INTO `training` (`icon`,`name`,`organizer`,`year`,`sort_order`) VALUES
-('award','Bikalpa Business Award — 2071','Bikalpa Organization','2071 BS',1),
-('certificate','Training on Cooperative Management','Ministry of Land Management, Nepal','2072 BS',2),
-('laptop','Computer Operator Training','Prithivi Computer Centre','1993',3),
-('book-open','Introduction to Financial Planning','Nepal College of Chartered Accountancy','2019',4),
-('shield-alt','DMS Operator Training','Aakash Digital Pvt. Ltd.','2018',5),
-('hand-holding-usd','Loan Recovery Training','Gandaki Cooperative Association','2017',6),
-('university','Higher Education in Cooperative','Pokhara University, FOM','2016',7),
-('chart-bar','Financial Statement Analysis','Nepal Commerce Campus','2015',8),
-('users','HR Management Workshop','FOM, Pokhara','2014',9),
-('leaf','Sustainable Business Practices','FNCCI Gandaki','2014',10),
-('bullhorn','Marketing Strategy Workshop','Nepal Marketing Professionals','2013',11),
-('globe','E-Governance Training','Ministry of Federal Affairs','2020',12);
+INSERT INTO `training` (`icon`,`name`,`organizer`,`year`,`certificate_file`,`certificate_url`,`sort_order`) VALUES
+('laptop','Web Designing Training','Code IT — HTML, CSS, JavaScript, UI/UX','2024','','',1),
+('certificate','Project Approach to Co-Operative Development','National Cooperative Union of India (NCUI) & CENTRABANK, New Delhi','2022','','',2),
+('users','Social Work — Charter President','Lions Clubs International','2019','','',3),
+('certificate','Manager Training','Nepal Federation of Saving & Credit Cooperative Unions Ltd. (NEFSCUN)','2018','','',4),
+('certificate','National Workshop on Account Supervisory Committee of Cooperatives','Nepal Federation of Saving & Credit Cooperative Unions Ltd. (NEFSCUN)','2017','','',5),
+('globe','Exposure Programme in SHG, JLG, and Farmers Club','Reserve Bank of India','2017','','',6),
+('certificate','CEO Workshop','Nepal Federation of Saving & Credit Cooperative Unions Ltd. (NEFSCUN)','2016','','',7),
+('chart-bar','Account, Audit, and Tax Management Training','Management Training Consultant Service Center','2012','','',8),
+('university','Banking Course','KFA Training School, Kathmandu','2010','','',9),
+('book-open','Diploma Course','Friends of Nepali Village, Pokhara','2009','','',10),
+('laptop','Basic Computer Knowledge','2000 Computer Institution, Pokhara','2007','','',11),
+('certificate','Radio Program Training','Multi Skill Development Training Institution, Pokhara','2007','','',12);
 
 -- Awards & Nominations
 CREATE TABLE IF NOT EXISTS `awards` (
@@ -126,12 +126,12 @@ CREATE TABLE IF NOT EXISTS `research` (
   `sort_order` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-INSERT INTO `research` (`title`,`description`,`pdf_file`,`year`,`sort_order`) VALUES
-('Digital Transformation in Nepal\'s Cooperative Sector','Research on digitizing cooperative operations for efficiency and transparency, with focus on document management systems.','files/research1.pdf','2020',1),
-('FinTech Innovation and Rural Financial Inclusion','Study on how fintech solutions bridge the financial inclusion gap in rural Nepal\'s cooperative institutions.','files/research2.pdf','2021',2),
-('E-Governance Framework for Cooperatives','Framework proposal for implementing e-governance in Nepal\'s cooperative federations.','files/research3.pdf','2022',3),
-('Impact of Automation on Loan Recovery Rates','Quantitative analysis of automation\'s effect on loan recovery efficiency in Gandaki Province cooperatives.','files/research4.pdf','2023',4),
-('Cooperative Leadership in the Digital Age','Leadership models for managing digital transformation in traditional cooperative institutions.','files/research5.pdf','2024',5);
+INSERT INTO `research` (`title`,`description`,`pdf_file`,`year`,`journal`,`url`,`sort_order`) VALUES
+('Cooperative Weak Documentation and Automation','Investigated why the loan documents of cooperatives are weak and suggested measures to improve them, including proper digitization, standardized documentation, and staff training.','files/canada2.pdf','2024','Akash DMS Research Series','',1),
+('Digital Transformation of Nepalese Cooperatives Through Aakash DMS (SIP2026 Canada)','Keywords: Digital transformation, cooperatives, workflow automation, document management, financial inclusion, Nepal.','files/Abstract ID- SIP26-CA-166 full paper.pdf','2026','Research Now — SIP26-CA-166','',2),
+('Leading the Financial Digital Era in Nepal: Akash Digital\'s Contribution','This paper addresses a critical challenge in Financial Inclusion and FinTech in Emerging Economies — specifically, the systemic lack of digitization within Nepal\'s high-impact cooperative financial sector.','files/canada1.pdf','2025','Research Now','https://www.researchgate.net/publication/leading-financial-digital-era-nepal-akash-digital-contribution',3),
+('Consumer Satisfaction Among Major Internet Service Providers in Pokhara','Surveyed customers in Pokhara to determine the percentage satisfied with internet services, highlighting service gaps and areas for improvement. In partial fulfillment of the requirement of the degree of Master in Business Studies (MBS).','files/research-paper-paperless-loan.pdf','2015','MBS Thesis — Pokhara University','https://www.researchgate.net/publication/consumer-satisfaction-isps-pokhara',4),
+('Concerns About Paperless Loan Applications','Explored how many people are concerned about the future loan application process without physical documents and identified strategies to ease the transition to paperless workflows.','files/canada4.pdf','2025','Akash DMS Research Series','',5);
 
 -- News & Online Publications
 CREATE TABLE IF NOT EXISTS `news` (
@@ -145,12 +145,11 @@ CREATE TABLE IF NOT EXISTS `news` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO `news` (`image`,`title`,`source`,`pdf_file`,`url`,`sort_order`) VALUES
-('img/news-screenshot.jpg','ICT Award Winner 2024 — Aakash Digital','Gorkhapatra National Daily','files/news1.pdf','',1),
-('img/news1-screenshot.jpg','Tanka Adhikari Named in Innovate Finance Powerlist 2026','Mero Online News','files/news2.pdf','',2),
-('img/news2-screenshot.jpg','Digital Cooperative Management: Aakash DMS Revolution','Online Khabar','files/news3.pdf','',3),
-('img/news3-screenshot.jpg','Pokhara Entrepreneur Leads Digital Transformation','Nagarik Daily','files/news4.pdf','',4),
-('img/news4-screenshot.jpg','FinTech Innovation Award for Aakash Digital','Karobar Daily','files/news5.pdf','',5),
-('img/news5-screenshot.jpg','Cooperative Sector Digitization — Success Story','Hamro Patro News','files/news6.pdf','',6);
+('files/news1.jpeg','आकाश डिजिटलमा टंक अधिकारीको प्रेरक यात्रा…','वित्तीय पोस्ट — असार १०, २०८२','','https://bittiyapost.com/news/2025/06/24/17259',1),
+('files/news2.jpeg','सहकारी क्षेत्रको डिजिटल यात्रा — धिप्री डटकम','धिप्री डटकम — Online News','','https://dhipri.com/posts/1674',2),
+('files/news3.jpeg','टंक अधिकारी: सहकारी डिजिटल यात्रा','धिप्री डटकम — Online News','','https://dhipri.com/posts/1269',3),
+('files/news4.jpeg','सहकारी क्षेत्रमा डिजिटल परिवर्तन','सहकारी अखवार — Online News','','https://sahakariakhabar.com/news/1711866423',4),
+('files/news5.jpeg','सहकारीखबर: टंक अधिकारीको योगदान','सहकारीखबर — Online News','','https://www.sahakarikhabar.com/2024/03/13/tank-adhikari/',5);
 
 -- Skills
 CREATE TABLE IF NOT EXISTS `skills` (
@@ -166,15 +165,22 @@ INSERT INTO `skills` (`category`,`name`,`level`,`sort_order`) VALUES
 ('Professional','Cooperative Management',92,2),
 ('Professional','FinTech Consulting',90,3),
 ('Professional','Digital Transformation',88,4),
-('Code','Web Development',75,5),
-('Code','PHP / MySQL',70,6),
-('Code','JavaScript',65,7),
-('Software','Microsoft Office',90,8),
-('Software','Aakash DMS',95,9),
-('Software','Database Management',80,10),
-('Language','Nepali',99,11),
-('Language','English',75,12),
-('Language','Hindi',80,13);
+('Professional','Communication',70,5),
+('Professional','Confidence',85,6),
+('Code','HTML5 / CSS3',90,7),
+('Code','PHP / MySQL',70,8),
+('Code','JavaScript',65,9),
+('Code','Web Development',75,10),
+('Software','Aakash DMS',95,11),
+('Software','Microsoft Office',90,12),
+('Software','Adobe Photoshop',85,13),
+('Software','Adobe Illustrator',90,14),
+('Software','GitHub / Version Control',90,15),
+('Software','cPanel Hosting',85,16),
+('Software','Database Management',80,17),
+('Language','Nepali',99,18),
+('Language','English',75,19),
+('Language','Hindi',80,20);
 
 -- Projects
 CREATE TABLE IF NOT EXISTS `projects` (
@@ -242,16 +248,18 @@ CREATE TABLE IF NOT EXISTS `interests` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO `interests` (`icon`,`name`,`sort_order`) VALUES
-('laptop-code','Digital Innovation',1),
-('chart-line','FinTech',2),
-('users','Cooperative Dev',3),
-('globe','E-Governance',4),
-('book','Reading',5),
-('microphone','Speaking',6),
-('plane','Travel',7),
-('mountain','Hiking',8),
-('music','Music',9),
-('camera','Photography',10);
+('search','Research & Exploring New Topics',1),
+('bicycle','Cycling',2),
+('plane','Traveling',3),
+('music','Working with Music',4),
+('laptop-code','Digital Innovation',5),
+('chart-line','FinTech',6),
+('users','Cooperative Development',7),
+('globe','E-Governance',8),
+('book','Reading',9),
+('microphone','Speaking',10),
+('mountain','Hiking',11),
+('camera','Photography',12);
 
 -- Contact Messages
 CREATE TABLE IF NOT EXISTS `messages` (
