@@ -14,6 +14,7 @@ function getDB(): PDO {
                     PDO::ATTR_EMULATE_PREPARES   => false,
                 ]
             );
+            $pdo->exec("SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci");
         } catch (PDOException $e) {
             // Log internally, never expose DB credentials/structure to the browser
             error_log('[Portfolio DB Error] ' . $e->getMessage());

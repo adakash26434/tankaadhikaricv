@@ -973,7 +973,7 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(34,211,238,.6);outli
       <div style="padding:20px">
         <div style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:6px">YouTube Channel</div>
         <div style="font-size:12px;color:var(--muted);margin-bottom:12px">Digital transformation, cooperative management, and FinTech insights from Nepal.</div>
-        <span class="tag" style="background:rgba(255,0,0,.1);color:#ff6b6b;border-color:rgba(255,0,0,.2)">@aakashpame ↗</span>
+        <span class="tag" style="background:rgba(255,0,0,.1);color:var(--red);border-color:rgba(255,0,0,.2)">@aakashpame ↗</span>
       </div>
     </a>
     <?php endif; ?>
@@ -1213,12 +1213,12 @@ async function sendMessage(e) {
     const res = await fetch('contact.php', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(data) });
     const json = await res.json();
     if (json.response === 'success') {
-      msg.style.cssText='display:block;background:rgba(34,211,238,.08);border:1px solid rgba(34,211,238,.2);color:#67e8f9;border-radius:8px;padding:10px 14px;font-size:13px;margin-bottom:14px';
+      msg.style.cssText='display:block;background:rgba(34,211,238,.08);border:1px solid rgba(34,211,238,.2);color:var(--cyan);border-radius:8px;padding:10px 14px;font-size:13px;margin-bottom:14px';
       msg.textContent = '✅ Message sent! Thank you, we will get back to you soon.';
       form.reset();
     } else { throw new Error(json.error || 'Something went wrong. Please try again.'); }
   } catch(err) {
-    msg.style.cssText='display:block;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);color:#f87171;border-radius:8px;padding:10px 14px;font-size:13px;margin-bottom:14px';
+    msg.style.cssText='display:block;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);color:var(--red);border-radius:8px;padding:10px 14px;font-size:13px;margin-bottom:14px';
     msg.textContent = '❌ ' + err.message;
   }
   btn.disabled = false; btn.innerHTML = '<i class="fa fa-paper-plane"></i> Send Message';
