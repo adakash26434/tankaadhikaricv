@@ -1,37 +1,31 @@
 <?php
 require_once __DIR__ . '/../config.php';
 
-// ── SESSION CONFIGURATION ──────────────────────────────────────────────────────
-// Timeout in seconds: 7200 = 2 hours (logged in users stay logged in 2 hours)
-// Adjust this value to change auto-logout time:
-//   1800  = 30 minutes (default, more secure)
+// ── SESSION TIMEOUT CONFIGURATION ──────────────────────────────────────────────
+// Change this value to adjust auto-logout time:
+//   1800  = 30 minutes (most secure)
 //   3600  = 1 hour
-//   7200  = 2 hours
-//  14400  = 4 hours
-//  86400  = 24 hours (least secure)
+//   7200  = 2 hours (default)
 if (!defined('SESSION_TIMEOUT_SECS')) {
-    define('SESSION_TIMEOUT_SECS', 7200); // Default: 2 hours
+    define('SESSION_TIMEOUT_SECS', 7200);
 }
 
 // ── BOOTSTRAP SESSION ──────────────────────────────────────────────────────────
 if (session_status() === PHP_SESSION_NONE) {
-    // Secure cookie settings for production
     session_set_cookie_params([
-        'lifetime' => SESSION_TIMEOUT_SECS,
+        'lifetime' => 0,
         'path'     => '/',
-        'secure'   => isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off',
+        'secure'   => empty($_SERVER['HTTPS']) ? false : ($_SERVER['HTTPS'] !== 'off'),
         'httponly' => true,
         'samesite' => 'Lax',
     ]);
-    session_name('TANKAAD_SESSION');
-    session_start();
+    @session_start();
 
-    // Regenerate session ID periodically to prevent fixation attacks
+    // Periodically regenerate session ID to prevent fixation attacks
     if (!isset($_SESSION['_created'])) {
         $_SESSION['_created'] = time();
     } elseif (time() - $_SESSION['_created'] > 300) {
-        // Regenerate every 5 minutes
-        session_regenerate_id(true);
+        @session_regenerate_id(true);
         $_SESSION['_created'] = time();
     }
 }
@@ -40,9 +34,9 @@ function requireAdmin(): void {
     if (!empty($_SESSION[ADMIN_SESSION_KEY])) {
         $lastActivity = $_SESSION['last_activity'] ?? 0;
         if (time() - $lastActivity > SESSION_TIMEOUT_SECS) {
-            $_SESSION['_timed_out'] = true; // Persist timeout flag in session
-            session_unset();
-            session_destroy();
+            $_SESSION['_timed_out'] = true;
+            @session_unset();
+            @session_destroy();
             header('Location: login.php');
             exit;
         }
@@ -52,8 +46,7 @@ function requireAdmin(): void {
         header('Location: login.php');
         exit;
     }
-    // Close session early to prevent write locks blocking other requests
-    session_write_close();
+    @session_write_close();
 }
 
 function isAdmin(): bool {
