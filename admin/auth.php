@@ -2,27 +2,34 @@
 require_once __DIR__ . '/../config.php';
 
 // ── SESSION TIMEOUT CONFIGURATION ──────────────────────────────────────────────
-// Change this value to adjust auto-logout time:
-//   1800  = 30 minutes (most secure)
-//   3600  = 1 hour
-//   7200  = 2 hours (default)
+//   1800  = 30 minutes   |   3600 = 1 hour   |   7200 = 2 hours (default)
 if (!defined('SESSION_TIMEOUT_SECS')) {
     define('SESSION_TIMEOUT_SECS', 7200);
 }
 
 // ── BOOTSTRAP SESSION ──────────────────────────────────────────────────────────
+// Only start session if not already active
 if (session_status() === PHP_SESSION_NONE) {
-    session_set_cookie_params([
-        'lifetime' => 0,
+    // Detect HTTPS reliably — works behind Cloudflare, CDN, reverse proxies
+    $isHttps = (
+        isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off'
+        || isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) === 'https'
+        || isset($_SERVER['HTTP_X_FORWARDED_SSL']) && $_SERVER['HTTP_X_FORWARDED_SSL'] === 'on'
+        || isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443
+        || !empty($_SERVER['HTTP_CF_VISITOR']) // Cloudflare
+    );
+
+    @session_set_cookie_params([
+        'lifetime' => 0,    // 0 = session cookie (expires when browser closes)
         'path'     => '/',
-        'secure'   => empty($_SERVER['HTTPS']) ? false : ($_SERVER['HTTPS'] !== 'off'),
+        'secure'   => $isHttps ? true : false,
         'httponly' => true,
         'samesite' => 'Lax',
     ]);
     @session_start();
 
-    // Periodically regenerate session ID to prevent fixation attacks
-    if (!isset($_SESSION['_created'])) {
+    // Regenerate session ID every 5 minutes to prevent fixation
+    if (empty($_SESSION['_created'])) {
         $_SESSION['_created'] = time();
     } elseif (time() - $_SESSION['_created'] > 300) {
         @session_regenerate_id(true);
