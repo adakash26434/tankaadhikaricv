@@ -458,6 +458,7 @@ section+section{margin-top:52px;padding-top:40px;border-top:1px solid var(--bord
 .port-info{padding:10px 12px}
 .port-info p{font-size:12.5px;font-weight:700;color:var(--text);margin-bottom:2px}
 .port-info span{font-size:11px;color:var(--muted)}
+.port-stars{color:#f59e0b;font-size:10px;letter-spacing:1px;margin-left:4px}
 
 /* ═══════════════════════════════════════════════════════
    AWARDS
@@ -1029,68 +1030,84 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(34,211,238,.6);outli
   <p style="font-size:13px;color:var(--muted);margin-bottom:20px;max-width:600px;line-height:1.7">
     Need a professional website, reliable web hosting, or custom email hosting? I provide end-to-end digital solutions tailored for businesses, cooperatives, and startups in Nepal.
   </p>
+  <?php
+  $pricingServices = dbRows("SELECT * FROM services_about WHERE is_pricing=1 ORDER BY sort_order, id");
+  if ($pricingServices): ?>
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-bottom:24px">
-    <!-- Website Development -->
+    <?php foreach($pricingServices as $s):
+      $accent   = h($s['accent_color'] ?? 'cyan');
+      $features = $s['features'] ? json_decode($s['features'], true) : [];
+      $rgbaArr  = ['cyan'=>'34,211,238','violet'=>'139,92,246','yellow'=>'245,158,11','red'=>'239,68,68','amber'=>'245,158,11','green'=>'34,197,94'];
+      $rgba     = $rgbaArr[$s['accent_color']] ?? '34,211,238';
+    ?>
+    <div class="card-dark" style="border-left:3px solid var(--<?=$accent?>)">
+      <div style="font-size:26px;margin-bottom:12px"><i class="fa fa-<?=h($s['icon'])?>"></i></div>
+      <div style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:8px"><?=h($s['name'])?></div>
+      <?php if($s['price']): ?>
+        <div style="font-size:24px;font-weight:900;color:var(--<?=$accent?>);margin-bottom:4px"><?=h($s['price'])?><?php if($s['price_unit']): ?> <span style="font-size:11px;font-weight:400;color:var(--muted)"><?=h($s['price_unit'])?></span><?php endif; ?></div>
+      <?php endif; ?>
+      <?php if($s['description']): ?>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:14px"><?=h($s['description'])?></div>
+      <?php endif; ?>
+      <?php if($features): ?>
+        <ul style="font-size:12px;color:var(--muted);line-height:1.9;padding-left:16px;margin-bottom:16px">
+          <?php foreach($features as $f): ?><li><?=h($f)?></li><?php endforeach; ?>
+        </ul>
+      <?php endif; ?>
+      <?php if($s['cta_text']): ?>
+        <a href="<?=h($s['cta_link']?:'#contact')?>" class="tag" style="display:inline-block;text-align:center;width:100%;background:rgba(<?=$rgba?>,.1);border-color:rgba(<?=$rgba?>,.2);color:var(--<?=$accent?>)"><?=h($s['cta_text'])?></a>
+      <?php endif; ?>
+    </div>
+    <?php endforeach; ?>
+  </div>
+  <?php else: ?>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-bottom:24px">
     <div class="card-dark" style="border-left:3px solid var(--cyan)">
       <div style="font-size:26px;margin-bottom:12px">🌐</div>
       <div style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:8px">Website Development</div>
       <div style="font-size:24px;font-weight:900;color:var(--cyan);margin-bottom:4px">From NPR 15,000</div>
       <div style="font-size:11px;color:var(--muted);margin-bottom:14px">One-time • Custom design included</div>
       <ul style="font-size:12px;color:var(--muted);line-height:1.9;padding-left:16px;margin-bottom:16px">
-        <li>Responsive & mobile-friendly design</li>
-        <li>SEO optimized structure</li>
-        <li>Contact forms & analytics</li>
-        <li>Free 30-day support</li>
-        <li>Portfolio, corporate, cooperative sites</li>
+        <li>Responsive & mobile-friendly design</li><li>SEO optimized structure</li>
+        <li>Contact forms & analytics</li><li>Free 30-day support</li>
       </ul>
-      <a href="#contact" class="tag" style="display:inline-block;text-align:center;width:100%;background:rgba(34,211,238,.1);border-color:rgba(34,211,238,.2)">Request a Quote →</a>
+      <a href="#contact" class="tag" style="display:inline-block;text-align:center;width:100%;background:rgba(34,211,238,.1);border-color:rgba(34,211,238,.2);color:var(--cyan)">Request a Quote →</a>
     </div>
-    <!-- Web Hosting -->
     <div class="card-dark" style="border-left:3px solid var(--violet)">
       <div style="font-size:26px;margin-bottom:12px">☁️</div>
       <div style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:8px">Web Hosting</div>
       <div style="font-size:24px;font-weight:900;color:var(--violet);margin-bottom:4px">From NPR 3,000<span style="font-size:11px;font-weight:400;color:var(--muted)"> /year</span></div>
       <div style="font-size:11px;color:var(--muted);margin-bottom:14px">Annual plans • Nepal-based servers</div>
       <ul style="font-size:12px;color:var(--muted);line-height:1.9;padding-left:16px;margin-bottom:16px">
-        <li>99.9% uptime guarantee</li>
-        <li>Free SSL certificate</li>
-        <li>Daily backups</li>
-        <li>cPanel / managed options</li>
-        <li>Email accounts included</li>
+        <li>99.9% uptime guarantee</li><li>Free SSL certificate</li>
+        <li>Daily backups</li><li>cPanel / managed options</li>
       </ul>
       <a href="#contact" class="tag" style="display:inline-block;text-align:center;width:100%;background:rgba(139,92,246,.1);border-color:rgba(139,92,246,.2);color:var(--violet)">Get Hosting →</a>
     </div>
-    <!-- Email Hosting -->
     <div class="card-dark" style="border-left:3px solid var(--yellow)">
       <div style="font-size:26px;margin-bottom:12px">📧</div>
       <div style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:8px">Professional Email Hosting</div>
       <div style="font-size:24px;font-weight:900;color:var(--yellow);margin-bottom:4px">From NPR 1,500<span style="font-size:11px;font-weight:400;color:var(--muted)"> /year</span></div>
       <div style="font-size:11px;color:var(--muted);margin-bottom:14px">Annual plans • Your domain @you.com</div>
       <ul style="font-size:12px;color:var(--muted);line-height:1.9;padding-left:16px;margin-bottom:16px">
-        <li>yourname@yourdomain.com</li>
-        <li>5 GB storage per mailbox</li>
-        <li>Webmail + IMAP/SMTP access</li>
-        <li>Spam & virus protection</li>
-        <li>Calendar & contacts sync</li>
+        <li>yourname@yourdomain.com</li><li>5 GB storage per mailbox</li>
+        <li>Webmail + IMAP/SMTP</li><li>Spam & virus protection</li>
       </ul>
       <a href="#contact" class="tag" style="display:inline-block;text-align:center;width:100%;background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.2);color:var(--yellow)">Setup Email →</a>
     </div>
-    <!-- Cyber Security Training -->
     <div class="card-dark" style="border-left:3px solid var(--red)">
       <div style="font-size:26px;margin-bottom:12px">🔒</div>
       <div style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:8px">Cyber Security Training</div>
       <div style="font-size:24px;font-weight:900;color:var(--red);margin-bottom:4px">NPR 20,000</div>
       <div style="font-size:11px;color:var(--muted);margin-bottom:14px">Per person • Group discounts available</div>
       <ul style="font-size:12px;color:var(--muted);line-height:1.9;padding-left:16px;margin-bottom:16px">
-        <li>Network & endpoint security</li>
-        <li>Phishing & social engineering awareness</li>
-        <li>Data privacy & compliance</li>
-        <li>Incident response basics</li>
-        <li>For businesses, IT teams & individuals</li>
+        <li>Network & endpoint security</li><li>Phishing awareness</li>
+        <li>Data privacy & compliance</li><li>Incident response basics</li>
       </ul>
       <a href="#contact" class="tag" style="display:inline-block;text-align:center;width:100%;background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.2);color:var(--red)">Enroll Now →</a>
     </div>
   </div>
+  <?php endif; ?>
   <div style="background:rgba(34,211,238,.04);border:1px solid rgba(34,211,238,.12);border-radius:12px;padding:16px 20px;font-size:13px;color:var(--muted);line-height:1.7;max-width:700px">
     💡 All packages include <strong style="color:var(--text)">free consultation</strong>. For cooperative organizations, NGOs, and educational institutions — special discounted rates available. Contact me to discuss your project requirements.
   </div>
@@ -1163,12 +1180,12 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(34,211,238,.6);outli
   <?php if($portfolioSites): ?>
   <h3 style="font-size:11px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:14px">Websites Developed</h3>
   <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-bottom:28px">
-    <?php foreach($portfolioSites as $s): ?>
+    <?php foreach($portfolioSites as $s): $rating = (int)($s['rating'] ?? 0); ?>
     <?php if($s['url']): ?>
     <a href="<?=h($s['url'])?>" target="_blank" rel="noopener noreferrer" class="port-item">
       <img src="<?=h($s['image'])?>" alt="<?=h($s['title'])?>" loading="lazy" />
       <div class="port-info">
-        <p><?=h($s['title'])?></p>
+        <p><?=h($s['title'])?><?php if($rating > 0): ?><span class="port-stars"><?=str_repeat('★',$rating)?><?=str_repeat('☆',5-$rating)?></span><?php endif; ?></p>
         <span><?=h($s['subtitle'])?></span>
       </div>
     </a>
@@ -1176,7 +1193,7 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(34,211,238,.6);outli
     <div class="port-item">
       <img src="<?=h($s['image'])?>" alt="<?=h($s['title'])?>" loading="lazy" />
       <div class="port-info">
-        <p><?=h($s['title'])?></p>
+        <p><?=h($s['title'])?><?php if($rating > 0): ?><span class="port-stars"><?=str_repeat('★',$rating)?><?=str_repeat('☆',5-$rating)?></span><?php endif; ?></p>
         <span><?=h($s['subtitle'])?></span>
       </div>
     </div>
