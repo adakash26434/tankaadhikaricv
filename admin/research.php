@@ -2,6 +2,7 @@
 define('ADMIN_PAGE', 1);
 require_once __DIR__ . '/auth.php';
 require_once __DIR__ . '/../db.php';
+require_once __DIR__ . '/includes/file_upload.php';
 requireAdmin();
 $pageTitle = 'Research Publications';
 $pageSubtitle = 'Add, edit or delete research paper entries.';
