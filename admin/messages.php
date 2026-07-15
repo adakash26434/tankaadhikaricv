@@ -38,18 +38,18 @@ include __DIR__ . '/header.php';
 
 <?php if($view): ?>
 <div class="card" style="margin-bottom:16px">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+  <div class="msg-row-header">
     <div style="font-size:13px;font-weight:700;color:#fff">📨 Message from <?=h($view['name'])?></div>
-    <a href="messages.php" class="btn btn-secondary" style="font-size:12px">← Back</a>
+    <a href="messages.php" class="btn btn-secondary btn-sm">← Back</a>
   </div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;font-size:13px">
-    <div><span style="color:#64748b">Name:</span> <strong style="color:#fff"><?=h($view['name'])?></strong></div>
-    <div><span style="color:#64748b">Email:</span> <a href="mailto:<?=h($view['email'])?>"><?=h($view['email'])?></a></div>
-    <div><span style="color:#64748b">Subject:</span> <span style="color:#c9d1e3"><?=h($view['subject']?:'—')?></span></div>
-    <div><span style="color:#64748b">Date:</span> <span style="color:#c9d1e3"><?=date('d M Y, H:i', strtotime($view['created_at']))?></span></div>
+  <div class="msg-meta">
+    <div><span class="msg-meta-label">Name:</span> <span class="msg-meta-val"><strong><?=h($view['name'])?></strong></span></div>
+    <div><span class="msg-meta-label">Email:</span> <span class="msg-meta-val"><a href="mailto:<?=h($view['email'])?>"><?=h($view['email'])?></a></span></div>
+    <div><span class="msg-meta-label">Subject:</span> <span class="msg-meta-val"><?=h($view['subject']?:'—')?></span></div>
+    <div><span class="msg-meta-label">Date:</span> <span class="msg-meta-val"><?=date('d M Y, H:i', strtotime($view['created_at']))?></span></div>
   </div>
-  <div style="background:#0f1420;border:1px solid #1e2638;border-radius:8px;padding:16px;color:#c9d1e3;font-size:14px;line-height:1.7;white-space:pre-wrap"><?=h($view['message'])?></div>
-  <div style="margin-top:14px;display:flex;gap:8px">
+  <div class="msg-body"><?=h($view['message'])?></div>
+  <div class="msg-actions">
     <a href="mailto:<?=h($view['email'])?>" class="btn btn-primary">📧 Reply via Email</a>
     <form method="POST" action="messages.php" onsubmit="return confirm('Delete this message permanently?')">
       <?=csrfField()?>
@@ -68,7 +68,7 @@ include __DIR__ . '/header.php';
     <thead><tr><th>From</th><th>Subject / Message</th><th>Date</th><th>Actions</th></tr></thead>
     <tbody>
     <?php foreach($list as $row): ?>
-    <tr style="<?=!$row['is_read']?'background:rgba(34,211,238,.03)':''?>">
+    <tr class="<?=!$row['is_read']?'msg-row-unread':''?>">
       <td>
         <strong style="color:<?=!$row['is_read']?'#fff':'#8892a4'?>"><?=h($row['name'])?></strong>
         <br><span style="color:#64748b;font-size:11px"><?=h($row['email'])?></span>

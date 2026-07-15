@@ -146,6 +146,23 @@ tbody tr:nth-child(even):hover td{background:rgba(30,38,56,.4)}
 .section-heading{font-size:14px;font-weight:700;color:#fff;margin-bottom:14px;letter-spacing:-.1px}
 .section-heading-sm{font-size:13px;font-weight:700;color:#fff;margin-bottom:12px}
 
+/* ── DASHBOARD CARDS ─────────────────────────────────── */
+.dash-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:18px;text-decoration:none;transition:border-color .15s,transform .15s;display:block}
+.dash-card:hover{border-color:var(--cyan);transform:translateY(-1px);text-decoration:none}
+.dash-card-icon{font-size:26px;margin-bottom:8px}
+.dash-card-title{font-size:13px;font-weight:700;color:#fff}
+.dash-card-sub{font-size:12px;color:var(--text-muted);margin-top:2px}
+
+/* ── MESSAGE CARD ────────────────────────────────────── */
+.msg-meta{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;font-size:13px}
+.msg-meta-label{color:var(--text-muted)}
+.msg-meta-val{color:var(--text)}
+.msg-meta-val strong{color:#fff}
+.msg-body{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px;color:var(--text);font-size:14px;line-height:1.7;white-space:pre-wrap}
+.msg-actions{margin-top:14px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.msg-row-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;gap:12px}
+.msg-row-unread{background:rgba(34,211,238,.03)}
+
 /* ── DIVIDERS ────────────────────────────────────────── */
 .divider{height:1px;background:var(--border);margin:20px 0}
 
