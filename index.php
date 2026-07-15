@@ -29,16 +29,17 @@ $cvFile   = h($p['cv_file'] ?? 'files/canada.pdf');
 $firstName = explode(' ', $p['full_name'] ?? 'Tanka')[0];
 
 // ── HERO CAROUSEL: collect photos from profile + awards + portfolio ──────────
+// Note: paths are NOT htmlspecialchars()'d here — escaping happens at output time
 $heroPhotos = [];
 if (!empty($p['avatar']) && strpos($p['avatar'], 'avatar') === false) {
-    $heroPhotos[] = ['src' => h($p['avatar']), 'caption' => $name];
+    $heroPhotos[] = ['src' => $p['avatar'], 'caption' => $name];
 }
 foreach ($awards as $a) {
-    if (!empty($a['image1'])) $heroPhotos[] = ['src' => h($a['image1']), 'caption' => h($a['title'])];
-    if (!empty($a['image2'])) $heroPhotos[] = ['src' => h($a['image2']), 'caption' => h($a['title'])];
+    if (!empty($a['image1'])) $heroPhotos[] = ['src' => $a['image1'], 'caption' => $a['title']];
+    if (!empty($a['image2'])) $heroPhotos[] = ['src' => $a['image2'], 'caption' => $a['title']];
 }
 foreach ($portfolioSites as $ps) {
-    if (!empty($ps['image'])) $heroPhotos[] = ['src' => h($ps['image']), 'caption' => h($ps['title'])];
+    if (!empty($ps['image'])) $heroPhotos[] = ['src' => $ps['image'], 'caption' => $ps['title']];
 }
 if (empty($heroPhotos)) {
     $heroPhotos[] = ['src' => $avatar, 'caption' => $name];
@@ -780,7 +781,7 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(34,211,238,.6);outli
       <div class="hero-carousel-track" id="heroTrack">
         <?php $first = true; foreach($heroPhotos as $i => $hp): ?>
         <div class="hero-carousel-slide <?=$first ? 'active' : ''?>" data-index="<?=$i?>">
-          <img src="<?=$hp['src']?>" alt="<?=htmlspecialchars($hp['caption'] ?? $name)?>" loading="<?=$i === 0 ? 'eager' : 'lazy'?>" />
+          <img src="<?=h($hp['src'])?>" alt="<?=htmlspecialchars($hp['caption'] ?? $name)?>" loading="<?=$i === 0 ? 'eager' : 'lazy'?>" />
           <?php if(count($heroPhotos) > 1): ?>
           <div class="hero-carousel-caption"><?=htmlspecialchars($hp['caption'] ?? '')?></div>
           <?php endif; ?>
@@ -931,8 +932,8 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(34,211,238,.6);outli
       <p style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:14px"><?=h($a['description'])?></p>
       <?php if($a['image1'] || $a['image2']): ?>
       <div style="display:grid;grid-template-columns:<?=($a['image1']&&$a['image2'])?'1fr 1fr':'1fr'?>;gap:12px">
-        <?php if($a['image1']): ?><img src="<?=h($a['image1'])?>" alt="<?=h($a['title'])?>" loading="lazy" style="width:100%;height:160px;object-fit:cover;border-radius:8px;border:1px solid var(--border)" /><?php endif; ?>
-        <?php if($a['image2']): ?><img src="<?=h($a['image2'])?>" alt="" loading="lazy" style="width:100%;height:160px;object-fit:cover;border-radius:8px;border:1px solid var(--border)" /><?php endif; ?>
+        <?php if($a['image1']): ?><img src="<?=h($a['image1'])?>" alt="<?=h($a['title'])?>" loading="lazy" style="width:100%;height:160px;object-fit:cover;border-radius:8px;border:1px solid var(--border)" onerror="this.style.display='none'" /><?php endif; ?>
+        <?php if($a['image2']): ?><img src="<?=h($a['image2'])?>" alt="" loading="lazy" style="width:100%;height:160px;object-fit:cover;border-radius:8px;border:1px solid var(--border)" onerror="this.style.display='none'" /><?php endif; ?>
       </div>
       <?php endif; ?>
       <?php if($a['url']): ?><div style="margin-top:12px"><a href="<?=h($a['url'])?>" target="_blank" rel="noopener noreferrer" class="tag" style="font-size:11px">View Certificate ↗</a></div><?php endif; ?>
