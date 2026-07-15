@@ -14,7 +14,7 @@ $hashFile   = __DIR__ . '/password.php';
 $usingBcrypt = false;
 if (is_file($hashFile)) {
     $h = include $hashFile;
-    if (is_string($h) && str_starts_with($h, '$2y$')) {
+    if (is_string($h) && substr($h, 0, 4) === '$2y$') {
         $usingBcrypt = true;
     }
 }
