@@ -28,6 +28,32 @@ $avatar   = h($p['avatar'] ?? 'img/avatar.jpg');
 $cvFile   = h($p['cv_file'] ?? 'files/canada.pdf');
 $firstName = explode(' ', $p['full_name'] ?? 'Tanka')[0];
 
+// ── HERO CAROUSEL: collect photos from profile + awards + portfolio ──────────
+$heroPhotos = [];
+if (!empty($p['avatar']) && strpos($p['avatar'], 'avatar') === false) {
+    $heroPhotos[] = ['src' => h($p['avatar']), 'caption' => $name];
+}
+foreach ($awards as $a) {
+    if (!empty($a['image1'])) $heroPhotos[] = ['src' => h($a['image1']), 'caption' => h($a['title'])];
+    if (!empty($a['image2'])) $heroPhotos[] = ['src' => h($a['image2']), 'caption' => h($a['title'])];
+}
+foreach ($portfolioSites as $ps) {
+    if (!empty($ps['image'])) $heroPhotos[] = ['src' => h($ps['image']), 'caption' => h($ps['title'])];
+}
+if (empty($heroPhotos)) {
+    $heroPhotos[] = ['src' => $avatar, 'caption' => $name];
+}
+// Use avatar as first photo always (dedupe by src)
+$seen = [];
+$heroPhotosDeduped = [['src' => $avatar, 'caption' => $name]];
+foreach ($heroPhotos as $hp) {
+    if (!isset($seen[$hp['src']])) { $seen[$hp['src']] = true; $heroPhotosDeduped[] = $hp; }
+}
+$heroPhotos = array_slice($heroPhotosDeduped, 0, 12);
+
+// ── AI CHAT: get settings ─────────────────────────────────────────────────────
+$aiSettings = dbRow("SELECT * FROM ai_settings LIMIT 1") ?: [];
+
 // Dynamic hero stats from DB
 $statYears = max(1, count($experiences));
 $statProjects = count($projects);
@@ -188,6 +214,7 @@ a:hover{text-decoration:underline}
 @keyframes fadeInLeft{from{opacity:0;transform:translateX(-20px)}to{opacity:1;transform:translateX(0)}}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
 @keyframes slideInUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 @keyframes gradientShift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
 @keyframes glowPulse{0%,100%{box-shadow:0 0 8px var(--glow-cyan),0 0 16px var(--glow-violet)}50%{box-shadow:0 0 16px var(--glow-cyan),0 0 32px var(--glow-violet)}}
 @keyframes pulse-dot{0%,100%{box-shadow:0 0 6px var(--green)}50%{box-shadow:0 0 14px var(--green)}}
@@ -477,16 +504,118 @@ section+section{margin-top:52px;padding-top:40px;border-top:1px solid var(--bord
 .gallery-item img:hover{border-color:var(--cyan)}
 
 /* ═══════════════════════════════════════════════════════
-   LIGHTBOX
+   HERO CAROUSEL
 ═══════════════════════════════════════════════════════ */
-#lightbox{position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:9999;display:none;align-items:center;justify-content:center;padding:20px}
-#lightbox.open{display:flex}
-#lightbox img{max-width:90vw;max-height:90vh;border-radius:12px;object-fit:contain}
-#lightbox-close{position:absolute;top:20px;right:24px;color:#fff;font-size:24px;cursor:pointer;background:none;border:none;line-height:1}
+.hero-carousel{position:relative;flex-shrink:0;width:150px;height:150px;border-radius:18px;
+  background:linear-gradient(135deg,rgba(34,211,238,.1),rgba(139,92,246,.1));
+  border:1px solid var(--border);overflow:hidden;
+  box-shadow:0 16px 48px var(--shadow),inset 0 1px 0 rgba(255,255,255,.08)}
+.hero-carousel-track{position:relative;width:100%;height:100%}
+.hero-carousel-slide{position:absolute;inset:0;opacity:0;transition:opacity .8s ease-in-out}
+.hero-carousel-slide.active{opacity:1}
+.hero-carousel-slide img{width:100%;height:100%;object-fit:cover;display:block}
+.hero-carousel-caption{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.7));
+  color:#fff;font-size:10px;padding:16px 8px 6px;text-align:center;opacity:0;transition:opacity .3s}
+.hero-carousel-slide.active .hero-carousel-caption{opacity:1}
+.hero-carousel-btn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.5);
+  border:1px solid rgba(255,255,255,.2);color:#fff;border-radius:50%;width:24px;height:24px;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;
+  transition:.2s;z-index:5;opacity:0;padding:0;line-height:1}
+.hero-carousel:hover .hero-carousel-btn{opacity:1}
+.hero-carousel-btn:hover{background:rgba(34,211,238,.7);border-color:var(--cyan)}
+.hero-carousel-btn.prev{left:4px}
+.hero-carousel-btn.next{right:4px}
+.hero-carousel-dots{position:absolute;bottom:6px;left:50%;transform:translateX(-50%);
+  display:flex;gap:4px;z-index:5}
+.hero-dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.35);
+  border:none;cursor:pointer;padding:0;transition:.2s}
+.hero-dot.active{background:var(--cyan);width:14px;border-radius:3px}
 
 /* ═══════════════════════════════════════════════════════
-   BACK TO TOP
+   GALLERY CAROUSEL
 ═══════════════════════════════════════════════════════ */
+.gallery-carousel{display:flex;align-items:center;gap:12px;position:relative}
+.gallery-carousel-viewport{overflow:hidden;flex:1;border-radius:12px;background:var(--meta-bg)}
+.gallery-carousel-track{display:flex;gap:10px;padding:4px;transition:transform .5s cubic-bezier(.25,.46,.45,.94);will-change:transform}
+.gallery-carousel-item{flex-shrink:0;width:160px;height:120px;border-radius:10px;overflow:hidden;cursor:pointer;position:relative;border:1px solid var(--border);transition:.2s}
+.gallery-carousel-item img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .3s}
+.gallery-carousel-item:hover img{transform:scale(1.06)}
+.gallery-item-overlay{position:absolute;inset:0;background:rgba(34,211,238,.25);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s}
+.gallery-item-overlay i{color:#fff;font-size:18px;text-shadow:0 2px 6px rgba(0,0,0,.5)}
+.gallery-carousel-item:hover .gallery-item-overlay{opacity:1}
+.gallery-carousel-btn{width:32px;height:32px;border-radius:50%;border:1px solid var(--border);background:var(--sidebar);color:var(--text);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s;flex-shrink:0;padding:0;line-height:1}
+.gallery-carousel-btn:hover{background:var(--cyan);border-color:var(--cyan);color:#08121e;transform:scale(1.1)}
+.gallery-scroll-hint{text-align:center;font-size:11px;color:var(--muted);margin-top:8px;letter-spacing:.5px}
+
+/* ═══════════════════════════════════════════════════════
+   LIGHTBOX
+═══════════════════════════════════════════════════════ */
+#lightbox{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:9999;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(6px)}
+#lightbox.open{display:flex}
+#lightbox img{max-width:90vw;max-height:90vh;border-radius:12px;object-fit:contain;box-shadow:0 24px 80px rgba(0,0,0,.5)}
+#lightbox-close{position:absolute;top:20px;right:24px;color:#fff;font-size:24px;cursor:pointer;background:none;border:none;line-height:1;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;transition:.2s}
+#lightbox-close:hover{background:rgba(239,68,68,.7)}
+
+/* ═══════════════════════════════════════════════════════
+   SCROLL REVEAL ANIMATIONS
+═══════════════════════════════════════════════════════ */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1)}
+.reveal.revealed{opacity:1;transform:translateY(0)}
+.reveal-delay-1{transition-delay:.1s}
+.reveal-delay-2{transition-delay:.2s}
+.reveal-delay-3{transition-delay:.3s}
+.reveal-delay-4{transition-delay:.4s}
+.reveal-delay-5{transition-delay:.5s}
+
+/* Card hover micro-interactions */
+.card-dark,.award-card,.news-card,.service-card,.interests-grid .interest-card,
+.port-item,.interest-card,.gallery-carousel-item,.hero-stat,.sidebar-stat{
+  transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s,border-color .25s
+}
+
+/* Counter animation for stats */
+.stat-counter{transition:text-shadow .3s}
+
+/* ═══════════════════════════════════════════════════════
+   AI CHAT WIDGET
+═══════════════════════════════════════════════════════ */
+.ai-chat-launcher{position:fixed;bottom:24px;right:24px;z-index:500;width:56px;height:56px;
+  border-radius:50%;background:linear-gradient(135deg,var(--cyan),#06b6d4);
+  border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 6px 24px rgba(34,211,238,.35);transition:transform .2s,box-shadow .2s;
+  font-size:22px;color:#08121e}
+.ai-chat-launcher:hover{transform:scale(1.1);box-shadow:0 8px 32px rgba(34,211,238,.5)}
+.ai-chat-launcher.has-unread{animation:pulse-dot 2s infinite}
+.ai-chat-window{position:fixed;bottom:90px;right:24px;z-index:499;width:360px;max-width:calc(100vw - 32px);
+  background:var(--sidebar);border:1px solid var(--border);border-radius:16px;
+  box-shadow:0 24px 80px rgba(0,0,0,.5);display:none;flex-direction:column;
+  max-height:520px;overflow:hidden;animation:slideUp .25s ease-out}
+.ai-chat-window.open{display:flex}
+.ai-chat-header{display:flex;align-items:center;gap:10px;padding:14px 16px;
+  border-bottom:1px solid var(--border);background:var(--card)}
+.ai-chat-header-icon{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--cyan),var(--violet));
+  display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff;flex-shrink:0}
+.ai-chat-header-title{font-size:13px;font-weight:700;color:#fff}
+.ai-chat-header-sub{font-size:10px;color:var(--muted)}
+.ai-chat-close{background:none;border:none;color:var(--muted);cursor:pointer;font-size:18px;padding:4px;
+  border-radius:6px;transition:.15s;margin-left:auto;line-height:1}
+.ai-chat-close:hover{color:var(--text);background:var(--border)}
+.ai-chat-messages{flex:1;overflow-y:auto;padding:14px 12px;display:flex;flex-direction:column;gap:10px;min-height:200px;max-height:320px}
+.ai-chat-msg{max-width:85%;padding:10px 13px;border-radius:14px;line-height:1.55;font-size:12.5px;word-break:break-word}
+.ai-chat-msg.bot{background:var(--card);border:1px solid var(--border);border-bottom-left-radius:4px;color:var(--text);align-self:flex-start}
+.ai-chat-msg.user{background:var(--cyan);color:#08121e;border-bottom-right-radius:4px;align-self:flex-end}
+.ai-chat-msg.user strong,.ai-chat-msg.bot strong{font-weight:700}
+.ai-chat-msg.ai-thinking{padding:12px 16px;background:var(--card);border:1px solid var(--border);border-bottom-left-radius:4px;color:var(--muted);font-size:12px;font-style:italic;align-self:flex-start}
+.ai-chat-suggestions{display:flex;flex-wrap:wrap;gap:6px;padding:6px 12px 0}
+.ai-chat-suggestion{background:var(--meta-bg);border:1px solid var(--border);border-radius:20px;padding:4px 10px;font-size:10.5px;color:var(--cyan);cursor:pointer;transition:.15s}
+.ai-chat-suggestion:hover{background:rgba(34,211,238,.1);border-color:var(--cyan)}
+.ai-chat-input-row{display:flex;gap:8px;padding:10px 12px;border-top:1px solid var(--border);background:var(--sidebar)}
+.ai-chat-input{flex:1;background:var(--bg);border:1.5px solid var(--border);color:var(--text);border-radius:20px;padding:9px 14px;font-size:12.5px;outline:none;transition:border-color .2s;font-family:inherit}
+.ai-chat-input:focus{border-color:var(--cyan)}
+.ai-chat-send{width:36px;height:36px;border-radius:50%;background:var(--cyan);border:none;color:#08121e;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;transition:.2s;flex-shrink:0}
+.ai-chat-send:hover{background:var(--cyan-dark);transform:scale(1.05)}
+.ai-chat-send:disabled{opacity:.5;cursor:not-allowed;transform:none}
 .back-top{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:150;
   background:var(--sidebar);border:1px solid var(--border);border-radius:40px;
   padding:9px 20px;color:var(--muted);font-size:12px;font-weight:700;text-transform:uppercase;
@@ -645,11 +774,26 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(34,211,238,.6);outli
 <!-- ABOUT -->
 <section id="about">
   <div class="hero">
-    <div class="hero-avatar-box">
-      <?php if($avatar && strpos($avatar,'avatar') === false): ?>
-        <img src="<?=$avatar?>" alt="<?=$name?>" />
-      <?php else: ?>
-        <div class="hero-avatar-initials"><?=strtoupper(substr($firstName,0,1).substr(explode(' ',$name)[count(explode(' ',$name))-1],0,1))?></div>
+    <!-- Hero Photo Carousel -->
+    <div class="hero-carousel" id="heroCarousel" aria-label="Photo carousel" role="region">
+      <div class="hero-carousel-track" id="heroTrack">
+        <?php $first = true; foreach($heroPhotos as $i => $hp): ?>
+        <div class="hero-carousel-slide <?=$first ? 'active' : ''?>" data-index="<?=$i?>">
+          <img src="<?=$hp['src']?>" alt="<?=htmlspecialchars($hp['caption'] ?? $name)?>" loading="<?=$i === 0 ? 'eager' : 'lazy'?>" />
+          <?php if(count($heroPhotos) > 1): ?>
+          <div class="hero-carousel-caption"><?=htmlspecialchars($hp['caption'] ?? '')?></div>
+          <?php endif; ?>
+        </div>
+        <?php $first = false; endforeach; ?>
+      </div>
+      <?php if(count($heroPhotos) > 1): ?>
+      <button class="hero-carousel-btn prev" onclick="heroSlide(-1)" aria-label="Previous photo">‹</button>
+      <button class="hero-carousel-btn next" onclick="heroSlide(1)" aria-label="Next photo">›</button>
+      <div class="hero-carousel-dots" id="heroDots">
+        <?php foreach($heroPhotos as $i => $hp): ?>
+        <button class="hero-dot <?=$i === 0 ? 'active' : ''?>" onclick="heroGoTo(<?=$i?>)" aria-label="Go to photo <?=$i+1?>"></button>
+        <?php endforeach; ?>
+      </div>
       <?php endif; ?>
       <div class="hero-corner"><?=htmlspecialchars($role ?: 'Portfolio')?></div>
     </div>
@@ -1038,13 +1182,23 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(34,211,238,.6);outli
   </div>
   <?php endif; ?>
   <h3 style="font-size:11px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:14px">Photo Gallery</h3>
-  <div class="gallery-grid">
-    <?php
-    $gallery = ['img/powerlist.jpg','img/powerlist2.jpg','img/ict.jpg','img/ict2.jpg','img/aakashdms1.jpg','img/aakashdms2.jpg','img/avatar.jpg'];
-    foreach($gallery as $g): ?>
-    <div class="gallery-item" onclick="openLightbox('<?=h($g)?>')" role="button" tabindex="0" aria-label="View photo" onkeydown="if(event.key==='Enter'||event.key===' ')openLightbox('<?=h($g)?>')"><img src="<?=h($g)?>" alt="Gallery photo" loading="lazy" /></div>
-    <?php endforeach; ?>
+  <div class="gallery-carousel" id="galleryCarousel">
+    <button class="gallery-carousel-btn prev" onclick="gallerySlide(-1)" aria-label="Previous photo">‹</button>
+    <div class="gallery-carousel-viewport" id="galleryViewport">
+      <div class="gallery-carousel-track" id="galleryTrack">
+        <?php
+        $galleryPhotos = ['img/powerlist.jpg','img/powerlist2.jpg','img/ict.jpg','img/ict2.jpg','img/aakashdms1.jpg','img/aakashdms2.jpg','img/avatar.jpg'];
+        foreach($galleryPhotos as $g): ?>
+        <div class="gallery-carousel-item" onclick="openLightbox('<?=h($g)?>')" role="button" tabindex="0" aria-label="View photo" onkeydown="if(event.key==='Enter'||event.key===' ')openLightbox('<?=h($g)?>')">
+          <img src="<?=h($g)?>" alt="Gallery photo" loading="lazy" />
+          <div class="gallery-item-overlay"><i class="fa fa-expand"></i></div>
+        </div>
+        <?php endforeach; ?>
+      </div>
+    </div>
+    <button class="gallery-carousel-btn next" onclick="gallerySlide(1)" aria-label="Next photo">›</button>
   </div>
+  <div class="gallery-scroll-hint" id="galleryHint">← Scroll or use arrows to browse →</div>
 </section>
 
 <!-- INTERESTS -->
@@ -1112,6 +1266,36 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(34,211,238,.6);outli
   <img id="lightbox-img" src="" alt="Gallery photo — enlarged view" onclick="event.stopPropagation()" />
 </div>
 
+<!-- AI Chat Widget -->
+<?php if(!empty($aiSettings['enabled'])): ?>
+<div id="aiChatWindow" class="ai-chat-window" role="dialog" aria-label="AI Assistant" aria-hidden="true">
+  <div class="ai-chat-header">
+    <div class="ai-chat-header-icon"><i class="fa fa-robot"></i></div>
+    <div>
+      <div class="ai-chat-header-title">AI Assistant</div>
+      <div class="ai-chat-header-sub">Powered by <?=htmlspecialchars($aiSettings['provider'] ?? 'AI')?></div>
+    </div>
+    <button class="ai-chat-close" onclick="toggleAiChat()" aria-label="Close chat">✕</button>
+  </div>
+  <div class="ai-chat-messages" id="aiChatMessages">
+    <div class="ai-chat-msg bot">👋 Hi! I'm the AI assistant for <?=htmlspecialchars($firstName)?>'s portfolio. Ask me anything about their experience, skills, education, projects, awards, or how to get in touch!</div>
+    <div class="ai-chat-suggestions">
+      <button class="ai-chat-suggestion" onclick="askAi('Tell me about <?=htmlspecialchars($firstName)?>')">About me</button>
+      <button class="ai-chat-suggestion" onclick="askAi('What skills does <?=htmlspecialchars($firstName)?> have?')">Skills</button>
+      <button class="ai-chat-suggestion" onclick="askAi('Show me <?=htmlspecialchars($firstName)?>\'s experience')">Experience</button>
+      <button class="ai-chat-suggestion" onclick="askAi('How can I contact <?=htmlspecialchars($firstName)?>?')">Contact</button>
+    </div>
+  </div>
+  <div class="ai-chat-input-row">
+    <input type="text" class="ai-chat-input" id="aiChatInput" placeholder="Ask about the portfolio…" onkeydown="if(event.key==='Enter'&&!event.shiftKey)sendAiMessage()" />
+    <button class="ai-chat-send" id="aiChatSendBtn" onclick="sendAiMessage()" aria-label="Send"><i class="fa fa-paper-plane"></i></button>
+  </div>
+</div>
+<button class="ai-chat-launcher" id="aiChatLauncher" onclick="toggleAiChat()" aria-label="Open AI chat" title="Chat with AI assistant">
+  <i class="fa fa-comments"></i>
+</button>
+<?php endif; ?>
+
 <script>
 // ── Loader ──────────────────────────────────────────────────────────────────
 window.addEventListener('load', () => {
@@ -1174,6 +1358,170 @@ document.querySelectorAll('.right-nav a[data-section]').forEach(link => {
       history.pushState(null, '', '#' + id);
     }
   });
+});
+
+// ── Hero Carousel ───────────────────────────────────────────────────────────
+let heroCurrent = 0;
+const heroSlides = document.querySelectorAll('.hero-carousel-slide');
+const heroDots = document.querySelectorAll('.hero-dot');
+const heroTotal = heroSlides.length;
+
+function heroGoTo(n) {
+  if (!heroTotal) return;
+  heroCurrent = ((n % heroTotal) + heroTotal) % heroTotal;
+  heroSlides.forEach((s, i) => s.classList.toggle('active', i === heroCurrent));
+  heroDots.forEach((d, i) => d.classList.toggle('active', i === heroCurrent));
+}
+function heroSlide(dir) { heroGoTo(heroCurrent + dir); }
+
+// Auto-advance every 4 seconds
+let heroInterval = setInterval(() => heroSlide(1), 4000);
+// Pause on hover
+document.getElementById('heroCarousel')?.addEventListener('mouseenter', () => clearInterval(heroInterval));
+document.getElementById('heroCarousel')?.addEventListener('mouseleave', () => { heroInterval = setInterval(() => heroSlide(1), 4000); });
+
+// ── Gallery Carousel ─────────────────────────────────────────────────────────
+const galleryTrack = document.getElementById('galleryTrack');
+const galleryItems = document.querySelectorAll('.gallery-carousel-item');
+let galleryPos = 0;
+const galleryItemWidth = 170; // width + gap
+
+function gallerySlide(dir) {
+  const maxScroll = galleryTrack.scrollWidth - galleryTrack.parentElement.clientWidth;
+  galleryPos = Math.max(0, Math.min(maxScroll, galleryPos + dir * galleryItemWidth * 2));
+  galleryTrack.style.transform = `translateX(-${galleryPos}px)`;
+}
+// Auto-scroll gallery every 5 seconds
+let galleryInterval = setInterval(() => gallerySlide(1), 5000);
+document.getElementById('galleryCarousel')?.addEventListener('mouseenter', () => clearInterval(galleryInterval));
+document.getElementById('galleryCarousel')?.addEventListener('mouseleave', () => { galleryInterval = setInterval(() => gallerySlide(1), 5000); });
+
+// ── Scroll Reveal ─────────────────────────────────────────────────────────────
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('revealed');
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+// ── Stat Counter Animation ─────────────────────────────────────────────────────
+function animateCounter(el, target, suffix) {
+  const duration = 1500;
+  const steps = 40;
+  const stepTime = duration / steps;
+  let current = 0;
+  const increment = target / steps;
+  const timer = setInterval(() => {
+    current = Math.min(target, current + increment);
+    el.textContent = Math.round(current) + (suffix || '');
+    if (current >= target) clearInterval(timer);
+  }, stepTime);
+}
+
+const statObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting && !entry.target.dataset.counted) {
+      entry.target.dataset.counted = '1';
+      const numEl = entry.target.querySelector('.hero-stat-num');
+      if (numEl) {
+        const text = numEl.textContent;
+        const match = text.match(/^(\d+)(.*)$/);
+        if (match) animateCounter(numEl, parseInt(match[1]), match[2]);
+      }
+    }
+  });
+}, { threshold: 0.3 });
+
+document.querySelectorAll('.hero-stat').forEach(el => statObserver.observe(el));
+
+// ── AI Chat ───────────────────────────────────────────────────────────────────
+let aiChatOpen = false;
+
+function toggleAiChat() {
+  aiChatOpen = !aiChatOpen;
+  const win = document.getElementById('aiChatWindow');
+  const launcher = document.getElementById('aiChatLauncher');
+  if (!win || !launcher) return;
+  win.classList.toggle('open', aiChatOpen);
+  win.setAttribute('aria-hidden', !aiChatOpen);
+  if (aiChatOpen) {
+    document.getElementById('aiChatInput')?.focus();
+    launcher.classList.remove('has-unread');
+  }
+}
+
+function appendAiMsg(type, html) {
+  const msgs = document.getElementById('aiChatMessages');
+  if (!msgs) return;
+  const div = document.createElement('div');
+  div.className = 'ai-chat-msg ' + type;
+  div.innerHTML = html;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function showThinking() {
+  const msgs = document.getElementById('aiChatMessages');
+  if (!msgs) return;
+  const div = document.createElement('div');
+  div.className = 'ai-chat-msg ai-thinking';
+  div.id = 'aiThinking';
+  div.textContent = '🤖 Thinking…';
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function removeThinking() {
+  document.getElementById('aiThinking')?.remove();
+}
+
+function askAi(question) {
+  const input = document.getElementById('aiChatInput');
+  if (input) input.value = question;
+  sendAiMessage();
+}
+
+async function sendAiMessage() {
+  const input = document.getElementById('aiChatInput');
+  const sendBtn = document.getElementById('aiChatSendBtn');
+  if (!input || !sendBtn) return;
+  const question = input.value.trim();
+  if (!question) return;
+  input.value = '';
+  appendAiMsg('user', '<strong>You:</strong> ' + question);
+  showThinking();
+  sendBtn.disabled = true;
+  try {
+    const res = await fetch('ai-chat.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ question })
+    });
+    const json = await res.json();
+    removeThinking();
+    if (json.error) {
+      appendAiMsg('bot', '❌ ' + json.error);
+    } else {
+      appendAiMsg('bot', '<strong>AI:</strong> ' + json.answer);
+    }
+  } catch(e) {
+    removeThinking();
+    appendAiMsg('bot', '❌ Network error. Please try again.');
+  }
+  sendBtn.disabled = false;
+}
+
+// Close chat on outside click
+document.addEventListener('click', function(e) {
+  const win = document.getElementById('aiChatWindow');
+  const launcher = document.getElementById('aiChatLauncher');
+  if (aiChatOpen && win && !win.contains(e.target) && !launcher?.contains(e.target)) {
+    toggleAiChat();
+  }
 });
 
 // ── "Send Message" button scrolls to contact ────────────────────────────────
