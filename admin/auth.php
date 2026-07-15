@@ -2,42 +2,28 @@
 require_once __DIR__ . '/../config.php';
 
 // ── SESSION TIMEOUT CONFIGURATION ──────────────────────────────────────────────
-//   1800  = 30 minutes   |   3600 = 1 hour   |   7200 = 2 hours (default)
 if (!defined('SESSION_TIMEOUT_SECS')) {
-    define('SESSION_TIMEOUT_SECS', 7200);
+    define('SESSION_TIMEOUT_SECS', 7200); // 2 hours idle timeout
 }
 
 // ── BOOTSTRAP SESSION ──────────────────────────────────────────────────────────
-// Only start session if not already active
+// Use PHP's default session handling — no custom cookie params.
+// PHP's defaults (PHPSESSID cookie, / path, etc.) are the most compatible
+// across all hosting environments including cPanel, Cloudflare, Apache, FastCGI.
 if (session_status() === PHP_SESSION_NONE) {
-    // Detect HTTPS reliably — works behind Cloudflare, CDN, reverse proxies
-    $isHttps = (
-        isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off'
-        || isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) === 'https'
-        || isset($_SERVER['HTTP_X_FORWARDED_SSL']) && $_SERVER['HTTP_X_FORWARDED_SSL'] === 'on'
-        || isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443
-        || !empty($_SERVER['HTTP_CF_VISITOR']) // Cloudflare
-    );
-
-    @session_set_cookie_params([
-        'lifetime' => 0,    // 0 = session cookie (expires when browser closes)
-        'path'     => '/',
-        'secure'   => $isHttps ? true : false,
-        'httponly' => true,
-        'samesite' => 'Lax',
-    ]);
+    // Start session using PHP's default cookie name and settings
+    // This is the most portable approach — let PHP/hosting handle the details
     @session_start();
+}
 
-    // Regenerate session ID every 5 minutes (skip on login page to avoid cookie issues)
-    // Don't regenerate on login.php GET — it causes cookie churn that breaks the POST flow
-    $script = $_SERVER['SCRIPT_NAME'] ?? '';
-    if (strpos($script, '/admin/login') !== 0) {
-        if (empty($_SESSION['_created'])) {
-            $_SESSION['_created'] = time();
-        } elseif (time() - $_SESSION['_created'] > 300) {
-            @session_regenerate_id(true);
-            $_SESSION['_created'] = time();
-        }
+// Periodically regenerate session ID for security (skip on login page)
+$script = $_SERVER['SCRIPT_NAME'] ?? '';
+if (strpos($script, '/admin/login') !== 0 && session_status() === PHP_SESSION_ACTIVE) {
+    if (empty($_SESSION['_created'])) {
+        $_SESSION['_created'] = time();
+    } elseif (time() - $_SESSION['_created'] > 300) {
+        @session_regenerate_id(true);
+        $_SESSION['_created'] = time();
     }
 }
 
