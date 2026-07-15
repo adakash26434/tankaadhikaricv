@@ -40,7 +40,7 @@ include __DIR__ . '/header.php';
 </div>
 
 <div class="card">
-  <div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:14px"><?=$editRow?'✏️ Edit Service':'➕ Add New Service Card'?></div>
+  <div class="section-heading"><?=$editRow?'✏️ Edit Service':'➕ Add New Service Card'?></div>
   <form method="POST" action="services_about.php?action=<?=$editRow?'edit&id='.$id:'add'?>">
     <?=csrfField()?>
     <div class="grid-3">
@@ -67,7 +67,7 @@ include __DIR__ . '/header.php';
 </div>
 
 <div class="card">
-  <div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:12px">All Services (<?=count($list)?>)</div>
+  <div class="section-heading-sm">All Services (<?=count($list)?>)</div>
   <?php if(!$list): ?><p style="color:#64748b;font-size:13px">No services yet. Add one above.</p><?php else: ?>
   <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px">
     <?php foreach($list as $row): ?>
@@ -76,10 +76,10 @@ include __DIR__ . '/header.php';
       <div style="font-size:12px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px"><?=h($row['name'])?></div>
       <div style="font-size:11px;color:#64748b;margin-bottom:10px"><?=h($row['description'])?></div>
       <div style="display:flex;gap:6px;justify-content:center">
-        <a href="services_about.php?action=edit&id=<?=$row['id']?>" class="btn btn-secondary" style="font-size:11px;padding:4px 10px">Edit</a>
+        <a href="services_about.php?action=edit&id=<?=$row['id']?>" class="btn btn-secondary btn-sm">Edit</a>
         <form method="POST" action="services_about.php?action=delete&id=<?=$row['id']?>" onsubmit="return confirm('Delete?')">
           <?=csrfField()?>
-          <button class="btn btn-danger" style="font-size:11px;padding:4px 10px" type="submit">✕</button>
+          <button class="btn btn-danger btn-sm" type="submit">✕</button>
         </form>
       </div>
     </div>

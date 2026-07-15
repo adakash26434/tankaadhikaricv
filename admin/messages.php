@@ -62,7 +62,7 @@ include __DIR__ . '/header.php';
 <?php endif; ?>
 
 <div class="card">
-  <div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:12px">All Messages (<?=count($list)?>)</div>
+  <div class="section-heading-sm">All Messages (<?=count($list)?>)</div>
   <?php if(!$list): ?><p style="color:#64748b;font-size:13px">No messages yet.</p><?php else: ?>
   <table>
     <thead><tr><th>From</th><th>Subject / Message</th><th>Date</th><th>Actions</th></tr></thead>
@@ -81,12 +81,12 @@ include __DIR__ . '/header.php';
       <td style="color:#64748b;font-size:11px;white-space:nowrap"><?=date('d M Y', strtotime($row['created_at']))?></td>
       <td>
         <div style="display:flex;gap:6px;flex-wrap:wrap">
-          <a href="messages.php?id=<?=$row['id']?>" class="btn btn-secondary" style="font-size:11px;padding:4px 10px">View</a>
+          <a href="messages.php?id=<?=$row['id']?>" class="btn btn-secondary btn-sm">View</a>
           <form method="POST" action="messages.php" onsubmit="return confirm('Delete?')">
             <?=csrfField()?>
             <input type="hidden" name="action" value="delete">
             <input type="hidden" name="id" value="<?=(int)$row['id']?>">
-            <button class="btn btn-danger" style="font-size:11px;padding:4px 10px" type="submit">Del</button>
+            <button class="btn btn-danger btn-sm" type="submit">Del</button>
           </form>
         </div>
       </td>

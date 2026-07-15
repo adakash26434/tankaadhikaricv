@@ -36,7 +36,7 @@ include __DIR__ . '/header.php';
 <?php if($msg==='updated'): ?><div class="alert-success">✅ Education updated!</div><?php endif; ?>
 
 <div class="card">
-  <div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:14px"><?=$editRow?'✏️ Edit Education':'➕ Add New Education'?></div>
+  <div class="section-heading"><?=$editRow?'✏️ Edit Education':'➕ Add New Education'?></div>
   <form method="POST" action="education.php?action=<?=$editRow?'edit&id='.$id:'add'?>">
     <?=csrfField()?>
     <div class="grid-2">
@@ -63,7 +63,7 @@ include __DIR__ . '/header.php';
 </div>
 
 <div class="card">
-  <div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:12px">All Education (<?=count($list)?>)</div>
+  <div class="section-heading-sm">All Education (<?=count($list)?>)</div>
   <?php if(!$list): ?><p style="color:#64748b;font-size:13px">No entries yet. Add one above.</p><?php else: ?>
   <table>
     <thead><tr><th>#</th><th>Code</th><th>Degree / Program</th><th>Institution</th><th>Period</th><th>Actions</th></tr></thead>
@@ -76,10 +76,10 @@ include __DIR__ . '/header.php';
       <td style="color:#8892a4"><?=h($row['institution'])?></td>
       <td style="color:#64748b;font-size:12px"><?=h($row['period'])?></td>
       <td style="display:flex;gap:6px;flex-wrap:wrap">
-        <a href="education.php?action=edit&id=<?=$row['id']?>" class="btn btn-secondary" style="font-size:11px;padding:4px 10px">Edit</a>
+        <a href="education.php?action=edit&id=<?=$row['id']?>" class="btn btn-secondary btn-sm">Edit</a>
         <form method="POST" action="education.php?action=delete&id=<?=$row['id']?>" onsubmit="return confirm('Delete this entry?')">
           <?=csrfField()?>
-          <button class="btn btn-danger" style="font-size:11px;padding:4px 10px" type="submit">Delete</button>
+          <button class="btn btn-danger btn-sm" type="submit">Delete</button>
         </form>
       </td>
     </tr>

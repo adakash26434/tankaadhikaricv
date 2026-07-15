@@ -833,7 +833,11 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(34,211,238,.6);outli
     <?php foreach($newsItems as $n):
       $href = $n['url'] ?: ($n['pdf_file'] ?: '#'); ?>
     <a href="<?=h($href)?>" target="_blank" rel="noopener noreferrer" class="news-card" style="text-decoration:none">
-      <?php if($n['image']): ?><img src="<?=h($n['image'])?>" alt="<?=h($n['title'])?>" class="news-img" loading="lazy" /><?php endif; ?>
+      <?php if($n['image']): ?>
+        <img src="<?=h($n['image'])?>" alt="<?=h($n['title'])?>" class="news-img" loading="lazy" />
+      <?php else: ?>
+        <div class="news-thumb"><i class="news-thumb-icon fa fa-newspaper"></i></div>
+      <?php endif; ?>
       <div class="news-body">
         <div class="news-title"><?=h($n['title'])?></div>
         <div class="news-source"><?=h($n['source'])?></div>

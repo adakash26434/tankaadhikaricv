@@ -142,6 +142,10 @@ tbody tr:nth-child(even):hover td{background:rgba(30,38,56,.4)}
 .empty-state-text{font-size:13px;margin-bottom:16px}
 .empty-state-action{color:var(--text-dim);font-size:12px}
 
+/* ── SECTION HEADINGS ─────────────────────────────────── */
+.section-heading{font-size:14px;font-weight:700;color:#fff;margin-bottom:14px;letter-spacing:-.1px}
+.section-heading-sm{font-size:13px;font-weight:700;color:#fff;margin-bottom:12px}
+
 /* ── DIVIDERS ────────────────────────────────────────── */
 .divider{height:1px;background:var(--border);margin:20px 0}
 

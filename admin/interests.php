@@ -38,7 +38,7 @@ include __DIR__ . '/header.php';
 </div>
 
 <div class="card">
-  <div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:14px"><?=$editRow?'✏️ Edit Interest':'➕ Add New Interest'?></div>
+  <div class="section-heading"><?=$editRow?'✏️ Edit Interest':'➕ Add New Interest'?></div>
   <form method="POST" action="interests.php?action=<?=$editRow?'edit&id='.$id:'add'?>">
     <?=csrfField()?>
     <div class="grid-3">
@@ -63,7 +63,7 @@ include __DIR__ . '/header.php';
 </div>
 
 <div class="card">
-  <div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:12px">All Interests (<?=count($list)?>)</div>
+  <div class="section-heading-sm">All Interests (<?=count($list)?>)</div>
   <?php if(!$list): ?><p style="color:#64748b;font-size:13px">No entries yet. Add one above.</p><?php else: ?>
   <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:16px">
     <?php foreach($list as $row): ?>
