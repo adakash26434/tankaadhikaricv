@@ -210,7 +210,8 @@ CREATE TABLE IF NOT EXISTS `portfolio_sites` (
   `title` varchar(255) NOT NULL DEFAULT '',
   `subtitle` varchar(255) NOT NULL DEFAULT '',
   `url` varchar(255) NOT NULL DEFAULT '',
-  `sort_order` int(11) NOT NULL DEFAULT 0
+  `sort_order` int(11) NOT NULL DEFAULT 0,
+  `rating` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO `portfolio_sites` (`image`,`title`,`subtitle`,`url`,`sort_order`) VALUES
@@ -227,18 +228,30 @@ CREATE TABLE IF NOT EXISTS `services_about` (
   `icon` varchar(50) NOT NULL DEFAULT 'globe',
   `name` varchar(255) NOT NULL DEFAULT '',
   `description` varchar(500) NOT NULL DEFAULT '',
-  `sort_order` int(11) NOT NULL DEFAULT 0
+  `sort_order` int(11) NOT NULL DEFAULT 0,
+  `is_pricing` TINYINT(1) NOT NULL DEFAULT 0,
+  `price` varchar(100) NOT NULL DEFAULT '',
+  `price_unit` varchar(100) NOT NULL DEFAULT '',
+  `features` text,
+  `accent_color` varchar(20) NOT NULL DEFAULT 'cyan',
+  `cta_text` varchar(255) NOT NULL DEFAULT '',
+  `cta_link` varchar(255) NOT NULL DEFAULT '#contact'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-INSERT INTO `services_about` (`icon`,`name`,`description`,`sort_order`) VALUES
-('globe','Domain Management','Secure domain registration & DNS management',1),
-('envelope','Official Email','Professional business email for Tanka Prasad Adhikari',2),
-('credit-card','Digital Payments','Integration for modern financial transactions',3),
-('code','Web Development','Advanced UI/UX focused development',4),
-('database','DMS Software','Cooperative document management systems',5),
-('chart-line','FinTech Consulting','Digital transformation advisory',6),
-('robot','Automation','Loan & document workflow automation',7),
-('chalkboard-teacher','Training','Cooperative sector capacity building',8);
+INSERT INTO `services_about` (`icon`,`name`,`description`,`sort_order`,`is_pricing`,`price`,`price_unit`,`features`,`accent_color`,`cta_text`,`cta_link`) VALUES
+('globe','Domain Management','Secure domain registration & DNS management',1,0,'','','','cyan','',''),
+('envelope','Official Email','Professional business email for Tanka Prasad Adhikari',2,0,'','','','cyan','',''),
+('credit-card','Digital Payments','Integration for modern financial transactions',3,0,'','','','cyan','',''),
+('code','Web Development','Advanced UI/UX focused development',4,0,'','','','cyan','',''),
+('database','DMS Software','Cooperative document management systems',5,0,'','','','cyan','',''),
+('chart-line','FinTech Consulting','Digital transformation advisory',6,0,'','','','cyan','',''),
+('robot','Automation','Loan & document workflow automation',7,0,'','','','cyan','',''),
+
+-- Digital Services (Pricing Cards) —
+('globe','Website Development','Custom design included, SEO optimized',8,1,'15,000','NPR One-time','Responsive & mobile-friendly design\nSEO optimized structure\nContact forms & analytics\nFree 30-day support','cyan','Request a Quote →','#contact'),
+('cloud','Web Hosting','99.9% uptime, Nepal-based servers',9,1,'3,000','NPR /year','99.9% uptime guarantee\nFree SSL certificate\nDaily backups','violet','Get Hosting →','#contact'),
+('envelope','Professional Email Hosting','Your domain @you.com',10,1,'1,500','NPR /year','yourname@yourdomain.com\n5 GB storage per mailbox\nSpam & virus protection','yellow','Setup Email →','#contact'),
+('shield-alt','Cyber Security Training','For businesses, IT teams & individuals',11,1,'20,000','NPR per person','Network & endpoint security\nPhishing & social engineering awareness\nData privacy & compliance','red','Enroll Now →','#contact');
 
 -- Interests
 CREATE TABLE IF NOT EXISTS `interests` (
@@ -314,3 +327,24 @@ CALL add_idx('portfolio_sites', 'idx_portfolio_sort', '`sort_order`');
 CALL add_idx('services_about', 'idx_services_sort', '`sort_order`');
 
 DROP PROCEDURE IF EXISTS add_idx$$
+
+
+-- ============================================================
+-- UPGRADE SCRIPT: Add new columns to existing databases
+-- Run these manually if you already have the tables:
+-- ============================================================
+
+-- services_about: add pricing card columns (ignore error if already exists)
+ALTER TABLE `services_about`
+  ADD COLUMN `is_pricing` TINYINT(1) NOT NULL DEFAULT 0 AFTER `sort_order`,
+  ADD COLUMN `price` VARCHAR(100) NOT NULL DEFAULT '' AFTER `is_pricing`,
+  ADD COLUMN `price_unit` VARCHAR(100) NOT NULL DEFAULT '' AFTER `price`,
+  ADD COLUMN `features` TEXT AFTER `price_unit`,
+  ADD COLUMN `accent_color` VARCHAR(20) NOT NULL DEFAULT 'cyan' AFTER `features`,
+  ADD COLUMN `cta_text` VARCHAR(255) NOT NULL DEFAULT '' AFTER `accent_color`,
+  ADD COLUMN `cta_link` VARCHAR(255) NOT NULL DEFAULT '#contact' AFTER `cta_text`;
+
+-- portfolio_sites: add rating column (ignore error if already exists)
+ALTER TABLE `portfolio_sites`
+  ADD COLUMN `rating` TINYINT(1) NOT NULL DEFAULT 0 AFTER `sort_order`;
+

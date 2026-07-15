@@ -88,23 +88,22 @@ try {
     }
 
     // Experience
-    $exp = dbRows("SELECT title, company, location, start_date, end_date, description FROM experience ORDER BY sort_order, id");
+    $exp = dbRows("SELECT company, role, period, description FROM experience ORDER BY sort_order, id");
     if ($exp) {
         $expList = [];
         foreach ($exp as $e) {
-            $dates = "{$e['start_date']} - " . ($e['end_date'] ?: 'Present');
-            $expList[] = "- {$e['title']} at {$e['company']} ({$dates}): {$e['description']}";
+            $expList[] = "- {$e['role']} at {$e['company']} ({$e['period']}): {$e['description']}";
         }
         $contextParts[] = "WORK EXPERIENCE:\n" . implode("\n", $expList);
     }
 
     // Education
-    $edu = dbRows("SELECT degree, institution, field_of_study, start_year, end_year FROM education ORDER BY sort_order, id");
+    $edu = dbRows("SELECT degree_code, degree_name, institution, period FROM education ORDER BY sort_order, id");
     if ($edu) {
         $eduList = [];
         foreach ($edu as $e) {
-            $years = "{$e['start_year']} - " . ($e['end_year'] ?: 'Present');
-            $eduList[] = "- {$e['degree']} in {$e['field_of_study']} from {$e['institution']} ({$years})";
+            $code = $e['degree_code'] ? "{$e['degree_code']} — " : '';
+            $eduList[] = "- {$code}{$e['degree_name']} from {$e['institution']} ({$e['period']})";
         }
         $contextParts[] = "EDUCATION:\n" . implode("\n", $eduList);
     }
@@ -120,13 +119,13 @@ try {
     }
 
     // Projects
-    $projects = dbRows("SELECT title, description, url, technologies FROM projects ORDER BY sort_order, id");
+    $projects = dbRows("SELECT title, subtitle, description, url, tags FROM projects ORDER BY sort_order, id");
     if ($projects) {
         $projList = [];
         foreach ($projects as $p) {
-            $tech = $p['technologies'] ? " [Tech: {$p['technologies']}]" : "";
+            $tags = $p['tags'] ? " [Tags: {$p['tags']}]" : "";
             $link = $p['url'] ? " — {$p['url']}" : "";
-            $projList[] = "- {$p['title']}: {$p['description']}{$tech}{$link}";
+            $projList[] = "- {$p['title']}" . ($p['subtitle'] ? " ({$p['subtitle']})" : "") . ": {$p['description']}{$tags}{$link}";
         }
         $contextParts[] = "PROJECTS:\n" . implode("\n", $projList);
     }
@@ -143,10 +142,13 @@ try {
     }
 
     // Training
-    $training = dbRows("SELECT title, institution, year FROM training ORDER BY sort_order, id");
+    $training = dbRows("SELECT name, organizer, year, certificate_url FROM training ORDER BY sort_order, id");
     if ($training) {
         $trainList = [];
-        foreach ($training as $t) { $trainList[] = "- {$t['title']} from {$t['institution']} ({$t['year']})"; }
+        foreach ($training as $t) {
+            $org = $t['organizer'] ? " by {$t['organizer']}" : "";
+            $trainList[] = "- {$t['name']}{$org} ({$t['year']})";
+        }
         $contextParts[] = "TRAINING & CERTIFICATIONS:\n" . implode("\n", $trainList);
     }
 
@@ -158,12 +160,27 @@ try {
         $contextParts[] = "RESEARCH PUBLICATIONS:\n" . implode("\n", $resList);
     }
 
-    // Services
-    $services = dbRows("SELECT title, description FROM services_about ORDER BY sort_order, id");
-    if ($services) {
-        $servList = [];
-        foreach ($services as $s) { $servList[] = "- {$s['title']}: {$s['description']}"; }
-        $contextParts[] = "SERVICES OFFERED:\n" . implode("\n", $servList);
+    // Services (includes Digital Services with pricing)
+    try {
+        $services = dbRows("SELECT name, description, is_pricing, price, price_unit, features FROM services_about ORDER BY sort_order, id");
+        if ($services) {
+            $servList = [];
+            foreach ($services as $s) {
+                $pricing = (!empty($s['is_pricing']) && !empty($s['price'])) ? " — {$s['price']} {$s['price_unit']}" : "";
+                $servList[] = "- {$s['name']}{$pricing}: {$s['description']}";
+            }
+            $contextParts[] = "SERVICES OFFERED:\n" . implode("\n", $servList);
+        }
+    } catch (Exception $e) {
+        // Fallback: query just name/description if new columns don't exist yet
+        try {
+            $services = dbRows("SELECT name, description FROM services_about ORDER BY sort_order, id");
+            if ($services) {
+                $servList = [];
+                foreach ($services as $s) { $servList[] = "- {$s['name']}: {$s['description']}"; }
+                $contextParts[] = "SERVICES OFFERED:\n" . implode("\n", $servList);
+            }
+        } catch (Exception $e2) { /* table doesn't exist */ }
     }
 
     // Interests
