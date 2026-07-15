@@ -254,3 +254,4 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--cyan);outline-offse
 <div class="page-title"><?=htmlspecialchars($pageTitle??'Dashboard')?></div>
 <div class="page-sub"><?=htmlspecialchars($pageSubtitle??'')?></div>
 </div>
+</div>
