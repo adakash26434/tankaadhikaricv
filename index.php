@@ -1031,12 +1031,14 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(34,211,238,.6);outli
     Need a professional website, reliable web hosting, or custom email hosting? I provide end-to-end digital solutions tailored for businesses, cooperatives, and startups in Nepal.
   </p>
   <?php
-  $pricingServices = dbRows("SELECT * FROM services_about WHERE is_pricing=1 ORDER BY sort_order, id");
+  try {
+      $pricingServices = dbRows("SELECT * FROM services_about WHERE is_pricing=1 ORDER BY sort_order, id");
+  } catch (Exception $e) { $pricingServices = []; }
   if ($pricingServices): ?>
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-bottom:24px">
     <?php foreach($pricingServices as $s):
       $accent   = h($s['accent_color'] ?? 'cyan');
-      $features = $s['features'] ? json_decode($s['features'], true) : [];
+      $features = $s["features"] ? (json_decode($s["features"], true) ?: explode("\n", $s["features"])) : [];
       $rgbaArr  = ['cyan'=>'34,211,238','violet'=>'139,92,246','yellow'=>'245,158,11','red'=>'239,68,68','amber'=>'245,158,11','green'=>'34,197,94'];
       $rgba     = $rgbaArr[$s['accent_color']] ?? '34,211,238';
     ?>
