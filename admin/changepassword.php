@@ -14,7 +14,7 @@ $hashFile   = __DIR__ . '/password.php';
 $usingBcrypt = false;
 if (is_file($hashFile)) {
     $h = include $hashFile;
-    if (is_string($h) && str_starts_with($h, '$2y$')) {
+    if (is_string($h) && substr($h, 0, 4) === '$2y$') {
         $usingBcrypt = true;
     }
 }
@@ -65,9 +65,7 @@ include __DIR__ . '/header.php';
 ?>
 
 <?php if($msg): ?>
-<div style="<?=$msgType==='error'?'background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);color:#f87171':'background:rgba(34,211,238,.08);border:1px solid rgba(34,211,238,.2);color:#67e8f9'?>;border-radius:8px;padding:14px 16px;font-size:13px;margin-bottom:18px">
-  <?=$msgType==='success'?'✅':'⚠️'?> <?=htmlspecialchars($msg)?>
-</div>
+<div class="alert <?=$msgType === 'error' ? 'alert-error' : 'alert-success'?>"><?=htmlspecialchars($msg)?></div>
 <?php endif; ?>
 
 <div style="background:rgba(<?=$usingBcrypt?'34,211,238':'250,204,21'?>,.04);border:1px solid rgba(<?=$usingBcrypt?'34,211,238':'250,204,21'?>,.2);border-radius:10px;padding:14px 18px;font-size:13px;margin-bottom:20px;color:<?=$usingBcrypt?'#67e8f9':'#fde047'?>">

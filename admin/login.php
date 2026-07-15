@@ -79,13 +79,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['password'])) {
         }
 
         $valid = false;
-        if ($storedHash
-            && (str_starts_with($storedHash, '$2y$')
-                || str_starts_with($storedHash, '$2a$')
-                || str_starts_with($storedHash, '$argon'))
-        ) {
-            $valid = password_verify($input, $storedHash);
-        } else {
+        if ($storedHash) {
+            $prefix4 = substr($storedHash, 0, 4);
+            if ($prefix4 === '$2y$' || $prefix4 === '$2a$' || $prefix4 === '$arg' && substr($storedHash, 0, 6) === '$argon') {
+                $valid = password_verify($input, $storedHash);
+            }
+        }
+        if (!$valid) {
             $valid = hash_equals(hash('sha256', ADMIN_PASSWORD), hash('sha256', $input));
         }
 

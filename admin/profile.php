@@ -42,9 +42,7 @@ include __DIR__ . '/header.php';
 ?>
 
 <?php if ($msg): ?>
-  <div style="border-radius:8px;padding:12px 16px;font-size:13px;margin-bottom:18px;<?=$msgType === 'error' ? 'background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);color:#f87171' : 'background:rgba(34,211,238,.08);border:1px solid rgba(34,211,238,.2);color:#67e8f9'?>">
-    <?=h($msg)?>
-  </div>
+  <div class="alert <?=$msgType === 'error' ? 'alert-error' : 'alert-success'?>"><?=h($msg)?></div>
 <?php endif; ?>
 
 <form method="POST" class="card" enctype="multipart/form-data">

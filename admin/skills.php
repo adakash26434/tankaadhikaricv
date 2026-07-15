@@ -35,7 +35,7 @@ include __DIR__ . '/header.php';
 <?php if($msg): ?><div class="alert-success">✅ Skill <?=$msg?>!</div><?php endif; ?>
 
 <div class="card" style="margin-bottom:16px">
-  <div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:14px"><?=$editRow?'✏️ Edit Skill':'➕ Add New Skill'?></div>
+  <div class="section-heading"><?=$editRow?'✏️ Edit Skill':'➕ Add New Skill'?></div>
   <form method="POST" action="skills.php?action=<?=$editRow?'edit&id='.$id:'add'?>">
     <?=csrfField()?>
     <div class="grid-2">
@@ -77,10 +77,10 @@ include __DIR__ . '/header.php';
       </td>
       <td style="color:#64748b"><?=$row['sort_order']?></td>
       <td style="display:flex;gap:6px">
-        <a href="skills.php?action=edit&id=<?=$row['id']?>" class="btn btn-secondary" style="font-size:11px;padding:4px 10px">Edit</a>
+        <a href="skills.php?action=edit&id=<?=$row['id']?>" class="btn btn-secondary btn-sm">Edit</a>
         <form method="POST" action="skills.php?action=delete&id=<?=$row['id']?>" onsubmit="return confirm('Delete?')">
           <?=csrfField()?>
-          <button class="btn btn-danger" style="font-size:11px;padding:4px 10px" type="submit">Delete</button>
+          <button class="btn btn-danger btn-sm" type="submit">Delete</button>
         </form>
       </td>
     </tr>

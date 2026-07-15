@@ -49,13 +49,13 @@ include __DIR__ . '/header.php';
 
 <?php if (isset($_GET['deleted'])): ?><div class="alert-success">✅ Entry deleted.</div><?php endif; ?>
 <?php if ($msg): ?>
-  <div style="border-radius:8px;padding:12px 16px;font-size:13px;margin-bottom:18px;<?=$msgType === 'error' ? 'background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);color:#f87171' : 'background:rgba(34,211,238,.08);border:1px solid rgba(34,211,238,.2);color:#67e8f9'?>">
+  <div class="alert <?=$msgType === 'error' ? 'alert-error' : 'alert-success'?>"
     <?=h($msg)?>
   </div>
 <?php endif; ?>
 
 <div class="card">
-  <div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:14px"><?=$editRow ? '✏️ Edit Portfolio Site' : '➕ Add New Portfolio Site'?></div>
+  <div class="section-heading"><?=$editRow ? '✏️ Edit Portfolio Site' : '➕ Add New Portfolio Site'?></div>
   <form method="POST" action="portfolio_sites.php?action=<?=$editRow ? 'edit&id=' . $id : 'add'?>" enctype="multipart/form-data">
     <?=csrfField()?>
     <div class="grid-2">
@@ -81,7 +81,7 @@ include __DIR__ . '/header.php';
 </div>
 
 <div class="card">
-  <div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:12px">All Portfolio Sites (<?=count($list)?>)</div>
+  <div class="section-heading-sm">All Portfolio Sites (<?=count($list)?>)</div>
   <?php if (!$list): ?>
     <p style="color:#64748b;font-size:13px">No entries yet.</p>
   <?php else: ?>
@@ -101,7 +101,7 @@ include __DIR__ . '/header.php';
           <a href="portfolio_sites.php?action=edit&id=<?=$row['id']?>" class="btn btn-secondary" style="font-size:11px;padding:4px 10px;flex:1;text-align:center">Edit</a>
           <form method="POST" action="portfolio_sites.php?action=delete&id=<?=$row['id']?>" onsubmit="return confirm('Delete?')">
             <?=csrfField()?>
-            <button class="btn btn-danger" style="font-size:11px;padding:4px 10px" type="submit">Delete</button>
+            <button class="btn btn-danger btn-sm" type="submit">Delete</button>
           </form>
         </div>
       </div>

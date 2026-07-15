@@ -73,7 +73,7 @@ foreach($cards as $c): ?>
 </div>
 
 <div class="card" style="background:rgba(139,92,246,.04);border-color:rgba(139,92,246,.2)">
-  <div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:8px">🔑 Change Admin Password</div>
+  <div class="section-heading-sm">🔑 Change Admin Password</div>
   <p style="font-size:12px;color:#64748b;margin-bottom:12px">Use the secure password change page to upgrade to a bcrypt-hashed password — no file editing required.</p>
   <a href="changepassword.php" class="btn btn-secondary" style="font-size:12px;border:1px solid rgba(139,92,246,.3);color:#a78bfa">🔐 Change Password →</a>
 </div>

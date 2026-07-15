@@ -97,7 +97,7 @@ include __DIR__ . '/header.php';
 ?>
 
 <?php if($msg): ?>
-<div class="alert-<?=$msgType?>" style="<?=$msgType==='error'?'background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);color:#f87171':'background:rgba(34,211,238,.08);border:1px solid rgba(34,211,238,.2);color:#67e8f9'?>;border-radius:8px;padding:12px 16px;font-size:13px;margin-bottom:18px">
+<div class="alert <?=$msgType === 'error' ? 'alert-error' : 'alert-success'?>">
   <?=$msg?>
 </div>
 <?php endif; ?>
@@ -183,8 +183,8 @@ include __DIR__ . '/header.php';
       <td style="color:#64748b;font-size:11px"><?=date('d M Y', $f['time'])?></td>
       <td><code style="background:#0f1420;padding:2px 6px;border-radius:4px;font-size:11px;color:#22d3ee"><?=htmlspecialchars($f['path'])?></code></td>
       <td style="display:flex;gap:6px">
-        <button onclick="copyPath('<?=htmlspecialchars($f['path'])?>')" class="btn btn-secondary" style="font-size:11px;padding:4px 10px">📋 Copy</button>
-        <a href="../<?=htmlspecialchars($f['path'])?>" target="_blank" class="btn btn-secondary" style="font-size:11px;padding:4px 10px">View ↗</a>
+        <button onclick="copyPath('<?=htmlspecialchars($f['path'])?>')" class="btn btn-secondary btn-sm">📋 Copy</button>
+        <a href="../<?=htmlspecialchars($f['path'])?>" target="_blank" class="btn btn-secondary btn-sm">View ↗</a>
       </td>
     </tr>
     <?php endforeach; ?>
