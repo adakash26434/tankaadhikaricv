@@ -40,9 +40,10 @@ function requireAdmin(): void {
     if (!empty($_SESSION[ADMIN_SESSION_KEY])) {
         $lastActivity = $_SESSION['last_activity'] ?? 0;
         if (time() - $lastActivity > SESSION_TIMEOUT_SECS) {
+            $_SESSION['_timed_out'] = true; // Persist timeout flag in session
             session_unset();
             session_destroy();
-            header('Location: login.php?timeout=1');
+            header('Location: login.php');
             exit;
         }
         $_SESSION['last_activity'] = time();
