@@ -21,16 +21,16 @@ function requireAdmin(): void {
             $_SESSION['_timed_out'] = true;
             session_unset();
             session_destroy();
+            if (session_status() === PHP_SESSION_ACTIVE) { session_write_close(); }
             header('Location: login.php');
             exit;
         }
         $_SESSION['last_activity'] = time();
+        session_write_close();
+        return;
     }
-    if (empty($_SESSION[ADMIN_SESSION_KEY])) {
-        header('Location: login.php');
-        exit;
-    }
-    session_write_close();
+    header('Location: login.php');
+    exit;
 }
 
 function isAdmin(): bool {
