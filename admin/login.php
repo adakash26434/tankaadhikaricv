@@ -44,10 +44,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if ($valid) {
-            session_regenerate_id(true);
             $_SESSION[ADMIN_SESSION_KEY] = true;
             unset($_SESSION['login_attempts'], $_SESSION['login_last_attempt'], $_SESSION['_timed_out']);
-            header('Location: index.php'); exit;
+            @session_write_close(); // Flush session data before redirect
+            header('Location: index.php');
+            exit;
         }
 
         $_SESSION['login_attempts']    = $attempts + 1;
