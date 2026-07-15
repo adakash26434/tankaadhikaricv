@@ -55,11 +55,9 @@ $list = dbRows("SELECT * FROM awards ORDER BY sort_order, id");
 include __DIR__ . '/header.php';
 ?>
 
-<?php if (isset($_GET['deleted'])): ?><div class="alert-success">✅ Award deleted.</div><?php endif; ?>
+<?php if (isset($_GET['deleted'])): ?><div class="alert alert-success">✅ Award deleted.</div><?php endif; ?>
 <?php if ($msg): ?>
-  <div class="alert <?=$msgType === 'error' ? 'alert-error' : 'alert-success'?>"
-    <?=h($msg)?>
-  </div>
+  <div class="alert <?=$msgType === 'error' ? 'alert-error' : 'alert-success'?>"><?=h($msg)?></div>
 <?php endif; ?>
 
 <div class="card" style="margin-bottom:16px">

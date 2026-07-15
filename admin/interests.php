@@ -29,9 +29,9 @@ $editRow = ($action === 'edit' && $id) ? dbRow("SELECT * FROM interests WHERE id
 $list = dbRows("SELECT * FROM interests ORDER BY sort_order, id");
 include __DIR__ . '/header.php';
 ?>
-<?php if(isset($_GET['deleted'])): ?><div class="alert-success">✅ Entry deleted.</div><?php endif; ?>
-<?php if($msg==='added'): ?><div class="alert-success">✅ Interest added!</div><?php endif; ?>
-<?php if($msg==='updated'): ?><div class="alert-success">✅ Interest updated!</div><?php endif; ?>
+<?php if(isset($_GET['deleted'])): ?><div class="alert alert-success">✅ Entry deleted.</div><?php endif; ?>
+<?php if($msg==='added'): ?><div class="alert alert-success">✅ Interest added!</div><?php endif; ?>
+<?php if($msg==='updated'): ?><div class="alert alert-success">✅ Interest updated!</div><?php endif; ?>
 
 <div class="card" style="margin-bottom:10px;background:#0f1420;border-color:#2a3347;font-size:12px;color:#64748b">
   💡 <strong style="color:#c9d1e3">Icon examples:</strong> laptop-code, chart-line, users, globe, book, microphone, plane, mountain, music, camera, heart, star, football-ball, paint-brush, tree, coffee
