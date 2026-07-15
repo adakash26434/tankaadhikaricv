@@ -11,6 +11,9 @@ $msg = ''; $msgType = 'success';
 $action = $_GET['action'] ?? '';
 $id = (int)($_GET['id'] ?? 0);
 
+// Load existing row FIRST (needed for POST handler + form display)
+$editRow = ($action === 'edit' && $id) ? dbRow("SELECT * FROM portfolio_sites WHERE id=?", [$id]) : null;
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     verifyCsrf();
 
@@ -41,8 +44,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 }
-
-$editRow = ($action === 'edit' && $id) ? dbRow("SELECT * FROM portfolio_sites WHERE id=?", [$id]) : null;
 $list = dbRows("SELECT * FROM portfolio_sites ORDER BY sort_order, id");
 include __DIR__ . '/header.php';
 ?>
