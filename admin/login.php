@@ -4,73 +4,76 @@ require_once __DIR__ . '/includes/totp.php';
 
 if (isAdmin()) { header('Location: index.php'); exit; }
 
-$error = '';
-$locked = false;
-$step = $_SESSION['login_step'] ?? 'password';  // 'password' | 'setup' | 'otp'
-$totpSecret = defined('DISABLE_2FA') ? false : totpGetSecret();
+// ── DISABLE_2FA CHECK ──────────────────────────────────────────────────────
+$is2FAEnabled = !defined('DISABLE_2FA') && totpGetSecret();
 
-// Clear pending state on GET request
+// Clear session on GET (fresh load)
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     unset($_SESSION['password_verified'], $_SESSION['totp_pending'], $_SESSION['login_step']);
-    $step = 'password';
 }
+
+$error  = '';
+$locked = false;
+$step   = $_SESSION['login_step'] ?? 'password';
 
 // Session timeout notice
 if (!empty($_SESSION['_timed_out'])) {
     $mins = (int)(SESSION_TIMEOUT_SECS / 60);
-    $error = "You were automatically logged out after {$mins} minutes of inactivity.";
+    $error = "Logged out after {$mins} min of inactivity.";
     unset($_SESSION['_timed_out']);
 }
 
-// ── PHASE 2: TOTP SETUP (first time - no TOTP_SECRET) ────────────────────────
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['setup_verify'])) {
-    $code = $_POST['setup_code'] ?? '';
+// ── 2FA SETUP (first time login — no secret yet) ──────────────────────────
+if ($step === 'setup' && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['setup_verify'])) {
+    $code   = $_POST['setup_code'] ?? '';
     $secret = $_SESSION['totp_setup_secret'] ?? '';
     if ($secret && totpVerifyCode($secret, $code)) {
         totpSaveSecret($secret);
         unset($_SESSION['totp_setup_secret'], $_SESSION['login_step']);
         $_SESSION[ADMIN_SESSION_KEY] = true;
-        $_SESSION['last_activity'] = time();
+        $_SESSION['last_activity']    = time();
         session_write_close();
         header('Location: index.php');
         exit;
     } else {
-        $error = 'Invalid code. Please try again.';
-        $step = 'setup';
+        $error = 'Invalid code. Try again.';
+        $step  = 'setup';
     }
 }
 
-// ── PHASE 2: OTP VERIFICATION (TOTP_SECRET exists) ───────────────────────────
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['otp_code'])) {
+// ── 2FA OTP VERIFICATION (returning user with secret) ─────────────────────
+if ($step === 'otp' && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['otp_code'])) {
     $code = $_POST['otp_code'] ?? '';
-    if ($totpSecret && totpVerifyCode($totpSecret, $code)) {
-        unset($_SESSION['password_verified']);
-        unset($_SESSION['login_attempts'], $_SESSION['login_last_attempt'], $_SESSION['_timed_out']);
-        unset($_SESSION['login_step']);
+    if ($is2FAEnabled && totpVerifyCode(totpGetSecret(), $code)) {
+        unset($_SESSION['password_verified'], $_SESSION['login_attempts'],
+              $_SESSION['login_last_attempt'], $_SESSION['_timed_out'], $_SESSION['login_step']);
         $_SESSION[ADMIN_SESSION_KEY] = true;
-        $_SESSION['last_activity'] = time();
+        $_SESSION['last_activity']    = time();
         session_write_close();
         header('Location: index.php');
         exit;
     } else {
-        $error = 'Invalid 2FA code. Please try again.';
-        $step = 'otp';
+        $error = 'Invalid 2FA code. Try again.';
+        $step  = 'otp';
     }
 }
 
-// ── PHASE 1: PASSWORD VERIFICATION ───────────────────────────────────────────
+// ── PASSWORD VERIFICATION ──────────────────────────────────────────────────
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['password'])) {
     $attempts    = (int)($_SESSION['login_attempts'] ?? 0);
     $lastAttempt = (int)($_SESSION['login_last_attempt'] ?? 0);
     $lockoutSecs = 300;
 
+    // Lockout check
     if ($attempts >= 5 && (time() - $lastAttempt) < $lockoutSecs) {
         $remaining = $lockoutSecs - (time() - $lastAttempt);
-        $error = 'Too many failed attempts. Please wait ' . ceil($remaining / 60) . ' minute(s).';
+        $error = 'Too many attempts. Wait ' . ceil($remaining / 60) . ' min.';
         $locked = true;
     } else {
         $input = $_POST['password'] ?? '';
-        $hashFile = __DIR__ . '/password.php';
+
+        // Read stored hash from password.php
+        $hashFile   = __DIR__ . '/password.php';
         $storedHash = null;
         if (is_file($hashFile)) {
             $hashData = include $hashFile;
@@ -79,51 +82,59 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['password'])) {
             }
         }
 
+        // Try bcrypt / argon2 first
         $valid = false;
-        // Check bcrypt/argon2 hashed password
         if ($storedHash) {
-            $prefix4 = substr($storedHash, 0, 4);
-            $prefix6 = substr($storedHash, 0, 6);
-            if ($prefix4 === '$2y$' || $prefix4 === '$2a$' || $prefix6 === '$argon') {
+            $p4 = substr($storedHash, 0, 4);
+            $p6 = substr($storedHash, 0, 6);
+            if ($p4 === '$2y$' || $p4 === '$2a$' || $p6 === '$argon') {
                 $valid = password_verify($input, $storedHash);
             }
         }
-        // Fallback: plain ADMIN_PASSWORD in superadmin.php
+
+        // Fallback: plain ADMIN_PASSWORD (sha256 comparison)
         if (!$valid) {
-            $valid = hash_equals(hash('sha256', ADMIN_PASSWORD), hash('sha256', $input));
+            $adminHash = hash('sha256', ADMIN_PASSWORD);
+            $inputHash = hash('sha256', $input);
+            if (function_exists('hash_equals')) {
+                $valid = hash_equals($adminHash, $inputHash);
+            } else {
+                // PHP < 5.6 fallback (timing-safe-ish)
+                $valid = ($adminHash === $inputHash);
+            }
         }
 
         if ($valid) {
+            // Password correct!
             unset($_SESSION['login_attempts'], $_SESSION['login_last_attempt'], $_SESSION['_timed_out']);
-            session_write_close();
 
-            if ($totpSecret) {
-                // 2FA enabled — go to OTP step
+            if ($is2FAEnabled) {
+                // 2FA ON: go to OTP step
                 $_SESSION['password_verified'] = true;
-                $_SESSION['login_step'] = 'otp';
+                $_SESSION['login_step']         = 'otp';
                 header('Location: login.php');
                 exit;
             } else {
-                // No 2FA — go directly to admin
+                // 2FA OFF: go directly to admin
                 $_SESSION[ADMIN_SESSION_KEY] = true;
-                $_SESSION['last_activity'] = time();
+                $_SESSION['last_activity']    = time();
                 unset($_SESSION['login_step']);
+                session_write_close();
                 header('Location: index.php');
                 exit;
             }
         }
 
+        // Wrong password
         $_SESSION['login_attempts']     = $attempts + 1;
         $_SESSION['login_last_attempt'] = time();
-        $attemptsLeft = max(0, 5 - ($attempts + 1));
-        $error = 'Incorrect password.' . ($attemptsLeft > 0 ? " $attemptsLeft attempt(s) remaining." : ' Account locked for 5 minutes.');
+        $left = max(0, 5 - ($attempts + 1));
+        $error = 'Incorrect password.' . ($left > 0 ? " ($left tries left)" : ' Locked 5 min.');
     }
 }
 
-// Retrieve session state for this render
-if (isset($_SESSION['login_step'])) {
-    $step = $_SESSION['login_step'];
-}
+// Keep step in sync with session
+if (isset($_SESSION['login_step'])) { $step = $_SESSION['login_step']; }
 $setupSecret = $_SESSION['totp_setup_secret'] ?? null;
 ?>
 <!DOCTYPE html>
