@@ -88,7 +88,7 @@ function totpGenerateCode(string $secret, ?int $timeSlice = null): string {
         ((ord($hash[$offset + 0]) & 0x7F) << 24) |
         ((ord($hash[$offset + 1]) & 0xFF) << 16) |
         ((ord($hash[$offset + 2]) & 0xFF) << 8) |
-        ((ord($hash[$offset + 3]) & 0xFF)
+        ((ord($hash[$offset + 3]) & 0xFF))
     );
     $code = ($code % 1000000);
     return str_pad((string)$code, 6, '0', STR_PAD_LEFT);

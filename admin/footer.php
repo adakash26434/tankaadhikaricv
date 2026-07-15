@@ -4,6 +4,16 @@
   Portfolio Admin &copy; <?=date('Y')?> — Aakash Digital Pvt. Ltd.
 </div>
 <script>
+function toggleMobileNav() {
+    var nav = document.getElementById('mobileNav');
+    if (!nav) return;
+    nav.classList.toggle('open');
+    document.body.style.overflow = nav.classList.contains('open') ? 'hidden' : '';
+}
+// Close mobile nav when clicking overlay background
+document.getElementById('mobileNav')?.addEventListener('click', function(e) {
+    if (e.target === this) toggleMobileNav();
+});
 // Remove current file — button has data-hidden="r_SAFEID"
 function removeCurrentFile(btn) {
     var row = btn.closest('.file-preview');
@@ -14,8 +24,7 @@ function removeCurrentFile(btn) {
     }
     if (row) row.style.display = 'none';
 }
-
-// Remove a file from multi-upload list — button has data-field, data-path, data-removed
+// Remove a file from multi-upload list
 document.querySelectorAll('.rm-multi-btn').forEach(function(btn) {
     btn.addEventListener('click', function() {
         var fieldName = btn.getAttribute('data-field');

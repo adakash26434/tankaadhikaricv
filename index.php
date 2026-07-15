@@ -27,6 +27,18 @@ $role     = h($p['role'] ?? '');
 $avatar   = h($p['avatar'] ?? 'img/avatar.jpg');
 $cvFile   = h($p['cv_file'] ?? 'files/canada.pdf');
 $firstName = explode(' ', $p['full_name'] ?? 'Tanka')[0];
+
+// Dynamic hero stats from DB
+$statYears = max(1, count($experiences));
+$statProjects = count($projects);
+$statAwards = count($awards);
+$statClients = $p['clients_served'] ?? '50+';
+$heroStats = [
+  ['num' => $statYears, 'label' => 'Yrs Experience'],
+  ['num' => $statProjects > 0 ? $statProjects . '+' : '1+', 'label' => 'Projects'],
+  ['num' => is_numeric($statClients) ? $statClients . '+' : $statClients, 'label' => 'Clients Served'],
+  ['num' => $statAwards > 0 ? $statAwards : '1', 'label' => "Int'l Awards"],
+];
 // Social links for Schema.org sameAs
 $sameAs = array_filter([
     $p['facebook_url']  ?? '',
@@ -298,7 +310,7 @@ section+section{margin-top:52px;padding-top:40px;border-top:1px solid var(--bord
 .hero-pulse{width:6px;height:6px;border-radius:50%;background:var(--cyan);display:inline-block;animation:pulse-dot 2s ease-in-out infinite}
 .hero{display:flex;align-items:flex-start;justify-content:space-between;gap:24px;margin-bottom:32px;flex-wrap:wrap}
 .hero-text{animation:fadeInUp .7s ease-out .15s both}
-.hero-text h1{font-size:44px;font-weight:900;color:var(--text);line-height:1.15;letter-spacing:-.8px;margin-bottom:6px}
+.hero-text h1{font-size:clamp(26px,5vw,44px);font-weight:900;color:var(--text);line-height:1.15;letter-spacing:-.8px;margin-bottom:6px}
 .hero-text h1 span{background:linear-gradient(135deg,var(--cyan) 0%,var(--violet) 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
 .hero-sub{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;font-weight:600;margin-bottom:2px;animation:fadeInUp .7s ease-out .3s both}
 
@@ -351,7 +363,7 @@ section+section{margin-top:52px;padding-top:40px;border-top:1px solid var(--bord
 .service-card:hover{border-color:rgba(34,211,238,.3);transform:translateY(-2px);box-shadow:0 8px 24px var(--shadow-lg)}
 .service-card:hover .service-icon i{transform:scale(1.15);filter:drop-shadow(0 0 6px var(--cyan))}
 .service-icon{font-size:20px;color:var(--cyan);margin-bottom:9px;transition:.2s}
-.service-name{font-size:9px;color:var(--text);font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+.service-name{font-size:11px;color:var(--text);font-weight:700;text-transform:uppercase;letter-spacing:.5px}
 .service-desc{font-size:10px;color:var(--muted);line-height:1.5;margin-top:3px}
 .service-card:nth-child(even) .service-icon{color:var(--violet)}
 .service-card:nth-child(even):hover{border-color:rgba(139,92,246,.3)}
@@ -388,7 +400,7 @@ section+section{margin-top:52px;padding-top:40px;border-top:1px solid var(--bord
    SKILLS
 ═══════════════════════════════════════════════════════ */
 .skill-row{display:flex;align-items:center;gap:12px;margin-bottom:12px}
-.skill-name{font-size:12.5px;color:var(--text);width:200px;flex-shrink:0;font-weight:500}
+.skill-name{font-size:12.5px;color:var(--text);min-width:120px;max-width:180px;flex-shrink:0;font-weight:500}
 .skill-bar{flex:1;background:var(--meta-bg);border-radius:6px;height:6px;overflow:hidden;transition:background .3s}
 .skill-fill{height:100%;border-radius:6px;transition:width 1s ease;box-shadow:0 0 6px var(--cyan)}
 .skill-pct{font-size:10.5px;color:var(--muted);width:32px;text-align:right;font-weight:600}
@@ -517,7 +529,7 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(34,211,238,.6);outli
    RESPONSIVE — MOBILE (≤600px)
 ═══════════════════════════════════════════════════════ */
 @media(max-width:600px){
-  .hero-text h1{font-size:30px}
+  .hero-text h1{font-size:28px}
   .hero-avatar-box{width:110px;height:110px}
   .hero-avatar-box img{width:110px;height:110px}
   .hero-avatar-initials{font-size:36px}
@@ -527,6 +539,10 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(34,211,238,.6);outli
   .hero-stats-row{grid-template-columns:repeat(2,1fr)}
   .profile-name{font-size:14px}
   .sidebar-profile{padding:16px}
+  .skill-row{flex-wrap:wrap;gap:8px}
+  .skill-name{min-width:0;max-width:none;width:auto;font-size:12px}
+  .skill-bar{width:100%;flex:auto}
+  .skill-pct{width:auto;font-size:10px}
 }
 
 /* ═══════════════════════════════════════════════════════
@@ -579,15 +595,15 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(34,211,238,.6);outli
     <!-- Quick stats -->
     <div class="sidebar-stats">
       <div class="sidebar-stat">
-        <div class="sidebar-stat-num">8<small>+</small></div>
+        <div class="sidebar-stat-num"><?=$statYears?><small>+</small></div>
         <div class="sidebar-stat-lbl">Years</div>
       </div>
       <div class="sidebar-stat">
-        <div class="sidebar-stat-num">20<small>+</small></div>
+        <div class="sidebar-stat-num"><?=$statProjects?><small>+</small></div>
         <div class="sidebar-stat-lbl">Projects</div>
       </div>
       <div class="sidebar-stat">
-        <div class="sidebar-stat-num">2<small style="color:var(--violet)">🏆</small></div>
+        <div class="sidebar-stat-num"><small style="color:var(--violet)">🏆</small><?=$statAwards?></div>
         <div class="sidebar-stat-lbl">Awards</div>
       </div>
     </div>
@@ -635,7 +651,7 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(34,211,238,.6);outli
       <?php else: ?>
         <div class="hero-avatar-initials"><?=strtoupper(substr($firstName,0,1).substr(explode(' ',$name)[count(explode(' ',$name))-1],0,1))?></div>
       <?php endif; ?>
-      <div class="hero-corner">CEO</div>
+      <div class="hero-corner"><?=htmlspecialchars($role ?: 'Portfolio')?></div>
     </div>
     <div class="hero-text">
       <div class="hero-eyebrow"><span class="hero-pulse"></span> Welcome to my portfolio</div>
@@ -648,10 +664,9 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(34,211,238,.6);outli
       </div>
       <!-- Hero stats bar -->
       <div class="hero-stats-row">
-        <div class="hero-stat"><div class="hero-stat-num">8+</div><div class="hero-stat-lbl">Yrs Experience</div></div>
-        <div class="hero-stat"><div class="hero-stat-num">20+</div><div class="hero-stat-lbl">Projects</div></div>
-        <div class="hero-stat"><div class="hero-stat-num">500+</div><div class="hero-stat-lbl">Clients Served</div></div>
-        <div class="hero-stat"><div class="hero-stat-num">2</div><div class="hero-stat-lbl">Int'l Awards</div></div>
+        <?php foreach($heroStats as $s): ?>
+        <div class="hero-stat"><div class="hero-stat-num"><?=$s['num']?></div><div class="hero-stat-lbl"><?=htmlspecialchars($s['label'])?></div></div>
+        <?php endforeach; ?>
       </div>
     </div>
   </div>
