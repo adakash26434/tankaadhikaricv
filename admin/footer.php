@@ -4,29 +4,32 @@
   Portfolio Admin &copy; <?=date('Y')?> — Aakash Digital Pvt. Ltd.
 </div>
 <script>
-// Remove current file — sets hidden input then hides preview row
-// The hidden input id is "remove_FIELDNAME" (prefix already in the id)
+// Remove current file — button has data-hidden="r_SAFEID"
 function removeCurrentFile(btn) {
-    var row    = btn.closest('.file-preview');
-    var target = btn.getAttribute('data-target');
-    // data-target is the fieldName, id is "remove_" + safe(fieldName)
-    var safeId = target.replace(/[^a-zA-Z0-9]/g, '_');
-    var hidden = document.getElementById('remove_' + safeId);
-    if (hidden) hidden.value = '1';
+    var row = btn.closest('.file-preview');
+    var hiddenId = btn.getAttribute('data-hidden');
+    if (hiddenId) {
+        var hidden = document.getElementById(hiddenId);
+        if (hidden) hidden.value = '1';
+    }
     if (row) row.style.display = 'none';
 }
 
-// Remove a file from multi-upload list
-function removeMultiFile(btn, fieldName, path) {
-    var safeId = fieldName.replace(/[^a-zA-Z0-9]/g, '_');
-    var removedField = document.getElementById('removed_' + safeId);
-    if (!removedField) return;
-    var removed = removedField.value ? JSON.parse(removedField.value) : [];
-    if (!removed.includes(path)) removed.push(path);
-    removedField.value = JSON.stringify(removed);
-    var item = btn.closest('.thumb-item');
-    if (item) item.style.display = 'none';
-}
+// Remove a file from multi-upload list — button has data-field, data-path, data-removed
+document.querySelectorAll('.rm-multi-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+        var fieldName = btn.getAttribute('data-field');
+        var path = btn.getAttribute('data-path');
+        var removedId = btn.getAttribute('data-removed');
+        var removedField = document.getElementById(removedId);
+        if (!removedField) return;
+        var removed = removedField.value ? JSON.parse(removedField.value) : [];
+        if (!removed.includes(path)) removed.push(path);
+        removedField.value = JSON.stringify(removed);
+        var item = btn.closest('.thumb-item');
+        if (item) item.style.display = 'none';
+    });
+});
 </script>
 </body>
 </html>
