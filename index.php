@@ -52,7 +52,8 @@ foreach ($heroPhotos as $hp) {
 $heroPhotos = array_slice($heroPhotosDeduped, 0, 12);
 
 // ── AI CHAT: get settings ─────────────────────────────────────────────────────
-$aiSettings = dbRow("SELECT * FROM ai_settings LIMIT 1") ?: [];
+$aiSettings = [];
+try { $aiSettings = dbRow("SELECT * FROM ai_settings LIMIT 1") ?: []; } catch (Exception $e) { $aiSettings = []; }
 
 // Dynamic hero stats from DB
 $statYears = max(1, count($experiences));
