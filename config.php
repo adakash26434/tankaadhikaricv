@@ -14,5 +14,14 @@ require_once __DIR__ . '/superadmin.php';  // Password yahibata aaucha
 
 define('ADMIN_SESSION_KEY', 'tanka_admin_auth');
 
+// ============================================================
+// ADMIN SESSION TIMEOUT — idle time paune paxi logout huncha
+// ============================================================
+// Seconds:   1800 = 30 min   |  7200 = 2 hours  |  14400 = 4 hours
+// Yo value config ma define na vaye default 2 hours use huncha
+if (!defined('SESSION_TIMEOUT_SECS')) {
+    define('SESSION_TIMEOUT_SECS', 7200);  // 7200 = 2 hours idle timeout
+}
+
 // Site base URL (with trailing slash)
 define('SITE_URL', '');

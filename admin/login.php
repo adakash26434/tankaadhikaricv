@@ -7,7 +7,8 @@ $locked = false;
 
 // Show timeout notice
 if (isset($_GET['timeout'])) {
-    $error = 'You were automatically logged out after 30 minutes of inactivity.';
+    $mins = (int)(SESSION_TIMEOUT_SECS / 60);
+    $error = "You were automatically logged out after {$mins} minutes of inactivity.";
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
