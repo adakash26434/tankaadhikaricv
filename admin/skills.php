@@ -31,8 +31,8 @@ $editRow = ($action === 'edit' && $id) ? dbRow("SELECT * FROM skills WHERE id=?"
 $list = dbRows("SELECT * FROM skills ORDER BY sort_order, id");
 include __DIR__ . '/header.php';
 ?>
-<?php if(isset($_GET['deleted'])): ?><div class="alert-success">✅ Skill deleted.</div><?php endif; ?>
-<?php if($msg): ?><div class="alert-success">✅ Skill <?=$msg?>!</div><?php endif; ?>
+<?php if(isset($_GET['deleted'])): ?><div class="alert alert-success">✅ Skill deleted.</div><?php endif; ?>
+<?php if($msg): ?><div class="alert alert-success">✅ Skill <?=$msg?>!</div><?php endif; ?>
 
 <div class="card" style="margin-bottom:16px">
   <div class="section-heading"><?=$editRow?'✏️ Edit Skill':'➕ Add New Skill'?></div>

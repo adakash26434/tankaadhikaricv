@@ -52,11 +52,9 @@ $list = dbRows("SELECT * FROM projects ORDER BY sort_order, id");
 include __DIR__ . '/header.php';
 ?>
 
-<?php if (isset($_GET['deleted'])): ?><div class="alert-success">✅ Project deleted.</div><?php endif; ?>
+<?php if (isset($_GET['deleted'])): ?><div class="alert alert-success">✅ Project deleted.</div><?php endif; ?>
 <?php if ($msg): ?>
-  <div class="alert <?=$msgType === 'error' ? 'alert-error' : 'alert-success'?>"
-    <?=h($msg)?>
-  </div>
+  <div class="alert <?=$msgType === 'error' ? 'alert-error' : 'alert-success'?>"><?=h($msg)?></div>
 <?php endif; ?>
 
 <div class="card" style="margin-bottom:16px">

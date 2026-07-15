@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../config.php';
+require_once __DIR__ . '/includes/file_upload.php';
 
 // ── SESSION TIMEOUT (in seconds) ────────────────────────────────────────────────
 //   1800 = 30 min  |  3600 = 1 hour  |  7200 = 2 hours (default)

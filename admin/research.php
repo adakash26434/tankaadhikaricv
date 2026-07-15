@@ -85,12 +85,10 @@ include __DIR__ . '/header.php';
 ?>
 
 <?php if (isset($_GET['deleted'])): ?>
-  <div class="alert-success">✅ Entry deleted.</div>
+  <div class="alert alert-success">✅ Entry deleted.</div>
 <?php endif; ?>
 <?php if ($msg): ?>
-  <div class="alert <?=$msgType === 'error' ? 'alert-error' : 'alert-success'?>"
-    <?=h($msg)?>
-  </div>
+  <div class="alert <?=$msgType === 'error' ? 'alert-error' : 'alert-success'?>"><?=h($msg)?></div>
 <?php endif; ?>
 
 <div class="card">
