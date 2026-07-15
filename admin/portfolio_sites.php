@@ -11,7 +11,7 @@ $msg = ''; $msgType = 'success';
 $action = $_GET['action'] ?? '';
 $id = (int)($_GET['id'] ?? 0);
 
-// Load existing row FIRST (needed for POST handler + form display)
+// Load FIRST (needed for POST handler + form display)
 $editRow = ($action === 'edit' && $id) ? dbRow("SELECT * FROM portfolio_sites WHERE id=?", [$id]) : null;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -19,8 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($action === 'delete' && $id) {
         getDB()->prepare("DELETE FROM portfolio_sites WHERE id=?")->execute([$id]);
-        header('Location: portfolio_sites.php?deleted=1');
-        exit;
+        header('Location: portfolio_sites.php?deleted=1'); exit;
     }
 
     $imgResult = handleAdminUpload($_FILES['image'] ?? null, 'image', $editRow['image'] ?? '', 'portfolio', 'img/');
@@ -28,18 +27,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($imgResult['error']) { $msg = $imgResult['error']; $msgType = 'error'; }
     else {
         $vals = [
-            trim($_POST['title']    ?? ''),
-            trim($_POST['subtitle'] ?? ''),
+            trim($_POST['title']     ?? ''),
+            trim($_POST['subtitle']  ?? ''),
             $imgResult['path'],
-            trim($_POST['url']     ?? ''),
+            trim($_POST['url']      ?? ''),
             (int)($_POST['sort_order'] ?? 0),
+            (int)($_POST['rating']  ?? 0),
         ];
         if ($action === 'add') {
-            dbExec("INSERT INTO portfolio_sites (title,subtitle,image,url,sort_order) VALUES (?,?,?,?,?)", $vals);
+            dbExec("INSERT INTO portfolio_sites (title,subtitle,image,url,sort_order,rating) VALUES (?,?,?,?,?,?)", $vals);
             $msg = 'Portfolio site added!';
         } elseif ($action === 'edit' && $id) {
             $vals[] = $id;
-            getDB()->prepare("UPDATE portfolio_sites SET title=?,subtitle=?,image=?,url=?,sort_order=? WHERE id=?")->execute($vals);
+            getDB()->prepare("UPDATE portfolio_sites SET title=?,subtitle=?,image=?,url=?,sort_order=?,rating=? WHERE id=?")->execute($vals);
             $msg = 'Portfolio site updated!';
         }
     }
@@ -70,6 +70,13 @@ include __DIR__ . '/header.php';
         <input type="url" name="url" value="<?=h($editRow['url'] ?? '')?>" placeholder="https://jayasahakari.com.np">
         <label>Sort Order (lower = shown first)</label>
         <input type="number" name="sort_order" value="<?=h($editRow['sort_order'] ?? '0')?>">
+        <label>Star Rating (1–5, leave blank for none)</label>
+        <select name="rating">
+          <option value="0">No rating</option>
+          <?php for($i=1;$i<=5;$i++): ?>
+            <option value="<?=$i?>" <?=(int)($editRow['rating']??0)===$i?'selected':''?>><?=$i?> ★</option>
+          <?php endfor; ?>
+        </select>
       </div>
     </div>
     <div style="margin-top:14px;display:flex;gap:8px">
@@ -93,7 +100,11 @@ include __DIR__ . '/header.php';
         <div style="width:100%;height:100px;background:#161b27;display:flex;align-items:center;justify-content:center;color:#64748b"><i class="fa fa-image fa-2x"></i></div>
       <?php endif; ?>
       <div style="padding:12px">
-        <div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:2px"><?=h($row['title'])?></div>
+        <div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:2px"><?=h($row['title'])?>
+          <?php if((int)($row['rating']??0) > 0): ?>
+            <span style="color:#f59e0b;font-size:11px"><?=str_repeat('★',(int)$row['rating'])?><?=str_repeat('☆',5-(int)$row['rating'])?></span>
+          <?php endif; ?>
+        </div>
         <div style="font-size:11px;color:#64748b;margin-bottom:8px"><?=h($row['subtitle'])?></div>
         <?php if ($row['url']): ?><a href="<?=h($row['url'])?>" target="_blank" style="font-size:11px;color:#22d3ee">↗ <?=h(parse_url($row['url'], PHP_URL_HOST))?></a><?php endif; ?>
         <div style="display:flex;gap:6px;margin-top:10px">
