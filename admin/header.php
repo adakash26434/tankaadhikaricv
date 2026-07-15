@@ -205,6 +205,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--cyan);outline-offse
       ['interests.php','Interests','&#10084;&#65039;'],
       ['messages.php','Messages','&#128172;'],
       ['upload.php','Upload','&#128247;'],
+      ['ai_settings.php','AI Chat','&#129504;'],
       ['changepassword.php','Password','&#128273;'],
     ]; ?>
     <?php foreach($mobileLinks as $l): ?>
@@ -240,6 +241,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--cyan);outline-offse
     <a href="interests.php" class="nav-link <?=$cur=='interests.php'?'active':''?>">Interests</a>
     <a href="messages.php" class="nav-link <?=$cur=='messages.php'?'active':''?>">Messages</a>
     <a href="upload.php" class="nav-link <?=$cur=='upload.php'?'active':''?> special">&#128247; Upload</a>
+    <a href="ai_settings.php" class="nav-link <?=$cur=='ai_settings.php'?'active':''?> special">&#129504; AI Chat</a>
     <a href="changepassword.php" class="nav-link <?=$cur=='changepassword.php'?'active':''?> special2">&#128273;</a>
   </nav>
   <div class="topbar-right">
