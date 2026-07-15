@@ -1,0 +1,48 @@
+# ============================================================
+# SECURITY: Sensitive config files — never commit these
+# ============================================================
+
+# Database & admin credentials
+config.php
+superadmin.php
+admin/password.php
+
+# Environment & secrets
+.env
+.env.*
+*.pem
+*.key
+
+# OS artifacts
+.DS_Store
+Thumbs.db
+
+# IDE / editor settings
+.idea/
+.vscode/
+*.sublime-*
+*.swp
+*.swo
+
+# Log files
+*.log
+logs/
+
+# Uploaded media (keep the img/ and files/ structure but not content)
+# Uncomment below if you don't want to track uploaded files
+# img/photos/*
+# img/*.jpg
+# img/*.jpeg
+# img/*.png
+# img/*.webp
+# files/*.pdf
+
+# Build artifacts
+node_modules/
+vendor/
+dist/
+build/
+
+# Cache
+.cache/
+*.cache
