@@ -47,14 +47,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // --- Determine final PDF path ---
     $finalPdf = $pdfFile;
     if (!$finalPdf) {
-        // Keep existing if no new file uploaded and not removing
-        $existingRow = dbRow("SELECT pdf_file FROM research WHERE id=?", [$id > 0 ? [$id] : []]);
         if ($action === 'edit' && $id) {
             $existing = dbRow("SELECT pdf_file FROM research WHERE id=?", [$id]);
             $finalPdf = $existing['pdf_file'] ?? '';
         }
     }
-    // Allow clearing PDF via explicit checkbox
+    // Allow clearing PDF via remove button (hidden field)
     if (isset($_POST['remove_pdf']) && $_POST['remove_pdf'] === '1') {
         $finalPdf = '';
     }
@@ -115,21 +113,7 @@ include __DIR__ . '/header.php';
         <label>Journal / Conference / Publisher Name</label>
         <input type="text" name="journal" value="<?=h($editRow['journal'] ?? '')?>" placeholder="SIP 2026 Canada — Abstract ID: SIP26-CA-166">
 
-        <!-- ✅ REAL FILE UPLOAD — NEW! -->
-        <label>Upload PDF File <span style="color:#64748b">(PDF only, max 5 MB)</span></label>
-        <input type="file" name="pdf_file" accept="application/pdf"
-               style="width:100%;background:#0f1420;border:1px solid #1e2638;color:#c9d1e3;border-radius:8px;padding:9px 12px;font-size:13px;cursor:pointer">
-
-        <!-- Show existing PDF if editing -->
-        <?php if ($editRow && !empty($editRow['pdf_file'])): ?>
-          <div style="margin-top:6px;display:flex;align-items:center;gap:8px">
-            <span style="font-size:12px;color:#67e8f9">📄 Current: <?=h($editRow['pdf_file'])?></span>
-            <a href="../<?=h($editRow['pdf_file'])?>" target="_blank" class="btn btn-secondary" style="font-size:11px;padding:3px 8px">View ↗</a>
-            <label style="font-size:11px;color:#64748b;cursor:pointer">
-              <input type="checkbox" name="remove_pdf" value="1" style="cursor:pointer"> Remove
-            </label>
-          </div>
-        <?php endif; ?>
+        <?php renderUploadField('Upload PDF File (max 5 MB)', 'pdf_file', $editRow['pdf_file'] ?? null, 'pdf'); ?>
 
         <label>Online Publication URL <span style="color:#64748b">(ResearchGate, Google Scholar, conference site, etc.)</span></label>
         <input type="url" name="url" value="<?=h($editRow['url'] ?? '')?>" placeholder="https://www.researchgate.net/publication/...">
