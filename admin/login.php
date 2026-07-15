@@ -76,7 +76,7 @@ input[type=password]:focus{border-color:#22d3ee;box-shadow:0 0 0 3px rgba(34,211
 .btn:hover:not(:disabled){background:#06b6d4}
 .btn:disabled{opacity:.5;cursor:not-allowed}
 .btn:focus{outline:3px solid rgba(34,211,238,.5);outline-offset:2px}
-.error{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:#f87171;border-radius:8px;padding:10px 14px;font-size:13px;margin-bottom:16px}
+.error{background:#7f1d1d;border:2px solid #ef4444;color:#fca5a5;border-radius:8px;padding:14px 16px;font-size:14px;margin-bottom:16px;font-weight:700;text-align:center;width:100%}
 .icon{width:48px;height:48px;background:rgba(34,211,238,.1);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;font-size:22px}
 </style>
 </head>
