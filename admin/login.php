@@ -4,12 +4,13 @@ if (isAdmin()) { header('Location: index.php'); exit; }
 
 $error = '';
 $locked = false;
+$debug = isset($_GET['debug']) && $_GET['debug'] === '1';
 
 // Show timeout notice (session-based so it persists through POST redirects)
 if (!empty($_SESSION['_timed_out'])) {
     $mins = (int)(SESSION_TIMEOUT_SECS / 60);
     $error = "You were automatically logged out after {$mins} minutes of inactivity.";
-    unset($_SESSION['_timed_out']); // Clear immediately so it doesn't persist after refresh
+    unset($_SESSION['_timed_out']);
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -36,17 +37,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $valid = false;
         if ($storedHash && (str_starts_with($storedHash, '$2y$') || str_starts_with($storedHash, '$2a$') || str_starts_with($storedHash, '$argon'))) {
-            // Bcrypt / Argon2 stored hash
             $valid = password_verify($input, $storedHash);
+            if ($debug) { $error .= "<br>🔐 Bcrypt hash found in password.php — used bcrypt verify"; }
         } else {
-            // Legacy plain-text comparison (constant-time to prevent timing attacks)
             $valid = hash_equals(hash('sha256', ADMIN_PASSWORD), hash('sha256', $input));
+            if ($debug) {
+                $error .= "<br>🔐 No bcrypt hash — using superadmin.php password";
+                $error .= "<br>   Expected hash: " . hash('sha256', ADMIN_PASSWORD);
+                $error .= "<br>   Got hash:     " . hash('sha256', $input);
+                $error .= "<br>   Match: " . ($valid ? '✅ YES' : '❌ NO');
+            }
         }
 
         if ($valid) {
             $_SESSION[ADMIN_SESSION_KEY] = true;
+            $_SESSION['last_activity'] = time();
             unset($_SESSION['login_attempts'], $_SESSION['login_last_attempt'], $_SESSION['_timed_out']);
-            @session_write_close(); // Flush session data before redirect
+            @session_write_close();
+            if ($debug) {
+                echo "<pre>✅ LOGIN SUCCESS!\nSession data set:\n";
+                echo "ADMIN_SESSION_KEY = " . ADMIN_SESSION_KEY . "\n";
+                echo "Session ID: " . session_id() . "\n";
+                echo "Cookie: " . $_SERVER['HTTP_COOKIE'] . "\n";
+                echo "Redirecting to index.php...</pre>";
+                exit;
+            }
             header('Location: index.php');
             exit;
         }
