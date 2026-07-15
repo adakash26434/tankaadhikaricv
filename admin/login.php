@@ -7,7 +7,7 @@ if (isAdmin()) { header('Location: index.php'); exit; }
 $error = '';
 $locked = false;
 $step = $_SESSION['login_step'] ?? 'password';  // 'password' | 'setup' | 'otp'
-$totpSecret = totpGetSecret();
+$totpSecret = defined('DISABLE_2FA') ? false : totpGetSecret();
 
 // Clear pending state on GET request
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
@@ -44,10 +44,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['setup_verify'])) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['otp_code'])) {
     $code = $_POST['otp_code'] ?? '';
     if ($totpSecret && totpVerifyCode($totpSecret, $code)) {
-        unset($_SESSION['password_verified'], $_SESSION['login_step']);
+        unset($_SESSION['password_verified']);
+        unset($_SESSION['login_attempts'], $_SESSION['login_last_attempt'], $_SESSION['_timed_out']);
+        unset($_SESSION['login_step']);
         $_SESSION[ADMIN_SESSION_KEY] = true;
         $_SESSION['last_activity'] = time();
-        unset($_SESSION['login_attempts'], $_SESSION['login_last_attempt'], $_SESSION['_timed_out']);
         session_write_close();
         header('Location: index.php');
         exit;
@@ -69,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['password'])) {
         $locked = true;
     } else {
         $input = $_POST['password'] ?? '';
-        $hashFile   = __DIR__ . '/password.php';
+        $hashFile = __DIR__ . '/password.php';
         $storedHash = null;
         if (is_file($hashFile)) {
             $hashData = include $hashFile;
@@ -79,12 +80,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['password'])) {
         }
 
         $valid = false;
+        // Check bcrypt/argon2 hashed password
         if ($storedHash) {
             $prefix4 = substr($storedHash, 0, 4);
-            if ($prefix4 === '$2y$' || $prefix4 === '$2a$' || $prefix4 === '$arg' && substr($storedHash, 0, 6) === '$argon') {
+            $prefix6 = substr($storedHash, 0, 6);
+            if ($prefix4 === '$2y$' || $prefix4 === '$2a$' || $prefix6 === '$argon') {
                 $valid = password_verify($input, $storedHash);
             }
         }
+        // Fallback: plain ADMIN_PASSWORD in superadmin.php
         if (!$valid) {
             $valid = hash_equals(hash('sha256', ADMIN_PASSWORD), hash('sha256', $input));
         }
@@ -100,11 +104,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['password'])) {
                 header('Location: login.php');
                 exit;
             } else {
-                // No 2FA — generate secret + show setup
-                $secret = totpGenerateSecret();
-                $_SESSION['totp_setup_secret'] = $secret;
-                $_SESSION['login_step'] = 'setup';
-                header('Location: login.php');
+                // No 2FA — go directly to admin
+                $_SESSION[ADMIN_SESSION_KEY] = true;
+                $_SESSION['last_activity'] = time();
+                unset($_SESSION['login_step']);
+                header('Location: index.php');
                 exit;
             }
         }
@@ -157,9 +161,9 @@ input[type=password]:focus{border-color:#22d3ee;box-shadow:0 0 0 3px rgba(34,211
   <form method="POST" autocomplete="off">
     <label for="password">Admin Password</label>
     <input type="password" id="password" name="password" placeholder="Enter password" autofocus required />
-    <button class="btn" type="submit">Continue &rarr;</button>
+    <button class="btn" type="submit">Login &rarr;</button>
   </form>
-  <p style="margin-top:16px;font-size:11px;color:#334155;text-align:center">After password, you'll be asked for a 2FA code from Google Authenticator.</p>
+  <p style="margin-top:16px;font-size:11px;color:#334155;text-align:center"><?php if (defined('DISABLE_2FA')): ?>2FA is disabled — password only.<?php else: ?>After password, you'll be asked for a 2FA code from Google Authenticator.<?php endif; ?></p>
 
   <?php elseif ($step === 'setup'): ?>
   <!-- STEP 2a: 2FA Setup (first time — no secret yet) -->

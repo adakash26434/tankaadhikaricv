@@ -15,6 +15,12 @@ require_once __DIR__ . '/superadmin.php';  // Password yahibata aaucha
 define('ADMIN_SESSION_KEY', 'tanka_admin_auth');
 
 // ============================================================
+// 2FA / TWO-FACTOR AUTHENTICATION
+// ============================================================
+// Remove the // prefix to DISABLE 2FA (Google Authenticator):
+// define('DISABLE_2FA', true);
+
+// ============================================================
 // ADMIN SESSION TIMEOUT — idle time paune paxi logout huncha
 // ============================================================
 // Seconds:   1800 = 30 min   |  7200 = 2 hours  |  14400 = 4 hours
