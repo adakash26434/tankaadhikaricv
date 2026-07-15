@@ -1,30 +1,17 @@
 <?php
 require_once __DIR__ . '/../config.php';
 
-// ── SESSION TIMEOUT CONFIGURATION ──────────────────────────────────────────────
+// ── SESSION TIMEOUT (in seconds) ────────────────────────────────────────────────
+//   1800 = 30 min  |  3600 = 1 hour  |  7200 = 2 hours (default)
 if (!defined('SESSION_TIMEOUT_SECS')) {
-    define('SESSION_TIMEOUT_SECS', 7200); // 2 hours idle timeout
+    define('SESSION_TIMEOUT_SECS', 7200);
 }
 
-// ── BOOTSTRAP SESSION ──────────────────────────────────────────────────────────
-// Use PHP's default session handling — no custom cookie params.
-// PHP's defaults (PHPSESSID cookie, / path, etc.) are the most compatible
-// across all hosting environments including cPanel, Cloudflare, Apache, FastCGI.
+// ── SESSION BOOTSTRAP ──────────────────────────────────────────────────────────
+// Minimal session start. No custom cookie params — PHP's defaults are the most
+// compatible across cPanel, Cloudflare, Apache, FastCGI, Nginx.
 if (session_status() === PHP_SESSION_NONE) {
-    // Start session using PHP's default cookie name and settings
-    // This is the most portable approach — let PHP/hosting handle the details
-    @session_start();
-}
-
-// Periodically regenerate session ID for security (skip on login page)
-$script = $_SERVER['SCRIPT_NAME'] ?? '';
-if (strpos($script, '/admin/login') !== 0 && session_status() === PHP_SESSION_ACTIVE) {
-    if (empty($_SESSION['_created'])) {
-        $_SESSION['_created'] = time();
-    } elseif (time() - $_SESSION['_created'] > 300) {
-        @session_regenerate_id(true);
-        $_SESSION['_created'] = time();
-    }
+    session_start();
 }
 
 function requireAdmin(): void {
@@ -32,8 +19,8 @@ function requireAdmin(): void {
         $lastActivity = $_SESSION['last_activity'] ?? 0;
         if (time() - $lastActivity > SESSION_TIMEOUT_SECS) {
             $_SESSION['_timed_out'] = true;
-            @session_unset();
-            @session_destroy();
+            session_unset();
+            session_destroy();
             header('Location: login.php');
             exit;
         }
@@ -43,7 +30,7 @@ function requireAdmin(): void {
         header('Location: login.php');
         exit;
     }
-    @session_write_close();
+    session_write_close();
 }
 
 function isAdmin(): bool {

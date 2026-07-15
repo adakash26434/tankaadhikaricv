@@ -4,9 +4,7 @@ if (isAdmin()) { header('Location: index.php'); exit; }
 
 $error = '';
 $locked = false;
-$debug = isset($_GET['debug']) && $_GET['debug'] === '1';
 
-// Show timeout notice (session-based so it persists through POST redirects)
 if (!empty($_SESSION['_timed_out'])) {
     $mins = (int)(SESSION_TIMEOUT_SECS / 60);
     $error = "You were automatically logged out after {$mins} minutes of inactivity.";
@@ -25,8 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $input = $_POST['password'] ?? '';
 
-        // Check for stored bcrypt hash first (admin/changepassword.php sets this)
-        $hashFile = __DIR__ . '/password.php';
+        $hashFile   = __DIR__ . '/password.php';
         $storedHash = null;
         if (is_file($hashFile)) {
             $hashData = include $hashFile;
@@ -36,37 +33,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         $valid = false;
-        if ($storedHash && (str_starts_with($storedHash, '$2y$') || str_starts_with($storedHash, '$2a$') || str_starts_with($storedHash, '$argon'))) {
+        if ($storedHash
+            && (str_starts_with($storedHash, '$2y$')
+                || str_starts_with($storedHash, '$2a$')
+                || str_starts_with($storedHash, '$argon'))
+        ) {
             $valid = password_verify($input, $storedHash);
-            if ($debug) { $error .= "<br>🔐 Bcrypt hash found in password.php — used bcrypt verify"; }
         } else {
             $valid = hash_equals(hash('sha256', ADMIN_PASSWORD), hash('sha256', $input));
-            if ($debug) {
-                $error .= "<br>🔐 No bcrypt hash — using superadmin.php password";
-                $error .= "<br>   Expected hash: " . hash('sha256', ADMIN_PASSWORD);
-                $error .= "<br>   Got hash:     " . hash('sha256', $input);
-                $error .= "<br>   Match: " . ($valid ? '✅ YES' : '❌ NO');
-            }
         }
 
         if ($valid) {
             $_SESSION[ADMIN_SESSION_KEY] = true;
             $_SESSION['last_activity'] = time();
             unset($_SESSION['login_attempts'], $_SESSION['login_last_attempt'], $_SESSION['_timed_out']);
-            @session_write_close();
-            if ($debug) {
-                echo "<pre>✅ LOGIN SUCCESS!\nSession data set:\n";
-                echo "ADMIN_SESSION_KEY = " . ADMIN_SESSION_KEY . "\n";
-                echo "Session ID: " . session_id() . "\n";
-                echo "Cookie: " . $_SERVER['HTTP_COOKIE'] . "\n";
-                echo "Redirecting to index.php...</pre>";
-                exit;
-            }
+            session_write_close();
             header('Location: index.php');
             exit;
         }
 
-        $_SESSION['login_attempts']    = $attempts + 1;
+        $_SESSION['login_attempts']     = $attempts + 1;
         $_SESSION['login_last_attempt'] = time();
         $attemptsLeft = max(0, 5 - ($attempts + 1));
         $error = 'Incorrect password.' . ($attemptsLeft > 0 ? " $attemptsLeft attempt(s) remaining." : ' Account locked for 5 minutes.');
@@ -91,21 +77,20 @@ input[type=password]:focus{border-color:#22d3ee;box-shadow:0 0 0 3px rgba(34,211
 .btn{width:100%;margin-top:16px;padding:12px;background:#22d3ee;border:none;border-radius:8px;color:#0f1420;font-weight:700;font-size:14px;cursor:pointer;transition:background .2s}
 .btn:hover:not(:disabled){background:#06b6d4}
 .btn:disabled{opacity:.5;cursor:not-allowed}
-.btn:focus{outline:3px solid rgba(34,211,238,.5);outline-offset:2px}
 .error{background:#7f1d1d;border:2px solid #ef4444;color:#fca5a5;border-radius:8px;padding:14px 16px;font-size:14px;margin-bottom:16px;font-weight:700;text-align:center;width:100%}
 .icon{width:48px;height:48px;background:rgba(34,211,238,.1);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;font-size:22px}
 </style>
 </head>
 <body>
 <div class="box">
-  <div class="icon">🔐</div>
+  <div class="icon">&#128272;</div>
   <h1>Admin Panel</h1>
   <p>Tanka Prasad Adhikari — Portfolio Management</p>
   <?php if($error): ?><div class="error" role="alert"><?=htmlspecialchars($error)?></div><?php endif; ?>
   <form method="POST" autocomplete="off">
     <label for="password">Admin Password</label>
     <input type="password" id="password" name="password" placeholder="Enter password" autofocus required <?=$locked?'disabled':''?> />
-    <button class="btn" type="submit" <?=$locked?'disabled':''?>>Login →</button>
+    <button class="btn" type="submit" <?=$locked?'disabled':''?>>Login &rarr;</button>
   </form>
 </div>
 </body>
