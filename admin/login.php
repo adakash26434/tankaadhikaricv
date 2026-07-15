@@ -5,10 +5,11 @@ if (isAdmin()) { header('Location: index.php'); exit; }
 $error = '';
 $locked = false;
 
-// Show timeout notice
-if (isset($_GET['timeout'])) {
+// Show timeout notice (session-based so it persists through POST redirects)
+if (!empty($_SESSION['_timed_out'])) {
     $mins = (int)(SESSION_TIMEOUT_SECS / 60);
     $error = "You were automatically logged out after {$mins} minutes of inactivity.";
+    unset($_SESSION['_timed_out']); // Clear immediately so it doesn't persist after refresh
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -45,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($valid) {
             session_regenerate_id(true);
             $_SESSION[ADMIN_SESSION_KEY] = true;
-            unset($_SESSION['login_attempts'], $_SESSION['login_last_attempt']);
+            unset($_SESSION['login_attempts'], $_SESSION['login_last_attempt'], $_SESSION['_timed_out']);
             header('Location: index.php'); exit;
         }
 
