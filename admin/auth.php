@@ -28,12 +28,16 @@ if (session_status() === PHP_SESSION_NONE) {
     ]);
     @session_start();
 
-    // Regenerate session ID every 5 minutes to prevent fixation
-    if (empty($_SESSION['_created'])) {
-        $_SESSION['_created'] = time();
-    } elseif (time() - $_SESSION['_created'] > 300) {
-        @session_regenerate_id(true);
-        $_SESSION['_created'] = time();
+    // Regenerate session ID every 5 minutes (skip on login page to avoid cookie issues)
+    // Don't regenerate on login.php GET — it causes cookie churn that breaks the POST flow
+    $script = $_SERVER['SCRIPT_NAME'] ?? '';
+    if (strpos($script, '/admin/login') !== 0) {
+        if (empty($_SESSION['_created'])) {
+            $_SESSION['_created'] = time();
+        } elseif (time() - $_SESSION['_created'] > 300) {
+            @session_regenerate_id(true);
+            $_SESSION['_created'] = time();
+        }
     }
 }
 
