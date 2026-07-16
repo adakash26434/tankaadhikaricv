@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS `profile` (
   `digital_services_intro` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-INSERT INTO `profile` (`full_name`,`title`,`bio`,`email`,`phone`,`location`,`born`,`company`,`company_url`,`role`,`facebook_url`,`tiktok_url`,`whatsapp_url`,`linkedin_url`,`youtube_url`,`cv_file`,`avatar`,`og_image`,`contact_email`,`clients_served`,`digital_services_intro`) VALUES
+INSERT IGNORE INTO `profile` (`full_name`,`title`,`bio`,`email`,`phone`,`location`,`born`,`company`,`company_url`,`role`,`facebook_url`,`tiktok_url`,`whatsapp_url`,`linkedin_url`,`youtube_url`,`cv_file`,`avatar`,`og_image`,`contact_email`,`clients_served`,`digital_services_intro`) VALUES
 ('Tanka Prasad Adhikari','Founder & Chief Executive Officer','Tanka Prasad Adhikari, the Founder of Aakash Digital Pvt. Ltd., leads the digital transformation of Nepal\'s cooperative sector. With a focus on fintech solutions and automation, he empowers financial institutions to operate efficiently in the digital age.','aakashpame@gmail.com','+977 985-6026434','Pokhara, Nepal','19 March 1990 — Pokhara, Nepal','Aakash Digital Pvt. Ltd.','https://www.aakashdigital.com.np','Founder & CEO','https://www.facebook.com/akashadhikari2','https://www.tiktok.com/@tankaadhikari34','https://wa.me/9779856026434','https://www.linkedin.com/in/tanka-adhikari','https://www.youtube.com/@aakashpame','files/canada.pdf','img/avatar.jpg','','aakashpame@gmail.com','50+','Need a professional website, reliable web hosting, or custom email hosting? I provide end-to-end digital solutions tailored for businesses, cooperatives, and startups in Nepal.');
 
 -- Education
@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS `education` (
   `sort_order` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-INSERT INTO `education` (`degree_code`,`degree_name`,`institution`,`period`,`sort_order`) VALUES
+INSERT IGNORE INTO `education` (`degree_code`,`degree_name`,`institution`,`period`,`sort_order`) VALUES
 ('MBS','Master of Business Studies (MBS - Management)','Janapriya Multiple Campus, Tribhuvan University','Graduated: November 2019',1),
 ('BBS','Bachelor of Business Studies (BBS - Management)','Prithivi Narayan Campus, Tribhuvan University','Graduated: June 2013',2),
 ('PCL','Proficiency Certificate Level (PCL) in Management','Prithivi Narayan Campus, Tribhuvan University','Graduated: March 2008',3),
@@ -63,7 +63,7 @@ CREATE TABLE IF NOT EXISTS `experience` (
   `sort_order` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-INSERT INTO `experience` (`company`,`role`,`period`,`description`,`color`,`sort_order`) VALUES
+INSERT IGNORE INTO `experience` (`company`,`role`,`period`,`description`,`color`,`sort_order`) VALUES
 ('AAKASH DIGITAL PVT. LTD.','Founder / CEO','Jun 2017 – Present','Automation of documents related to loan investment and recovery in cooperative institutions, leading digital transformation in Nepal\'s cooperative sector through Aakash DMS.','violet',1),
 ('JAYA MANAKAMANA SAVING AND CREDIT CO-OPERATIVE LTD.','CEO / Manager','Jul 2016 – Aug 2023','Worked with the board of directors to establish objectives, oversee financial structure, ensure compliance, manage HR and daily operations, and strengthen community relations for sustainable cooperative growth.','cyan',2),
 ('BIHANI SAVING AND CREDIT CO-OPERATIVE LTD.','CEO / Manager','Jul 2013 – Jun 2016','Directed cooperative operations, maintained fiscal discipline, coordinated strategic planning, and strengthened the cooperative\'s service delivery and compliance with regulatory bodies.','cyan',3),
@@ -83,7 +83,7 @@ CREATE TABLE IF NOT EXISTS `training` (
   `sort_order` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-INSERT INTO `training` (`icon`,`name`,`organizer`,`year`,`certificate_file`,`certificate_url`,`sort_order`) VALUES
+INSERT IGNORE INTO `training` (`icon`,`name`,`organizer`,`year`,`certificate_file`,`certificate_url`,`sort_order`) VALUES
 ('laptop','Web Designing Training','Code IT — HTML, CSS, JavaScript, UI/UX','2024','','',1),
 ('certificate','Project Approach to Co-Operative Development','National Cooperative Union of India (NCUI) & CENTRABANK, New Delhi','2022','','',2),
 ('users','Social Work — Charter President','Lions Clubs International','2019','','',3),
@@ -112,7 +112,7 @@ CREATE TABLE IF NOT EXISTS `awards` (
   `sort_order` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-INSERT INTO `awards` (`title`,`organization`,`year`,`description`,`url`,`image1`,`image2`,`color`,`icon`,`sort_order`) VALUES
+INSERT IGNORE INTO `awards` (`title`,`organization`,`year`,`description`,`url`,`image1`,`image2`,`color`,`icon`,`sort_order`) VALUES
 ('ICT Award – Startup Category','ICT Awards Nepal','2024','Recognized for innovation and contribution to Nepal\'s technology sector through Aakash Digital Pvt. Ltd.','https://apply.ictaward.org/forms/province-startup-ict-recognition-2025/apply','img/ict.jpg','img/ict2.jpg','cyan','fa-trophy',1),
 ('SIP 2026 Canada — Selected Researcher','Scholars in Ireland Programme (SIP), Ireland','2026','Selected as a researcher for SIP 2026 Canada. Abstract titled "Digital Transformation of Nepalese Cooperatives Through Aakash DMS" accepted for oral presentation. Supported by Global Affairs Canada & Irish Aid.','https://sipireland.ie/','img/sip2026.jpg','img/sip2026-2.jpg','cyan','fa-globe-americas',2),
 ('Innovate Finance — Pride in FinTech Powerlist','Innovate Finance, UK','Powerlist 2026','Listed among global Startup leaders in FinTech by Innovate Finance, UK, for outstanding impact and innovation.','https://www.innovatefinance.com/pride-in-fintech-2025/#Standout45','img/powerlist.jpg','img/powerlist2.jpg','violet','fa-star',3);
@@ -129,7 +129,7 @@ CREATE TABLE IF NOT EXISTS `research` (
   `sort_order` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-INSERT INTO `research` (`title`,`description`,`pdf_file`,`year`,`journal`,`url`,`sort_order`) VALUES
+INSERT IGNORE INTO `research` (`title`,`description`,`pdf_file`,`year`,`journal`,`url`,`sort_order`) VALUES
 ('Cooperative Weak Documentation and Automation','Investigated why the loan documents of cooperatives are weak and suggested measures to improve them, including proper digitization, standardized documentation, and staff training.','files/canada2.pdf','2024','Akash DMS Research Series','',1),
 ('Digital Transformation of Nepalese Cooperatives Through Aakash DMS (SIP2026 Canada)','Selected for oral presentation at SIP 2026 Canada. Keywords: Digital transformation, cooperatives, workflow automation, document management, financial inclusion, Nepal.','files/SIP2026-Canada-Abstract.pdf','2026','Research Now — SIP26-CA-166','https://sipireland.ie/',2),
 ('Leading the Financial Digital Era in Nepal: Akash Digital\'s Contribution','This paper addresses a critical challenge in Financial Inclusion and FinTech in Emerging Economies — specifically, the systemic lack of digitization within Nepal\'s high-impact cooperative financial sector.','files/canada1.pdf','2025','Research Now','https://www.researchgate.net/publication/leading-financial-digital-era-nepal-akash-digital-contribution',3),
@@ -147,7 +147,7 @@ CREATE TABLE IF NOT EXISTS `news` (
   `sort_order` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-INSERT INTO `news` (`image`,`title`,`source`,`pdf_file`,`url`,`sort_order`) VALUES
+INSERT IGNORE INTO `news` (`image`,`title`,`source`,`pdf_file`,`url`,`sort_order`) VALUES
 ('files/news1.jpeg','आकाश डिजिटलमा टंक अधिकारीको प्रेरक यात्रा…','वित्तीय पोस्ट — असार १०, २०८२','','https://bittiyapost.com/news/2025/06/24/17259',1),
 ('files/news2.jpeg','सहकारी क्षेत्रको डिजिटल यात्रा — धिप्री डटकम','धिप्री डटकम — Online News','','https://dhipri.com/posts/1674',2),
 ('files/news3.jpeg','टंक अधिकारी: सहकारी डिजिटल यात्रा','धिप्री डटकम — Online News','','https://dhipri.com/posts/1269',3),
@@ -163,7 +163,7 @@ CREATE TABLE IF NOT EXISTS `skills` (
   `sort_order` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-INSERT INTO `skills` (`category`,`name`,`level`,`sort_order`) VALUES
+INSERT IGNORE INTO `skills` (`category`,`name`,`level`,`sort_order`) VALUES
 ('Professional','Leadership & Strategy',95,1),
 ('Professional','Cooperative Management',92,2),
 ('Professional','FinTech Consulting',90,3),
@@ -198,7 +198,7 @@ CREATE TABLE IF NOT EXISTS `projects` (
   `sort_order` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-INSERT INTO `projects` (`title`,`subtitle`,`description`,`url`,`image1`,`image2`,`tags`,`sort_order`) VALUES
+INSERT IGNORE INTO `projects` (`title`,`subtitle`,`description`,`url`,`image1`,`image2`,`tags`,`sort_order`) VALUES
 ('Aakash DMS System','Digital Cooperative Management System','Nepal\'s premier fintech solution for cooperatives — complete automation of loan documents, member management, reporting dashboards, and document digitization. Used by cooperatives across Gandaki Province.','https://www.aakashdigital.com.np','img/aakashdms1.jpg','img/aakashdms2.jpg','Fintech,Document Automation,Loan Management,Cooperative',1),
 ('Aakash Digital — Corporate Website','Company Website & Product Showcase','Official company website for Aakash Digital Pvt. Ltd. showcasing the DMS software, services, client cooperatives, and digital transformation mission in Nepal\'s financial sector.','https://www.aakashdigital.com.np','img/akashdigital-thumb.jpg','','Corporate Website,Web Design,Nepali',2),
 ('Jaya Sahakari Website','Cooperative Website Development','Developed a responsive bilingual (Nepali/English) website for Jaya Manakamana Saving & Credit Cooperative with online presence, member information, and interest rate display.','https://jayasahakari.com.np','img/jayasahakari-thumb.jpg','','Web Development,Bilingual,Responsive,Cooperative',3),
@@ -216,7 +216,7 @@ CREATE TABLE IF NOT EXISTS `portfolio_sites` (
   `rating` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-INSERT INTO `portfolio_sites` (`image`,`title`,`subtitle`,`url`,`sort_order`) VALUES
+INSERT IGNORE INTO `portfolio_sites` (`image`,`title`,`subtitle`,`url`,`sort_order`) VALUES
 ('img/jayasahakari-thumb.jpg','Jaya Sahakari','Cooperative Website','https://jayasahakari.com.np',1),
 ('img/bishalsaving-thumb.jpg','Bishal Saving Co-op','Website Design','',2),
 ('img/lekhanathsaving-thumb.jpg','Lekhanath Saving Co-op','Website Design','',3),
@@ -240,7 +240,7 @@ CREATE TABLE IF NOT EXISTS `services_about` (
   `cta_link` varchar(255) NOT NULL DEFAULT '#contact'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-INSERT INTO `services_about` (`icon`,`name`,`description`,`sort_order`,`is_pricing`,`price`,`price_unit`,`features`,`accent_color`,`cta_text`,`cta_link`) VALUES
+INSERT IGNORE INTO `services_about` (`icon`,`name`,`description`,`sort_order`,`is_pricing`,`price`,`price_unit`,`features`,`accent_color`,`cta_text`,`cta_link`) VALUES
 ('globe','Domain Management','Secure domain registration & DNS management',1,0,'','','','cyan','',''),
 ('envelope','Official Email','Professional business email for Tanka Prasad Adhikari',2,0,'','','','cyan','',''),
 ('credit-card','Digital Payments','Integration for modern financial transactions',3,0,'','','','cyan','',''),
@@ -263,7 +263,7 @@ CREATE TABLE IF NOT EXISTS `interests` (
   `sort_order` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-INSERT INTO `interests` (`icon`,`name`,`sort_order`) VALUES
+INSERT IGNORE INTO `interests` (`icon`,`name`,`sort_order`) VALUES
 ('search','Research & Exploring New Topics',1),
 ('bicycle','Cycling',2),
 ('plane','Traveling',3),
