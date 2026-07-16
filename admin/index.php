@@ -16,7 +16,8 @@ $counts = [
   'skills'     => dbRow("SELECT COUNT(*) as c FROM skills")['c'] ?? 0,
   'projects'   => dbRow("SELECT COUNT(*) as c FROM projects")['c'] ?? 0,
   'portfolio'  => dbRow("SELECT COUNT(*) as c FROM portfolio_sites")['c'] ?? 0,
-  'services'   => dbRow("SELECT COUNT(*) as c FROM services_about")['c'] ?? 0,
+  'services'   => dbRow("SELECT COUNT(*) as c FROM services_about WHERE COALESCE(is_pricing, 0) = 0")['c'] ?? 0,
+  'digi_services' => dbRow("SELECT COUNT(*) as c FROM services_about WHERE is_pricing = 1")['c'] ?? 0,
   'interests'  => dbRow("SELECT COUNT(*) as c FROM interests")['c'] ?? 0,
   'messages'   => dbRow("SELECT COUNT(*) as c FROM messages WHERE is_read=0")['c'] ?? 0,
   'totalMsg'   => dbRow("SELECT COUNT(*) as c FROM messages")['c'] ?? 0,
@@ -39,6 +40,7 @@ $cards = [
   ['🚀','Projects',$counts['projects'].' projects','projects.php'],
   ['🌐','Portfolio',$counts['portfolio'].' sites','portfolio_sites.php'],
   ['🛒','Services',$counts['services'].' services','services_about.php'],
+  ['💰','Digital',$counts['digi_services'].' cards','digital_services.php'],
   ['❤️','Interests',$counts['interests'].' items','interests.php'],
   ['✉️','Messages',$counts['messages'].' unread','messages.php'],
 ];
