@@ -819,10 +819,14 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(34,211,238,.6);outli
   </div>
   <p style="font-size:14px;color:var(--muted);line-height:1.85;margin-bottom:28px;max-width:660px"><?=$bio?></p>
 
-  <?php if($servicesAbout): ?>
+  <?php 
+  // Show only non-pricing services in "Services I Offer" section
+  $regularServices = array_filter($servicesAbout, fn($s) => empty($s['is_pricing']));
+  ?>
+  <?php if($regularServices): ?>
   <div class="sec-label">Services I Offer</div>
   <div class="services-grid">
-    <?php foreach($servicesAbout as $s): ?>
+    <?php foreach($regularServices as $s): ?>
     <div class="service-card">
       <div class="service-icon"><i class="fa fa-<?=h($s['icon'])?>"></i></div>
       <div class="service-name"><?=h($s['name'])?></div>

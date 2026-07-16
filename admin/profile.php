@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     elseif ($ogResult['error'])     { $msg = $ogResult['error'];     $msgType = 'error'; }
     elseif ($cvResult['error'])     { $msg = $cvResult['error'];     $msgType = 'error'; }
     else {
-        $fields = ['full_name','title','bio','email','phone','location','born','company','company_url','role','facebook_url','tiktok_url','whatsapp_url','linkedin_url','youtube_url','cv_file','og_image','contact_email'];
+        $fields = ['full_name','title','bio','email','phone','location','born','company','company_url','role','facebook_url','tiktok_url','whatsapp_url','linkedin_url','youtube_url','cv_file','og_image','contact_email','clients_served'];
         $vals = [];
         $sets = [];
         foreach ($fields as $f) {
@@ -79,6 +79,8 @@ include __DIR__ . '/header.php';
       <input type="url" name="tiktok_url" value="<?=h($profile['tiktok_url'] ?? '')?>">
       <label>WhatsApp URL</label>
       <input type="url" name="whatsapp_url" value="<?=h($profile['whatsapp_url'] ?? '')?>">
+      <label>Clients Served (for hero stats)</label>
+      <input type="text" name="clients_served" value="<?=h($profile['clients_served'] ?? '50+')?>" placeholder="e.g. 50+">
       <label>Admin Email for Contact Notifications <span style="color:#64748b;font-weight:400">(new messages will be emailed here)</span></label>
       <input type="email" name="contact_email" value="<?=h($profile['contact_email'] ?? '')?>" placeholder="aakashpame@gmail.com">
 
