@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     elseif ($ogResult['error'])     { $msg = $ogResult['error'];     $msgType = 'error'; }
     elseif ($cvResult['error'])     { $msg = $cvResult['error'];     $msgType = 'error'; }
     else {
-        $fields = ['full_name','title','bio','email','phone','location','born','company','company_url','role','facebook_url','tiktok_url','whatsapp_url','linkedin_url','youtube_url','cv_file','og_image','contact_email','clients_served'];
+        $fields = ['full_name','title','bio','email','phone','location','born','company','company_url','role','facebook_url','tiktok_url','whatsapp_url','linkedin_url','youtube_url','cv_file','og_image','contact_email','clients_served','digital_services_intro'];
         $vals = [];
         $sets = [];
         foreach ($fields as $f) {
@@ -91,6 +91,11 @@ include __DIR__ . '/header.php';
   </div>
   <label>Bio / About Text</label>
   <textarea name="bio" rows="5"><?=h($profile['bio'] ?? '')?></textarea>
+
+  <label style="margin-top:16px">Digital Services Intro Text</label>
+  <textarea name="digital_services_intro" rows="3" placeholder="Need a professional website, reliable web hosting, or custom email hosting? I provide end-to-end digital solutions..."><?=h($profile['digital_services_intro'] ?? '')?></textarea>
+  <div style="font-size:11px;color:#64748b;margin-top:4px">Shown above the pricing cards in Digital Services section.</div>
+
   <div style="margin-top:18px"><button class="btn btn-primary" type="submit">💾 Save Profile</button></div>
 </form>
 <?php include __DIR__ . '/footer.php'; ?>

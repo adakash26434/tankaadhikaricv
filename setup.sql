@@ -29,11 +29,12 @@ CREATE TABLE IF NOT EXISTS `profile` (
   `avatar` varchar(255) NOT NULL DEFAULT 'img/avatar.jpg',
   `og_image` varchar(255) NOT NULL DEFAULT '',
   `contact_email` varchar(255) NOT NULL DEFAULT '',
-  `clients_served` varchar(50) NOT NULL DEFAULT '50+'
+  `clients_served` varchar(50) NOT NULL DEFAULT '50+',
+  `digital_services_intro` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-INSERT INTO `profile` (`full_name`,`title`,`bio`,`email`,`phone`,`location`,`born`,`company`,`company_url`,`role`,`facebook_url`,`tiktok_url`,`whatsapp_url`,`linkedin_url`,`youtube_url`,`cv_file`,`avatar`,`og_image`,`contact_email`,`clients_served`) VALUES
-('Tanka Prasad Adhikari','Founder & Chief Executive Officer','Tanka Prasad Adhikari, the Founder of Aakash Digital Pvt. Ltd., leads the digital transformation of Nepal\'s cooperative sector. With a focus on fintech solutions and automation, he empowers financial institutions to operate efficiently in the digital age.','aakashpame@gmail.com','+977 985-6026434','Pokhara, Nepal','19 March 1990 — Pokhara, Nepal','Aakash Digital Pvt. Ltd.','https://www.aakashdigital.com.np','Founder & CEO','https://www.facebook.com/akashadhikari2','https://www.tiktok.com/@tankaadhikari34','https://wa.me/9779856026434','https://www.linkedin.com/in/tanka-adhikari','https://www.youtube.com/@aakashpame','files/canada.pdf','img/avatar.jpg','','aakashpame@gmail.com','50+');
+INSERT INTO `profile` (`full_name`,`title`,`bio`,`email`,`phone`,`location`,`born`,`company`,`company_url`,`role`,`facebook_url`,`tiktok_url`,`whatsapp_url`,`linkedin_url`,`youtube_url`,`cv_file`,`avatar`,`og_image`,`contact_email`,`clients_served`,`digital_services_intro`) VALUES
+('Tanka Prasad Adhikari','Founder & Chief Executive Officer','Tanka Prasad Adhikari, the Founder of Aakash Digital Pvt. Ltd., leads the digital transformation of Nepal\'s cooperative sector. With a focus on fintech solutions and automation, he empowers financial institutions to operate efficiently in the digital age.','aakashpame@gmail.com','+977 985-6026434','Pokhara, Nepal','19 March 1990 — Pokhara, Nepal','Aakash Digital Pvt. Ltd.','https://www.aakashdigital.com.np','Founder & CEO','https://www.facebook.com/akashadhikari2','https://www.tiktok.com/@tankaadhikari34','https://wa.me/9779856026434','https://www.linkedin.com/in/tanka-adhikari','https://www.youtube.com/@aakashpame','files/canada.pdf','img/avatar.jpg','','aakashpame@gmail.com','50+','Need a professional website, reliable web hosting, or custom email hosting? I provide end-to-end digital solutions tailored for businesses, cooperatives, and startups in Nepal.');
 
 -- Education
 CREATE TABLE IF NOT EXISTS `education` (
@@ -352,4 +353,8 @@ ALTER TABLE `portfolio_sites`
 -- profile: add clients_served column (ignore error if already exists)
 ALTER TABLE `profile`
   ADD COLUMN `clients_served` VARCHAR(50) NOT NULL DEFAULT '50+' AFTER `contact_email`;
+
+-- profile: add digital_services_intro column (ignore error if already exists)
+ALTER TABLE `profile`
+  ADD COLUMN `digital_services_intro` TEXT NOT NULL AFTER `clients_served`;
 
