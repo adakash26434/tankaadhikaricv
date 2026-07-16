@@ -27,6 +27,7 @@ $role     = h($p['role'] ?? '');
 $avatar   = h($p['avatar'] ?? 'img/avatar.jpg');
 $cvFile   = h($p['cv_file'] ?? 'files/canada.pdf');
 $firstName = explode(' ', $p['full_name'] ?? 'Tanka')[0];
+$digitalServicesIntro = h($p['digital_services_intro'] ?? 'Need a professional website, reliable web hosting, or custom email hosting? I provide end-to-end digital solutions tailored for businesses, cooperatives, and startups in Nepal.');
 
 // ── HERO CAROUSEL: collect photos from profile + awards + portfolio ──────────
 // Note: paths are NOT htmlspecialchars()'d here — escaping happens at output time
@@ -1031,9 +1032,11 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(34,211,238,.6);outli
 <!-- DIGITAL SERVICES -->
 <section id="services">
   <h2 class="section-title">Digital Services</h2><div class="section-underline"></div>
+  <?php if($digitalServicesIntro): ?>
   <p style="font-size:13px;color:var(--muted);margin-bottom:20px;max-width:600px;line-height:1.7">
-    Need a professional website, reliable web hosting, or custom email hosting? I provide end-to-end digital solutions tailored for businesses, cooperatives, and startups in Nepal.
+    <?=$digitalServicesIntro?>
   </p>
+  <?php endif; ?>
   <?php
   try {
       $pricingServices = dbRows("SELECT * FROM services_about WHERE is_pricing=1 ORDER BY sort_order, id");
