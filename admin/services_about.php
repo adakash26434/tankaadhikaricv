@@ -54,9 +54,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   }
 }
 
-$allServices = dbRows("SELECT * FROM services_about ORDER BY is_pricing DESC, sort_order, id");
-$regularServices = array_filter($allServices, function($s) { return empty($s['is_pricing']); });
-$pricingServices = array_filter($allServices, function($s) { return !empty($s['is_pricing']); });
+// Get services - use try-catch for compatibility with older databases
+try {
+    $allServices = dbRows("SELECT * FROM services_about ORDER BY sort_order, id");
+    $regularServices = array_filter($allServices, function($s) { 
+        return !isset($s['is_pricing']) || empty($s['is_pricing']); 
+    });
+    $pricingServices = array_filter($allServices, function($s) { 
+        return isset($s['is_pricing']) && !empty($s['is_pricing']); 
+    });
+} catch (Exception $e) {
+    // Fallback for tables without is_pricing column
+    $allServices = dbRows("SELECT * FROM services_about ORDER BY sort_order, id");
+    $regularServices = $allServices;
+    $pricingServices = [];
+}
 
 include __DIR__ . '/header.php';
 ?>

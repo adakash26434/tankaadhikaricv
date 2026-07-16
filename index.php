@@ -822,7 +822,9 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(34,211,238,.6);outli
 
   <?php 
   // Show only non-pricing services in "Services I Offer" section
-  $regularServices = array_filter($servicesAbout, function($s) { return empty($s['is_pricing']); });
+  $regularServices = array_filter($servicesAbout, function($s) { 
+      return !isset($s['is_pricing']) || empty($s['is_pricing']); 
+  });
   ?>
   <?php if($regularServices): ?>
   <div class="sec-label">Services I Offer</div>
