@@ -55,8 +55,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $allServices = dbRows("SELECT * FROM services_about ORDER BY is_pricing DESC, sort_order, id");
-$regularServices = array_filter($allServices, fn($s) => empty($s['is_pricing']));
-$pricingServices = array_filter($allServices, fn($s) => !empty($s['is_pricing']));
+$regularServices = array_filter($allServices, function($s) { return empty($s['is_pricing']); });
+$pricingServices = array_filter($allServices, function($s) { return !empty($s['is_pricing']); });
 
 include __DIR__ . '/header.php';
 ?>

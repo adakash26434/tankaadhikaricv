@@ -333,28 +333,42 @@ DROP PROCEDURE IF EXISTS add_idx;
 
 -- ============================================================
 -- UPGRADE SCRIPT: Add new columns to existing databases
--- Run these if you already have the tables:
+-- Safe to run - won't error if columns already exist
 -- ============================================================
 
--- services_about: add pricing card columns (ignore error if already exists)
-ALTER TABLE `services_about`
-  ADD COLUMN `is_pricing` TINYINT(1) NOT NULL DEFAULT 0 AFTER `sort_order`,
-  ADD COLUMN `price` VARCHAR(100) NOT NULL DEFAULT '' AFTER `is_pricing`,
-  ADD COLUMN `price_unit` VARCHAR(100) NOT NULL DEFAULT '' AFTER `price`,
-  ADD COLUMN `features` TEXT AFTER `price_unit`,
-  ADD COLUMN `accent_color` VARCHAR(20) NOT NULL DEFAULT 'cyan' AFTER `features`,
-  ADD COLUMN `cta_text` VARCHAR(255) NOT NULL DEFAULT '' AFTER `accent_color`,
-  ADD COLUMN `cta_link` VARCHAR(255) NOT NULL DEFAULT '#contact' AFTER `cta_text`;
+DROP PROCEDURE IF EXISTS safe_add_column;
 
--- portfolio_sites: add rating column (ignore error if already exists)
-ALTER TABLE `portfolio_sites`
-  ADD COLUMN `rating` TINYINT(1) NOT NULL DEFAULT 0 AFTER `sort_order`;
+-- Procedure to add column only if it doesn't exist
+DELIMITER $$
+CREATE PROCEDURE safe_add_column(IN tbl VARCHAR(128), IN col VARCHAR(128), IN col_def VARCHAR(255))
+BEGIN
+  IF NOT EXISTS (
+    SELECT * FROM information_schema.COLUMNS 
+    WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = tbl AND COLUMN_NAME = col
+  ) THEN
+    SET @sql = CONCAT('ALTER TABLE `', tbl, '` ADD COLUMN `', col, '` ', col_def);
+    PREPARE stmt FROM @sql; EXECUTE stmt; DEALLOCATE PREPARE stmt;
+  END IF;
+END$$
+DELIMITER ;
 
--- profile: add clients_served column (ignore error if already exists)
-ALTER TABLE `profile`
-  ADD COLUMN `clients_served` VARCHAR(50) NOT NULL DEFAULT '50+' AFTER `contact_email`;
+-- services_about: add pricing card columns
+CALL safe_add_column('services_about', 'is_pricing', 'TINYINT(1) NOT NULL DEFAULT 0 AFTER `sort_order`');
+CALL safe_add_column('services_about', 'price', "VARCHAR(100) NOT NULL DEFAULT '' AFTER `is_pricing`");
+CALL safe_add_column('services_about', 'price_unit', "VARCHAR(100) NOT NULL DEFAULT '' AFTER `price`");
+CALL safe_add_column('services_about', 'features', 'TEXT AFTER `price_unit`');
+CALL safe_add_column('services_about', 'accent_color', "VARCHAR(20) NOT NULL DEFAULT 'cyan' AFTER `features`");
+CALL safe_add_column('services_about', 'cta_text', "VARCHAR(255) NOT NULL DEFAULT '' AFTER `accent_color`");
+CALL safe_add_column('services_about', 'cta_link', "VARCHAR(255) NOT NULL DEFAULT '#contact' AFTER `cta_text`");
 
--- profile: add digital_services_intro column (ignore error if already exists)
-ALTER TABLE `profile`
-  ADD COLUMN `digital_services_intro` TEXT NOT NULL AFTER `clients_served`;
+-- portfolio_sites: add rating column
+CALL safe_add_column('portfolio_sites', 'rating', 'TINYINT(1) NOT NULL DEFAULT 0 AFTER `sort_order`');
 
+-- profile: add clients_served column
+CALL safe_add_column('profile', 'clients_served', "VARCHAR(50) NOT NULL DEFAULT '50+' AFTER `contact_email`");
+
+-- profile: add digital_services_intro column
+CALL safe_add_column('profile', 'digital_services_intro', 'TEXT NOT NULL AFTER `clients_served`');
+
+-- Clean up
+DROP PROCEDURE IF EXISTS safe_add_column;
