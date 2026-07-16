@@ -328,12 +328,12 @@ CALL add_idx('interests', 'idx_interests_sort', '`sort_order`');
 CALL add_idx('portfolio_sites', 'idx_portfolio_sort', '`sort_order`');
 CALL add_idx('services_about', 'idx_services_sort', '`sort_order`');
 
-DROP PROCEDURE IF EXISTS add_idx$$
+DROP PROCEDURE IF EXISTS add_idx;
 
 
 -- ============================================================
 -- UPGRADE SCRIPT: Add new columns to existing databases
--- Run these manually if you already have the tables:
+-- Run these if you already have the tables:
 -- ============================================================
 
 -- services_about: add pricing card columns (ignore error if already exists)
