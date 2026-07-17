@@ -56,9 +56,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Get only pricing services
+// Get only pricing services - show all if is_pricing column doesn't exist
 try {
-    $services = dbRows("SELECT * FROM services_about WHERE is_pricing = 1 ORDER BY sort_order, id");
+    $db = getDB();
+    $cols = $db->query("SHOW COLUMNS FROM services_about LIKE 'is_pricing'")->fetchAll();
+    if (empty($cols)) {
+        // Column doesn't exist - show all services
+        $services = dbRows("SELECT * FROM services_about ORDER BY sort_order, id");
+    } else {
+        $services = dbRows("SELECT * FROM services_about WHERE is_pricing = 1 ORDER BY sort_order, id");
+    }
 } catch (Exception $e) {
     $services = [];
 }
