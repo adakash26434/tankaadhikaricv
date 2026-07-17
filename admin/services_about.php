@@ -47,9 +47,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 // Get only regular services (is_pricing = 0 or is_pricing column doesn't exist)
 try {
-    $services = dbRows("SELECT * FROM services_about WHERE COALESCE(is_pricing, 0) = 0 ORDER BY sort_order, id");
+    $db = getDB();
+    $cols = $db->query("SHOW COLUMNS FROM services_about LIKE 'is_pricing'")->fetchAll();
+    if (empty($cols)) {
+        // Column doesn't exist - show all services
+        $services = dbRows("SELECT * FROM services_about ORDER BY sort_order, id");
+    } else {
+        $services = dbRows("SELECT * FROM services_about WHERE is_pricing = 0 ORDER BY sort_order, id");
+    }
 } catch (Exception $e) {
-    $services = dbRows("SELECT * FROM services_about ORDER BY sort_order, id");
+    $services = [];
 }
 
 include __DIR__ . '/header.php';
