@@ -1076,44 +1076,77 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(34,211,238,.6);outli
     <div class="card-dark" style="border-left:3px solid var(--cyan)">
       <div style="font-size:26px;margin-bottom:12px">🌐</div>
       <div style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:8px">Website Development</div>
-      <div style="font-size:24px;font-weight:900;color:var(--cyan);margin-bottom:4px">From NPR 15,000</div>
-      <div style="font-size:11px;color:var(--muted);margin-bottom:14px">One-time • Custom design included</div>
+      <div style="font-size:24px;font-weight:900;color:var(--cyan);margin-bottom:4px">From NPR 70,000+</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:14px">One-time • Custom design</div>
       <ul style="font-size:12px;color:var(--muted);line-height:1.9;padding-left:16px;margin-bottom:16px">
-        <li>Responsive & mobile-friendly design</li><li>SEO optimized structure</li>
+        <li>Responsive & mobile-friendly</li><li>SEO optimized</li>
         <li>Contact forms & analytics</li><li>Free 30-day support</li>
       </ul>
       <a href="#contact" class="tag" style="display:inline-block;text-align:center;width:100%;background:rgba(34,211,238,.1);border-color:rgba(34,211,238,.2);color:var(--cyan)">Request a Quote →</a>
     </div>
     <div class="card-dark" style="border-left:3px solid var(--violet)">
-      <div style="font-size:26px;margin-bottom:12px">☁️</div>
-      <div style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:8px">Web Hosting</div>
-      <div style="font-size:24px;font-weight:900;color:var(--violet);margin-bottom:4px">From NPR 3,000<span style="font-size:11px;font-weight:400;color:var(--muted)"> /year</span></div>
-      <div style="font-size:11px;color:var(--muted);margin-bottom:14px">Annual plans • Nepal-based servers</div>
+      <div style="font-size:26px;margin-bottom:12px">📰</div>
+      <div style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:8px">News Portal</div>
+      <div style="font-size:24px;font-weight:900;color:var(--violet);margin-bottom:4px">NPR 100,000</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:14px">One-time</div>
       <ul style="font-size:12px;color:var(--muted);line-height:1.9;padding-left:16px;margin-bottom:16px">
-        <li>99.9% uptime guarantee</li><li>Free SSL certificate</li>
-        <li>Daily backups</li><li>cPanel / managed options</li>
+        <li>Breaking news & categories</li><li>User authentication</li>
+        <li>Social sharing</li><li>Admin dashboard</li>
       </ul>
-      <a href="#contact" class="tag" style="display:inline-block;text-align:center;width:100%;background:rgba(139,92,246,.1);border-color:rgba(139,92,246,.2);color:var(--violet)">Get Hosting →</a>
+      <a href="#contact" class="tag" style="display:inline-block;text-align:center;width:100%;background:rgba(139,92,246,.1);border-color:rgba(139,92,246,.2);color:var(--violet)">Get News Portal →</a>
     </div>
     <div class="card-dark" style="border-left:3px solid var(--yellow)">
+      <div style="font-size:26px;margin-bottom:12px">🏨</div>
+      <div style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:8px">Hotel Website</div>
+      <div style="font-size:24px;font-weight:900;color:var(--yellow);margin-bottom:4px">NPR 100,000</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:14px">One-time</div>
+      <ul style="font-size:12px;color:var(--muted);line-height:1.9;padding-left:16px;margin-bottom:16px">
+        <li>Room booking system</li><li>Gallery & amenities</li>
+        <li>Online payment ready</li><li>Multi-language support</li>
+      </ul>
+      <a href="#contact" class="tag" style="display:inline-block;text-align:center;width:100%;background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.2);color:var(--yellow)">Get Hotel Website →</a>
+    </div>
+    <div class="card-dark" style="border-left:3px solid var(--green)">
+      <div style="font-size:26px;margin-bottom:12px">🧮</div>
+      <div style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:8px">Account Software</div>
+      <div style="font-size:24px;font-weight:900;color:var(--green);margin-bottom:4px">NPR 65,000</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:14px">One-time</div>
+      <ul style="font-size:12px;color:var(--muted);line-height:1.9;padding-left:16px;margin-bottom:16px">
+        <li>Invoice & expense tracking</li><li>Financial reports</li>
+        <li>Multi-user access</li><li>Data backup & security</li>
+      </ul>
+      <a href="#contact" class="tag" style="display:inline-block;text-align:center;width:100%;background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.2);color:var(--green)">Get Software →</a>
+    </div>
+    <div class="card-dark" style="border-left:3px solid var(--orange)">
+      <div style="font-size:26px;margin-bottom:12px">☁️</div>
+      <div style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:8px">Web Hosting</div>
+      <div style="font-size:24px;font-weight:900;color:var(--orange);margin-bottom:4px">From NPR 20,000<span style="font-size:11px;font-weight:400;color:var(--muted)"> /year</span></div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:14px">Annual plans • Nepal servers</div>
+      <ul style="font-size:12px;color:var(--muted);line-height:1.9;padding-left:16px;margin-bottom:16px">
+        <li>99.9% uptime</li><li>Free SSL</li>
+        <li>Daily backups</li><li>cPanel included</li>
+      </ul>
+      <a href="#contact" class="tag" style="display:inline-block;text-align:center;width:100%;background:rgba(249,115,22,.1);border-color:rgba(249,115,22,.2);color:var(--orange)">Get Hosting →</a>
+    </div>
+    <div class="card-dark" style="border-left:3px solid var(--pink)">
       <div style="font-size:26px;margin-bottom:12px">📧</div>
       <div style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:8px">Professional Email Hosting</div>
-      <div style="font-size:24px;font-weight:900;color:var(--yellow);margin-bottom:4px">From NPR 1,500<span style="font-size:11px;font-weight:400;color:var(--muted)"> /year</span></div>
-      <div style="font-size:11px;color:var(--muted);margin-bottom:14px">Annual plans • Your domain @you.com</div>
+      <div style="font-size:24px;font-weight:900;color:var(--pink);margin-bottom:4px">From NPR 25,000<span style="font-size:11px;font-weight:400;color:var(--muted)"> /year</span></div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:14px">Annual plans</div>
       <ul style="font-size:12px;color:var(--muted);line-height:1.9;padding-left:16px;margin-bottom:16px">
-        <li>yourname@yourdomain.com</li><li>5 GB storage per mailbox</li>
-        <li>Webmail + IMAP/SMTP</li><li>Spam & virus protection</li>
+        <li>yourname@yourdomain.com</li><li>5 GB storage</li>
+        <li>Spam protection</li><li>IMAP/SMTP</li>
       </ul>
-      <a href="#contact" class="tag" style="display:inline-block;text-align:center;width:100%;background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.2);color:var(--yellow)">Setup Email →</a>
+      <a href="#contact" class="tag" style="display:inline-block;text-align:center;width:100%;background:rgba(236,72,153,.1);border-color:rgba(236,72,153,.2);color:var(--pink)">Setup Email →</a>
     </div>
     <div class="card-dark" style="border-left:3px solid var(--red)">
       <div style="font-size:26px;margin-bottom:12px">🔒</div>
       <div style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:8px">Cyber Security Training</div>
-      <div style="font-size:24px;font-weight:900;color:var(--red);margin-bottom:4px">NPR 20,000</div>
-      <div style="font-size:11px;color:var(--muted);margin-bottom:14px">Per person • Group discounts available</div>
+      <div style="font-size:24px;font-weight:900;color:var(--red);margin-bottom:4px">NPR 30,000</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:14px">Per person • Group discounts</div>
       <ul style="font-size:12px;color:var(--muted);line-height:1.9;padding-left:16px;margin-bottom:16px">
-        <li>Network & endpoint security</li><li>Phishing awareness</li>
-        <li>Data privacy & compliance</li><li>Incident response basics</li>
+        <li>Network security</li><li>Phishing awareness</li>
+        <li>Data privacy</li><li>Incident response</li>
       </ul>
       <a href="#contact" class="tag" style="display:inline-block;text-align:center;width:100%;background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.2);color:var(--red)">Enroll Now →</a>
     </div>
