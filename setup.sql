@@ -250,10 +250,10 @@ INSERT IGNORE INTO `services_about` (`icon`,`name`,`description`,`sort_order`,`i
 ('robot','Automation','Loan & document workflow automation',7,0,'','','','cyan','',''),
 
 -- Digital Services (Pricing Cards) —
-('globe','Website Development','Custom design included, SEO optimized',8,1,'15,000','NPR One-time','Responsive & mobile-friendly design\nSEO optimized structure\nContact forms & analytics\nFree 30-day support','cyan','Request a Quote →','#contact'),
-('cloud','Web Hosting','99.9% uptime, Nepal-based servers',9,1,'3,000','NPR /year','99.9% uptime guarantee\nFree SSL certificate\nDaily backups','violet','Get Hosting →','#contact'),
-('envelope','Professional Email Hosting','Your domain @you.com',10,1,'1,500','NPR /year','yourname@yourdomain.com\n5 GB storage per mailbox\nSpam & virus protection','yellow','Setup Email →','#contact'),
-('shield-alt','Cyber Security Training','For businesses, IT teams & individuals',11,1,'20,000','NPR per person','Network & endpoint security\nPhishing & social engineering awareness\nData privacy & compliance','red','Enroll Now →','#contact');
+('globe','Website Development','From NPR 15,000 - One-time',8,1,'15,000','NPR','Custom design included\nResponsive & mobile-friendly design\nSEO optimized structure\nContact forms & analytics\nFree 30-day support','cyan','Request a Quote →','#contact'),
+('cloud','Web Hosting','From NPR 3,000 /year - Annual plans',9,1,'3,000','NPR /year','Nepal-based servers\n99.9% uptime guarantee\nFree SSL certificate\nDaily backups\ncPanel / managed options','violet','Get Hosting →','#contact'),
+('envelope','Professional Email Hosting','From NPR 1,500 /year',10,1,'1,500','NPR /year','Your domain @you.com\nyourname@yourdomain.com\n5 GB storage per mailbox\nWebmail + IMAP/SMTP\nSpam & virus protection','yellow','Setup Email →','#contact'),
+('shield-alt','Cyber Security Training','NPR 20,000 - Per person',11,1,'20,000','NPR','Group discounts available\nNetwork & endpoint security\nPhishing awareness\nData privacy & compliance\nIncident response basics','red','Enroll Now →','#contact');
 
 -- Interests
 CREATE TABLE IF NOT EXISTS `interests` (
