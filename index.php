@@ -142,7 +142,7 @@ $siteDesc = htmlspecialchars("{$_fn} is the {$_ti} of {$_co}, leading digital tr
   --bg:#0d1117;--sidebar:#161b27;--card:#1e2535;--card-alt:#232b3e;
   --border:#263147;--text:#c9d1e3;--muted:#8b99b4;
   --cyan:#22d3ee;--violet:#8b5cf6;--accent:#0ea5e9;
-  --green:#22c55e;--red:#ef4444;--yellow:#f59e0b;
+  --green:#22c55e;--red:#ef4444;--yellow:#f59e0b;--orange:#f97316;--pink:#ec4899;
   --shadow:rgba(0,0,0,0.5);--shadow-lg:rgba(0,0,0,0.7);
   --glow-cyan:rgba(34,211,238,.3);--glow-violet:rgba(139,92,246,.2);
   --bg-pattern:radial-gradient(circle,rgba(34,211,238,.06) 1px,transparent 1px);
@@ -163,7 +163,7 @@ $siteDesc = htmlspecialchars("{$_fn} is the {$_ti} of {$_co}, leading digital tr
   --bg:#f0f2f8;--sidebar:#ffffff;--card:#ffffff;--card-alt:#f8f9fc;
   --border:#dde1ec;--text:#1a2035;--muted:#6b7594;
   --cyan:#0891b2;--violet:#7c3aed;--accent:#0284c7;
-  --green:#16a34a;--red:#dc2626;--yellow:#d97706;
+  --green:#16a34a;--red:#dc2626;--yellow:#d97706;--orange:#ea580c;--pink:#db2777;
   --shadow:rgba(0,0,0,0.08);--shadow-lg:rgba(0,0,0,0.12);
   --glow-cyan:rgba(8,145,178,.15);--glow-violet:rgba(124,58,237,.12);
   --bg-pattern:radial-gradient(circle,rgba(8,145,178,.08) 1px,transparent 1px);
@@ -1048,7 +1048,7 @@ button:focus-visible,a:focus-visible{outline:3px solid rgba(34,211,238,.6);outli
     <?php foreach($pricingServices as $s):
       $accent   = h($s['accent_color'] ?? 'cyan');
       $features = $s["features"] ? (json_decode($s["features"], true) ?: explode("\n", $s["features"])) : [];
-      $rgbaArr  = ['cyan'=>'34,211,238','violet'=>'139,92,246','yellow'=>'245,158,11','red'=>'239,68,68','amber'=>'245,158,11','green'=>'34,197,94'];
+      $rgbaArr  = ['cyan'=>'34,211,238','violet'=>'139,92,246','yellow'=>'245,158,11','red'=>'239,68,68','amber'=>'245,158,11','green'=>'34,197,94','orange'=>'249,115,22','pink'=>'236,72,153'];
       $rgba     = $rgbaArr[$s['accent_color']] ?? '34,211,238';
     ?>
     <div class="card-dark" style="border-left:3px solid var(--<?=$accent?>)">

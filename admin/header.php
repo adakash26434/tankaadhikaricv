@@ -202,6 +202,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--cyan);outline-offse
       ['projects.php','Projects','&#128640;'],
       ['portfolio_sites.php','Portfolio','&#127760;'],
       ['services_about.php','Services','&#129309;'],
+      ['digital_services.php','Digital Services','&#128176;'],
       ['interests.php','Interests','&#10084;&#65039;'],
       ['messages.php','Messages','&#128172;'],
       ['upload.php','Upload','&#128247;'],
@@ -238,6 +239,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--cyan);outline-offse
     <a href="projects.php" class="nav-link <?=$cur=='projects.php'?'active':''?>">Projects</a>
     <a href="portfolio_sites.php" class="nav-link <?=$cur=='portfolio_sites.php'?'active':''?>">Portfolio</a>
     <a href="services_about.php" class="nav-link <?=$cur=='services_about.php'?'active':''?>">Services</a>
+    <a href="digital_services.php" class="nav-link <?=$cur=='digital_services.php'?'active':''?>">&#128176; Digital Services</a>
     <a href="interests.php" class="nav-link <?=$cur=='interests.php'?'active':''?>">Interests</a>
     <a href="messages.php" class="nav-link <?=$cur=='messages.php'?'active':''?>">Messages</a>
     <a href="upload.php" class="nav-link <?=$cur=='upload.php'?'active':''?> special">&#128247; Upload</a>

@@ -80,6 +80,7 @@ Access at: `https://yoursite.com/admin/`
 | **Projects** | Project title, description, URL, images, tags |
 | **Portfolio** | Screenshots with title and links for About section |
 | **Services** | Icon (FontAwesome), name, description for About section |
+| **Digital Services** | Pricing cards for the Digital Services section — name, icon, price, price unit, features, accent color, CTA (editable in admin) |
 | **Interests** | Icon + name for About section |
 | **Messages** | View/read contact form submissions |
 | **Upload** | Upload images (JPEG/PNG/WebP/GIF) and PDF files |

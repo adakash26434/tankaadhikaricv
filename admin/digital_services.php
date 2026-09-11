@@ -4,6 +4,35 @@ require_once __DIR__ . '/auth.php';
 require_once __DIR__ . '/../db.php';
 requireAdmin();
 
+// ── SELF-HEALING SCHEMA: add pricing-card columns if missing (legacy DBs) ──
+// Mirrors setup.sql's safe_add_column() calls — idempotent, admin-only.
+
+function ensurePricingColumns(): void {
+    $db = getDB();
+    $stmt = $db->query("SELECT COLUMN_NAME FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'services_about'");
+    $existing = array_column($stmt->fetchAll(PDO::FETCH_ASSOC), 'COLUMN_NAME');
+    $adds = [
+        'is_pricing'   => "TINYINT(1) NOT NULL DEFAULT 0",
+        'price'         => "VARCHAR(100) NOT NULL DEFAULT ''",
+        'price_unit'    => "VARCHAR(100) NOT NULL DEFAULT ''",
+        'features'      => 'TEXT',
+        'accent_color'  => "VARCHAR(20) NOT NULL DEFAULT 'cyan'",
+        'cta_text'      => "VARCHAR(255) NOT NULL DEFAULT ''",
+        'cta_link'      => "VARCHAR(255) NOT NULL DEFAULT '#contact'",
+    ];
+    foreach ($adds as $col => $def) {
+        if (!in_array($col, $existing, true))) {
+            $db->exec("ALTER TABLE services_about ADD COLUMN `$col` $def");
+        }
+    }
+}
+
+try {
+    ensurePricingColumns();
+} catch (Exception $e) {
+    error_log('[Digital Services] Column check failed: ' . $e->getMessage());
+}
+
 $pageTitle = 'Digital Services';
 $pageSubtitle = 'Manage Digital Services pricing cards — shown in Digital Services section.';
 
@@ -56,18 +85,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Get only pricing services - show all if is_pricing column doesn't exist
+// Get only pricing services — after ensurePricingColumns() the column is guaranteed to exist
 try {
-    $db = getDB();
-    $cols = $db->query("SHOW COLUMNS FROM services_about LIKE 'is_pricing'")->fetchAll();
-    if (empty($cols)) {
-        // Column doesn't exist - show all services
-        $services = dbRows("SELECT * FROM services_about ORDER BY sort_order, id");
-    } else {
-        $services = dbRows("SELECT * FROM services_about WHERE is_pricing = 1 ORDER BY sort_order, id");
-    }
+    $services = dbRows("SELECT * FROM services_about WHERE is_pricing = 1 ORDER BY sort_order, id");
 } catch (Exception $e) {
-    $services = [];
+    // Last-resort fallback — never break the admin page
+    try {
+        $services = dbRows("SELECT * FROM services_about ORDER BY sort_order, id");
+    } catch (Exception $e2) {
+        $services = [];
+    }
 }
 
 include __DIR__ . '/header.php';
@@ -85,7 +112,7 @@ include __DIR__ . '/header.php';
 
 <div class="card" style="margin-bottom:16px">
   <div class="section-heading">💰 Digital Services</div>
-  <p style="font-size:12px;color:#64748b;margin-bottom:16px">These are shown in the Digital Services section with pricing, features, and CTA buttons.</p>
+  <p style="font-size:12px;color:#64748b;margin-bottom:16px">These pricing cards are shown in the Digital Services section. The intro text above the cards can be edited in <a href="profile.php" style="color:var(--cyan)">Profile → Digital Services Intro Text</a>.</p>
   
   <?php if (empty($services)): ?>
     <p style="color:#64748b;text-align:center;padding:20px">No digital services yet.</p>
@@ -170,7 +197,7 @@ include __DIR__ . '/header.php';
       <div>
         <label>Accent Color</label>
         <select name="accent_color">
-          <?php foreach (['cyan', 'violet', 'yellow', 'red', 'amber', 'green'] as $c): ?>
+          <?php foreach (['cyan', 'violet', 'yellow', 'red', 'amber', 'green', 'orange', 'pink'] as $c): ?>
             <option value="<?php echo $c; ?>" <?php echo ($editRow['accent_color'] ?? 'cyan') === $c ? 'selected' : ''; ?>><?php echo ucfirst($c); ?></option>
           <?php endforeach; ?>
         </select>
